@@ -1,0 +1,11 @@
+{
+    "name": "GhostAddons",
+    "creator": "Ghostyy",
+    "version": "1.0.0",
+    "description": "Dungeons QOL.",
+    "entry": "index.js",
+    "requires": [
+      "Vigilance", 
+      "requestV2"
+    ]
+  }
