@@ -1,14 +1,18 @@
 import config from "../config"
 import request from "../../requestV2"
 import { chat, getSbLevelPrefix } from "./utils"
-import { calcSkillLevel } from "../../BloomCore/utils/Utils"
+import { calcSkillLevel, convertToPBTime } from "../../BloomCore/utils/Utils"
 
 export default class playerData {
-    constructor(username) {
+    constructor(username, dungeonClass, classLevel) {
         this.username = username
+        this.dungeonClass = dungeonClass
+        this.classLevel = classLevel
         this.uuid = null
+        this.rank = null
         
         this.toKick = [false, "Requirements Met."]
+        this.kicked = false
 
         this.stats = {
             dungeons: {
@@ -31,7 +35,9 @@ export default class playerData {
             magical_power: {
                 mp: null, reforge: null
             },
-            sb_level: null
+            sb_level: null,
+            sb_level_raw: null,
+            discord: null
         }
 
         this.updated = { uuid: false, dungeons: false, rest: false}
@@ -60,11 +66,12 @@ export default class playerData {
         return request({url: `https://sky.shiiyu.moe/api/v2/profile/${this.uuid}`, headers: {'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json'}, json: true}).then(data => {
             if (data.error) return chat(`&cError: ${data.error}`)
             const profile = Object.values(data.profiles).find(profile => profile.current === true)
-            chat(profile[`profile_id`])
 
             this.stats.magical_power.mp = profile?.raw?.accessory_bag_storage?.highest_magical_power
-            this.stats.magical_power.reforge = profile?.raw?.accessory_bag_storage?.selected_power
+            let reforge = profile?.raw?.accessory_bag_storage?.selected_power
+            this.stats.magical_power.reforge = reforge[0].toUpperCase() + reforge.slice(1)
             this.stats.sb_level = `${getSbLevelPrefix(profile?.raw?.leveling?.experience/100)}${profile?.raw?.leveling?.experience/100}`
+            this.stats.sb_level_raw = profile?.raw?.leveling?.experience/100
 
             this.stats.experience.classes.Archer = calcSkillLevel("catacombs", profile?.raw?.dungeons?.player_classes?.archer?.experience)
             this.stats.experience.classes.Berserker = calcSkillLevel("catacombs", profile?.raw?.dungeons?.player_classes?.berserk?.experience)
@@ -74,13 +81,46 @@ export default class playerData {
 
             this.stats.experience.classAverage = ((this.stats.experience.classes.Archer + this.stats.experience.classes.Berserker + this.stats.experience.classes.Healer + this.stats.experience.classes.Mage + this.stats.experience.classes.Tank ) / 5).toFixed(2)
 
+            this.rank = "&6"
+
             this.updated.rest = true
             return this.updateToKick()
         }).catch(e => chat(`&cError: ${e.reason}`))
     }
 
     updateToKick() {
-        return
+        if (this.updated.dungeons && !this.updated.rest && !this.kicked) { // PB, Cata Level, Secrets, Class XP
+            // PB 
+            let pb = this.getSelectPB()[1]['rawS+']
+            switch ( config.partyFinderminPB ) {
+                case 0: // 4:40 = 280000
+                    if ( parseInt(pb) > 280000) { return this.toKick = [true, `Slow PB: [${this.getSelectPB()[1]['S+']} > 4:40]`] }
+                case 1: // 5:00 = 300000
+                    if ( parseInt(pb) > 300000) { return this.toKick = [true, `Slow PB: [${this.getSelectPB()[1]['S+']} > 5:00]`] }
+                case 2: // 5:30 = 330000
+                    if ( parseInt(pb) > 330000) { return this.toKick = [true, `Slow PB: [${this.getSelectPB()[1]['S+']} > 5:30]`] }
+                case 3: // 6:00 = 360000
+                    if ( parseInt(pb) > 360000) { return this.toKick = [true, `Slow PB: [${this.getSelectPB()[1]['S+']} > 6:00]`] }
+                case 4: // Custom PB
+                    if ( parseInt(pb) > parseInt(config.partyFindercustomMinPB)) { return this.toKick = [true, `Slow PB: [${convertToPBTime(pb)} > ${convertToPBTime(parseInt(config.partyFindercustomMinPB))}]`] }
+            }
+
+            // Cata Level
+            if ( parseFloat(this.stats.experience.catacombs) < config.partyFinderminCata ) return this.toKick = [true, `Low Cata: [${this.stats.experience.catacombs} < ${config.partyFinderminCata}]`]
+
+            // Secrets 
+            if (parseInt(this.stats.dungeons.secrets) < parseInt(config.partyFinderminSecrets)) return this.toKick = [true, `Low Secret Count: [${this.stats.dungeons.secrets} < ${config.partyFinderminSecrets}]`]
+
+            // Class XP
+            if (this.classLevel < config.partyFinderminClass) return this.toKick = [true, `Low Class Level: [${this.classLevel} < ${config.partyFinderminClass}]`]
+
+        } if (this.updated.rest && !this.kicked) { // SB Level, MP
+            // Magical Power
+            if (parseInt(this.stats.magical_power) < parseInt(config.partyFinderminMP)) return this.toKick = [true, `Low Magical Power: [${this.stats.magical_power} < ${config.partyFinderminMP}]`]
+
+            // SB Level
+            if (parseInt(this.stats.sb_level_raw) < parseInt(config.partyFinderminLvl)) return this.toKick = [true, `Low Skyblock Level: [${this.stats.sb_level_raw} < ${config.partyFinderminLvl}]`]
+        }
     }
     
     getSelectPB() {
@@ -109,18 +149,18 @@ export default class playerData {
         return {"S": null, "S+": null, "rawS": null, "rawS+": null}
     }
 
-    getString(dungeonClass, classLevel) {
+    getString() {
         return [
             `&${this.toKick[0]? "c":"a"}&l&m--------------------`,
-            `&8[${(this.updated.rest)? this.stats.sb_level: "&r..."}&8] &6${this.username}`, // TODO: Rank Integration.
+            `&8[${(this.updated.rest)? this.stats.sb_level: "&r..."}&8] ${(this.updated.rest)? this.rank: "&6"} ${this.username}`, // TODO: Rank Integration.
             `&c☠ Cata Level: &e${(this.updated.dungeons)? this.stats.experience.catacombs: "..."}`,
             ` `,
             `&f&l⚛&r &fClass Average: &e${(this.updated.rest)? this.stats.experience.classAverage: "..."}`,
-            `&c☣ Archer Level: &e${(this.updated.rest)? this.stats.experience.classes.Archer:(dungeonClass == "Archer")? classLevel: "..."}`,
-            `&6⚔ Berserk Level: &e${(this.updated.rest)? this.stats.experience.classes.Berserker:(dungeonClass == "Berserk")? classLevel: "..."}`,
-            `&a❈ Tank Level: &e${(this.updated.rest)? this.stats.experience.classes.Tank:(dungeonClass == "Tank")? classLevel: "..."}`,
-            `&b✎ Mage Level: &e${(this.updated.rest)? this.stats.experience.classes.Mage:(dungeonClass == "Mage")? classLevel: "..."}`,
-            `&d❤ Healer Level: &e${(this.updated.rest)? this.stats.experience.classes.Healer:(dungeonClass == "Healer")? classLevel: "..."}`,
+            `&c☣ Archer Level: &e${(this.updated.rest)? this.stats.experience.classes.Archer:(this.dungeonClass == "Archer")? this.classLevel: "..."} ${(this.dungeonClass == "Archer")? "&7(active)": ""}`,
+            `&6⚔ Berserk Level: &e${(this.updated.rest)? this.stats.experience.classes.Berserker:(this.dungeonClass == "Berserk")? this.classLevel: "..."} ${(this.dungeonClass == "Berserk")? "&7(active)": ""}`,
+            `&a❈ Tank Level: &e${(this.updated.rest)? this.stats.experience.classes.Tank:(this.dungeonClass == "Tank")? this.classLevel: "..."} ${(this.dungeonClass == "Tank")? "&7(active)": ""}`,
+            `&b✎ Mage Level: &e${(this.updated.rest)? this.stats.experience.classes.Mage:(this.dungeonClass == "Mage")? this.classLevel: "..."} ${(this.dungeonClass == "Mage")? "&7(active)": ""}`,
+            `&d❤ Healer Level: &e${(this.updated.rest)? this.stats.experience.classes.Healer:(this.dungeonClass == "Healer")? this.classLevel: "..."} ${(this.dungeonClass == "Healer")? "&7(active)": ""}`,
             ` `,
             `&bMagical Power: &6${(this.updated.rest)? this.stats.magical_power.mp: "..."} | ${(this.updated.rest)? this.stats.magical_power.reforge: "..."}`,
             `&bSecret Count: &6${(this.updated.dungeons)? this.stats.dungeons.secrets: "..."}`,

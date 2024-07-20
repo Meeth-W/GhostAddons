@@ -2,8 +2,6 @@ import config from "../../config";
 import playerData from "../../utils/player";
 import { chat } from "../../utils/utils";
 
-let modStatus = false
-
 const trigger = register("chat", (username, dungeonClass, classLevel) => {
     chat("&cTrigger")
     let player = new playerData(username)
@@ -12,9 +10,19 @@ const trigger = register("chat", (username, dungeonClass, classLevel) => {
         ChatLib.clearChat(6969)
         chat(player.getString(dungeonClass, classLevel).join("\n"), 6969)
 
+        if ( config.partyFinderAutoKick && player.toKick[0]) {
+            chat("&cKicking Player: &r" + player.toKick[1])
+            player.kicked = true
+        }
+
         player.updateRest().then(() => {
             ChatLib.clearChat(6969)
             chat(player.getString(dungeonClass, classLevel).join("\n"), 6969)
+
+            if ( config.partyFinderAutoKick && !player.kicked && player.toKick[0]) {
+                chat("&cKicking Player: &r" + player.toKick[1])
+                player.kicked = true
+            }
         })
     }) } catch(e) {chat(`&cError: ${e.reason}`)}
 

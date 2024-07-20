@@ -3,8 +3,6 @@ import config from "./config";
 import modules from "./modules";
 import { chat } from "./utils/utils";
 
-const listeners = [];
-
 register("command", (command, ...args) => {
     if (!command && !args) {try {config.openGUI()} catch(e) {chat(`&cError: ${e}`)}}
 }).setName("ghostaddons").setAliases("gh");
