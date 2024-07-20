@@ -1,8 +1,26 @@
 import config from "../../config";
 import playerData from "../../utils/player";
-import { chat, queueChat } from "../../utils/utils";
+import { chat, prefix, queueChat } from "../../utils/utils";
 
 let isleader = false
+
+register("command", (username) => {
+    if (!username) username = Player.getName()
+    let player = new playerData(username, "Mage", 50) // Defaulting to Mage 50 cuz this is dependant and updates later anyway.
+    chat(player.getString().join("\n"), 6969)
+    try { player.init().then(() => {
+        ChatLib.clearChat(6969)
+        chat(player.getString().join("\n"), 6969)
+        player.updateRest().then(() => {
+            ChatLib.clearChat(6969)
+            chat(player.getString().join("\n"), 6969)
+            new Message(new TextComponent(prefix + `&c&l[&r&cClick To Invite&c&l]`).setHover(
+                "show_text",
+                `&c/party invite ${username}`
+            ).setClick('run_command', `/party invite ${username}`)).chat()
+        })
+    }) } catch(e) {chat(`&cError: ${e.reason}`)}
+}).setName("nicepb").setAliases("m7stats");
 
 const leadCheck = register('chat', (rank, leader) => {
     if ( leader == Player.getName() ) { isleader = true} 
@@ -12,10 +30,10 @@ const leadCheck = register('chat', (rank, leader) => {
 const trigger = register("chat", (username, dungeonClass, classLevel) => {
     chat("&cTrigger")
     let player = new playerData(username, dungeonClass, classLevel)
-    chat(player.getString(dungeonClass, classLevel).join("\n"), 6969)
+    chat(player.getString().join("\n"), 6969)
     try { player.init().then(() => {
         ChatLib.clearChat(6969)
-        chat(player.getString(dungeonClass, classLevel).join("\n"), 6969)
+        chat(player.getString().join("\n"), 6969)
 
         if ( config.partyFinderAutoKick && player.toKick[0]) {
             player.kicked = true
@@ -28,7 +46,12 @@ const trigger = register("chat", (username, dungeonClass, classLevel) => {
 
         player.updateRest().then(() => {
             ChatLib.clearChat(6969)
-            chat(player.getString(dungeonClass, classLevel).join("\n"), 6969)
+            chat(player.getString().join("\n"), 6969)
+
+            new Message(new TextComponent(prefix + `&c&l[&r&cClick To Kick&c&l]`).setHover(
+                "show_text",
+                `&c/party kick ${username}`
+            ).setClick('run_command', `/party kick ${username}`)).chat()
 
             if ( config.partyFinderAutoKick && !player.kicked && player.toKick[0]) {
                 player.kicked = true
