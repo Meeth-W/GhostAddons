@@ -2,11 +2,19 @@ import PogObject from "../../PogData";
 
 export const data = new PogObject("GhostAddons", {
     slotBinding: {
-        presets: { // {Inventory Slot: Hotbar Slot}
-            Archer: {}, Berserk: {}, Mage: {}, Tank: {}, Healer: {}, General: {}, Kuudra: {}
-        },
+        presets: [ // {Inventory Slot: Hotbar Slot}
+            {}, {}, {}, {}, {}, {}, {}
+        ],
         history: { // [Last Swap, Default Swap]
-            _36: [null, null], _37: [null, null], _38: [null, null], _39: [null, null], _40: [null, null], _41: [null, null], _42: [null, null], _43: [null, null], _44: [null, null]
+            '36': {last: null, default: null},
+            '37': {last: null, default: null}, 
+            '38': {last: null, default: null}, 
+            '39': {last: null, default: null}, 
+            '40': {last: null, default: null}, 
+            '41': {last: null, default: null}, 
+            '42': {last: null, default: null}, 
+            '43': {last: null, default: null}, 
+            '44': {last: null, default: null}
         }
     }
 }, 'data/mainData.json')

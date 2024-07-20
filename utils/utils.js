@@ -50,3 +50,7 @@ export function isInDungeon() {
         return TabList?.getNames()?.some(a => a.removeFormatting() == 'Dungeon: Catacombs')
     } catch (e) { chat(`&cError: ${e.reason}`)}
 }
+
+export function getPreset() {
+    return 0 // TODO: Make this work
+}
