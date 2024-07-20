@@ -24,3 +24,23 @@ export const sbLevelsPrefix = {
     "&6": [400, 439],
     "&c": [440, 479]
 }
+
+export class queueChat{
+    static queue = []
+    static lastMessage = 0
+    static timeout = 400
+
+    static queueCommand(func) {
+        this.queue.push(func)
+        this.doNext()
+    }
+    static doNext() {
+        if (!this.queue.length) return
+        if (Date.now() - this.lastMessage >= this.timeout) {
+            this.lastMessage = Date.now()
+            const func = this.queue.shift()
+            if (func) func()
+        }
+        setTimeout(() => this.doNext(), this.timeout)
+    }
+}
