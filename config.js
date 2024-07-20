@@ -15,49 +15,44 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General'];
-
+        const categories = ['General', 'Party Finder'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
 class Settings {
+    constructor() {
+        this.initialize(this);
+    }
+    
     // General
     @SwitchProperty({
         name: 'Toggle Ghost Addons',
         description: 'Decides whether all features of this mod are &aenabled&7/&cdisabled&7.',
         category: 'General'
     })
-    toggle = false
+    toggle = false;
 
     // Party Finder
-    // @TextProperty({
-    //     name: 'API Key',
-    //     description: 'Your API Key &chttps://developer.hypixel.net/dashboard',
-    //     category: 'Party FInder',
-    //     subcategory: 'API Settings'
-    // })
-    // apiKey = "null";
-
     @SwitchProperty({
         name: '&9Toggle Party Finder',
         description: 'Decides wether all features in Party Finder are &aenabled&7/&cdisabled&7.',
         category: 'Party Finder'
     })
-    partyFinderToggle = false
+    partyFinderToggle = false;
 
     @SwitchProperty({
         name: '&9Toggle Auto Kick',
         description: 'Decides wether players are automatically kicked from the party.',
         category: 'Party Finder'
     })
-    partyFinderAutoKick = false
+    partyFinderAutoKick = false;
 
     @SwitchProperty({
         name: 'Party Chat',
         description: 'Send an overview / kick message in party chat.',
         category: 'Party Finder'
     })
-    partyFinderPartyChat = false
+    partyFinderPartyChat = false;
 
     @SelectorProperty({
         name: 'Dungeon Type',
@@ -66,7 +61,7 @@ class Settings {
         subcategory: 'Floor Settings',
         options: ['Catacombs', 'Master Catacombs']
     })
-    partyFinderDungeonType = 1
+    partyFinderDungeonType = 1;
 
     @SelectorProperty({
         name: 'Dungeon Floor',
@@ -75,7 +70,7 @@ class Settings {
         subcategory: 'Floor Settings',
         options: ['1: Bonzo', '2: Scarf', '3: Professor', '4: Thorn', '5: Livid', '6: Sadan', '7: Necron / Wither King']
     })
-    partyFinderDungeonFloor = 6
+    partyFinderDungeonFloor = 6;
 
     @SliderProperty({
         name: 'Cata Level',
@@ -84,7 +79,7 @@ class Settings {
         subcategory: 'Requirements',
         min: 1,
         max: 100,
-        step: 1,
+        step: 1
     })
     partyFinderminCata = 50;
 
@@ -96,7 +91,7 @@ class Settings {
         subcategory: 'Requirements',
         min: 1,
         max: 50,
-        step: 1,
+        step: 1
     })
     partyFinderminClass = 45;
 
@@ -108,7 +103,7 @@ class Settings {
         subcategory: 'Requirements',
         min: 100,
         max: 2000,
-        step: 1,
+        step: 1
     })
     partyFinderminMP = 1450;
 
@@ -120,7 +115,7 @@ class Settings {
         subcategory: 'Requirements',
         min: 1,
         max: 500,
-        step: 1,
+        step: 1
     })
     partyFinderminLvl = 300;
 
@@ -130,7 +125,7 @@ class Settings {
         description: 'Minimum Personal Best',
         category: 'Party Finder',
         subcategory: 'Requirements',
-        options: ['Sub 4:40', 'Sub 5:00', 'Sub 5:30', 'Sub 6:00', 'Custom'],
+        options: ['Sub 4:40', 'Sub 5:00', 'Sub 5:30', 'Sub 6:00', 'Custom']
     })
     partyFinderminPB = 0;
 
@@ -139,7 +134,7 @@ class Settings {
         name: 'Custom PB Time',
         description: 'Custom personal best time in milliseconds.',
         category: 'Party Finder',
-        subcategory: 'Requirements',
+        subcategory: 'Requirements'
     })
     partyFindercustomMinPB = "300000";
     
@@ -148,7 +143,7 @@ class Settings {
         name: 'Secret Count',
         description: 'Minimum Secret Count',
         category: 'Party Finder',
-        subcategory: 'Requirements',
+        subcategory: 'Requirements'
     })
     partyFinderminSecrets = "50000";
 
