@@ -112,11 +112,11 @@ export default class playerData {
             if (parseInt(this.stats.dungeons.secrets) < parseInt(config.partyFinderminSecrets)) return this.toKick = [true, `Low Secret Count: [${this.stats.dungeons.secrets} < ${config.partyFinderminSecrets}]`]
 
             // Class XP
-            if (this.classLevel < config.partyFinderminClass) return this.toKick = [true, `Low Class Level: [${this.classLevel} < ${config.partyFinderminClass}]`]
+            if (parseInt(this.classLevel) < config.partyFinderminClass) return this.toKick = [true, `Low Class Level: [${this.classLevel} < ${config.partyFinderminClass}]`]
 
         } if (this.updated.rest && !this.kicked) { // SB Level, MP
             // Magical Power
-            if (parseInt(this.stats.magical_power) < parseInt(config.partyFinderminMP)) return this.toKick = [true, `Low Magical Power: [${this.stats.magical_power} < ${config.partyFinderminMP}]`]
+            if (parseInt(this.stats.magical_power.mp) < parseInt(config.partyFinderminMP)) return this.toKick = [true, `Low Magical Power: [${this.stats.magical_power.mp} < ${config.partyFinderminMP}]`]
 
             // SB Level
             if (parseInt(this.stats.sb_level_raw) < parseInt(config.partyFinderminLvl)) return this.toKick = [true, `Low Skyblock Level: [${this.stats.sb_level_raw} < ${config.partyFinderminLvl}]`]

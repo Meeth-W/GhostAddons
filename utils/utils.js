@@ -30,8 +30,8 @@ export class queueChat{
     static lastMessage = 0
     static timeout = 400
 
-    static queueCommand(func) {
-        this.queue.push(func)
+    static queueCommands(funcs) {
+        this.queue = funcs
         this.doNext()
     }
     static doNext() {
