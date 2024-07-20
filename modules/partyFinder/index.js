@@ -6,7 +6,7 @@ let isleader = false
 
 register("command", (username) => {
     if (!username) username = Player.getName()
-    let player = new playerData(username, "Mage", 50) // Defaulting to Mage 50 cuz this is dependant and updates later anyway.
+    let player = new playerData(username, "Mage", 50, true) // Defaulting to Mage 50 cuz this is dependant and updates later anyway.
     chat(player.getString().join("\n"), 6969)
     try { player.init().then(() => {
         ChatLib.clearChat(6969)

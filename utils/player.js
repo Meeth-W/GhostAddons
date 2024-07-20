@@ -4,10 +4,11 @@ import { chat, getSbLevelPrefix } from "./utils"
 import { calcSkillLevel, convertToPBTime } from "../../BloomCore/utils/Utils"
 
 export default class playerData {
-    constructor(username, dungeonClass, classLevel) {
+    constructor(username, dungeonClass, classLevel, cmd = false) {
         this.username = username
         this.dungeonClass = dungeonClass
         this.classLevel = classLevel
+        this.cmdUsed = cmd
         this.uuid = null
         this.rank = null
         
@@ -156,11 +157,11 @@ export default class playerData {
             `&c☠ Cata Level: &e${(this.updated.dungeons)? this.stats.experience.catacombs: "..."}`,
             ` `,
             `&f&l⚛&r &fClass Average: &e${(this.updated.rest)? this.stats.experience.classAverage: "..."}`,
-            `&c☣ Archer Level: &e${(this.updated.rest)? this.stats.experience.classes.Archer:(this.dungeonClass == "Archer")? this.classLevel: "..."}`,
-            `&6⚔ Berserk Level: &e${(this.updated.rest)? this.stats.experience.classes.Berserker:(this.dungeonClass == "Berserk")? this.classLevel: "..."}`,
-            `&a❈ Tank Level: &e${(this.updated.rest)? this.stats.experience.classes.Tank:(this.dungeonClass == "Tank")? this.classLevel: "..."}`,
-            `&b✎ Mage Level: &e${(this.updated.rest)? this.stats.experience.classes.Mage:(this.dungeonClass == "Mage")? this.classLevel: "..."}`,
-            `&d❤ Healer Level: &e${(this.updated.rest)? this.stats.experience.classes.Healer:(this.dungeonClass == "Healer")? this.classLevel: "..."}`,
+            `&c➶ Archer Level: &e${(this.updated.rest)? this.stats.experience.classes.Archer:(this.dungeonClass == "Archer")? this.classLevel: "..."} ${(this.dungeonClass == "Archer" && !this.cmdUsed)? "&c&l←": ""}`,
+            `&6☄ Berserk Level: &e${(this.updated.rest)? this.stats.experience.classes.Berserker:(this.dungeonClass == "Berserk")? this.classLevel: "..."} ${(this.dungeonClass == "Berserk" && !this.cmdUsed)? "&6&l←)": ""}`,
+            `&a⚓Tank Level: &e${(this.updated.rest)? this.stats.experience.classes.Tank:(this.dungeonClass == "Tank")? this.classLevel: "..."} ${(this.dungeonClass == "Tank" && !this.cmdUsed)? "&a&l←": ""}`,
+            `&b⚡ Mage Level: &e${(this.updated.rest)? this.stats.experience.classes.Mage:(this.dungeonClass == "Mage")? this.classLevel: "..."} ${(this.dungeonClass == "Mage" && !this.cmdUsed)? "&b&l←": ""}`,
+            `&d⚚ Healer Level: &e${(this.updated.rest)? this.stats.experience.classes.Healer:(this.dungeonClass == "Healer")? this.classLevel: "... "} ${(this.dungeonClass == "Healer" && !this.cmdUsed)? "&d&l←": ""}`,
             ` `,
             `&bMagical Power: &6${(this.updated.rest)? this.stats.magical_power.mp: "..."} | ${(this.updated.rest)? this.stats.magical_power.reforge: "..."}`,
             `&bSecret Count: &6${(this.updated.dungeons)? this.stats.dungeons.secrets: "..."}`,

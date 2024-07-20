@@ -1,9 +1,10 @@
 import config from "../config";
 
 import partyFinder from "./partyFinder";
+import slotBinding from "./slotBinding";
 
 export const modules = [
-    partyFinder
+    partyFinder, slotBinding
 ]
 
 export default { modules };

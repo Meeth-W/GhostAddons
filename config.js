@@ -15,13 +15,22 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General', 'Party Finder'];
+        const categories = ['General', 'Slot Binding', 'Party Finder'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
 class Settings {
     constructor() {
         this.initialize(this);
+
+        // General Section
+        this.setCategoryDescription('General', '&6Ghost Addons\n\n&bCoded by: &cGhostyy &7(.ghxstyy)')
+
+        // Party Finder
+        this.setCategoryDescription('Party Finder', '&6Party Finder Settings\n\n&7/nicepb {user} | /m7stats {user}')
+
+        // Slot Binding
+        this.setCategoryDescription('Slot Binding', '&6Slot Binding Settings\n\n&7Set hotkey from Minecraft Controls Settings.')
     }
     
     // General
@@ -83,7 +92,6 @@ class Settings {
     })
     partyFinderminCata = 50;
 
-    // Class Level
     @SliderProperty({
         name: 'Class Level',
         description: 'Minimum Class Level',
@@ -95,7 +103,6 @@ class Settings {
     })
     partyFinderminClass = 45;
 
-    // MP
     @SliderProperty({
         name: 'Magical Power',
         description: 'Minimum Magical Power',
@@ -107,7 +114,6 @@ class Settings {
     })
     partyFinderminMP = 1450;
 
-    // SB Level
     @SliderProperty({
         name: 'Skyblock Level',
         description: 'Minimum Skyblock Level',
@@ -119,7 +125,6 @@ class Settings {
     })
     partyFinderminLvl = 300;
 
-    // PB
     @SelectorProperty({
         name: 'Personal Best',
         description: 'Minimum Personal Best',
@@ -129,7 +134,6 @@ class Settings {
     })
     partyFinderminPB = 0;
 
-    // PB Custom
     @TextProperty({
         name: 'Custom PB Time',
         description: 'Custom personal best time in milliseconds.',
@@ -138,7 +142,6 @@ class Settings {
     })
     partyFindercustomMinPB = "300000";
     
-    // Secrets
     @TextProperty({ 
         name: 'Secret Count',
         description: 'Minimum Secret Count',
@@ -147,6 +150,47 @@ class Settings {
     })
     partyFinderminSecrets = "50000";
 
+    // Slot Binding
+    @SwitchProperty({
+        name: '&9Toggle Slot Binding',
+        description: 'Decides wether all features in Slot Binding are &aenabled&7/&cdisabled&7.',
+        category: 'Slot Binding'
+    })
+    slotBindingToggle = false;
+
+    @SelectorProperty({
+        name: 'Preset',
+        description: 'The current preset in use. \nSelected preset will be edited with keybind.',
+        category: 'Slot Binding',
+        subcategory: 'Settings',
+        options: ['Mage', 'Archer', 'Berserker', 'Healer', 'Tank', 'General', 'Kuudra'],
+    })
+    slotBindingPreset = 0;
+
+    @SwitchProperty({
+        name: "Auto Select",
+        description: "&7Selects slot bind preset based on your selected class in dungeons.\n&cSelected preset will be used outside dungeons.",
+        category: "Slot Binding",
+        subcategory: 'Settings'
+    })
+    slotBindingautoSelect = false
+
+    @TextProperty({
+        name: "Swap Sound",
+        description: "Sound used for slot binding.",
+        category: "Slot Binding",
+        placeholder: "note.pling",
+        subcategory: 'Settings'
+    })
+    slotBindingswapSound = "note.pling";
+
+    @SwitchProperty({
+        name: "Dynamic Coloring",
+        description: "Changes the color of the line overlay based on the preset being used.",
+        category: "Slot Binding",
+        subcategory: 'Settings'
+    })
+    slotBindingdynamicColoring = false
 }
 
 export default new Settings();
