@@ -1,18 +1,29 @@
 import config from "../../config";
 import playerData from "../../utils/player";
-import { chat } from "../../utils/utils";
+import { chat, queueChat } from "../../utils/utils";
+
+let isleader = false
+
+const leadCheck = register('chat', (rank, leader) => {
+    if ( leader == Player.getName() ) { isleader = true} 
+    else { isleader = false }
+}).setCriteria("Party Leader: ${rank} ${leader} ●").unregister()
 
 const trigger = register("chat", (username, dungeonClass, classLevel) => {
     chat("&cTrigger")
-    let player = new playerData(username)
+    let player = new playerData(username, dungeonClass, classLevel)
     chat(player.getString(dungeonClass, classLevel).join("\n"), 6969)
     try { player.init().then(() => {
         ChatLib.clearChat(6969)
         chat(player.getString(dungeonClass, classLevel).join("\n"), 6969)
 
         if ( config.partyFinderAutoKick && player.toKick[0]) {
-            chat("&cKicking Player: &r" + player.toKick[1])
             player.kicked = true
+            queueChat.queueCommands([
+                () => {if (config.partyFinderPartyChat) ChatLib.command(`party chat [GH] Kicking Player: ${player.toKick[1]}`)},
+                () => {if (isleader) ChatLib.command(`party kick ${username}`)}
+            ])
+            if (!isleader) chat("&cCancelling Auto-Kick, Not party leader.")
         }
 
         player.updateRest().then(() => {
@@ -20,8 +31,18 @@ const trigger = register("chat", (username, dungeonClass, classLevel) => {
             chat(player.getString(dungeonClass, classLevel).join("\n"), 6969)
 
             if ( config.partyFinderAutoKick && !player.kicked && player.toKick[0]) {
-                chat("&cKicking Player: &r" + player.toKick[1])
                 player.kicked = true
+                queueChat.queueCommands([
+                    () => {if (config.partyFinderPartyChat) ChatLib.command(`party chat [GH] Kicking Player: ${player.toKick[1]}`)},
+                    () => {if (isleader) ChatLib.command(`party kick ${username}`)}
+                ])
+                if (!isleader) chat("&cCancelling Auto-Kick, Not party leader.")
+            }
+
+            if (config.partyFinderPartyChat && !player.toKick[0] && !player.kicked) {
+                queueChat.queueCommands([
+                    () => {ChatLib.command(`party chat [GH] [${parseInt(player.stats.sb_level_raw)}] ${username} | Floor PB: ${player.getSelectPB()[1]['S+']} | Highest Magical Power: ${player.stats.magical_power.mp} | SPR: ${(player.stats.dungeons.secrets / player.stats.dungeons.runs).toFixed(2)}`)}
+                ])
             }
         })
     }) } catch(e) {chat(`&cError: ${e.reason}`)}
@@ -31,9 +52,13 @@ const trigger = register("chat", (username, dungeonClass, classLevel) => {
 export function toggle() {
     if (config.partyFinderToggle && config.toggle) {
         chat("&aStarting the &6Party Finder &amodule.")
-        return trigger.register()
+        leadCheck.register()
+        trigger.register()
+        return
     }
     chat("&cStopping the &6Party Finder &cmodule.")
-    return trigger.unregister()
+    leadCheck.unregister()
+    trigger.unregister()
+    return
 }
 export default { toggle };
