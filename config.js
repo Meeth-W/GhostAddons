@@ -15,7 +15,7 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General', 'Slot Binding', 'Party Finder'];
+        const categories = ['General', 'Slot Binding', 'Party Finder', 'Auto Leap'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
@@ -31,6 +31,9 @@ class Settings {
 
         // Slot Binding
         this.setCategoryDescription('Slot Binding', '&6Slot Binding Settings\n\n&7Set hotkey from Minecraft Controls Settings.')
+
+        // Auto Leap 
+        this.setCategoryDescription('Auto Leap', '&6Automatically leaps to certain users on specific events.\n\n&4This module is a Cheat. Use at your own risk.')
     }
     
     // General
@@ -40,6 +43,13 @@ class Settings {
         category: 'General'
     })
     toggle = false;
+
+    @SwitchProperty({
+        name: 'Debug Mode',
+        description: 'Debug stuff, ignore this.',
+        category: 'General'
+    })
+    debug = false;
 
     // Party Finder
     @SwitchProperty({
@@ -191,6 +201,39 @@ class Settings {
         subcategory: 'Settings'
     })
     slotBindingdynamicColoring = false
+
+    // Auto Leap 
+    @SwitchProperty({
+        name: '&9Toggle Auto Leap',
+        description: 'Decides wether all features in Auto Leap are &aenabled&7/&cdisabled&7.',
+        category: 'Auto Leap'
+    })
+    autoLeapToggle = false;
+
+    @SwitchProperty({
+        name: 'Auto Leap to Door Opener',
+        description: 'Leaps to whoever opens the wither door.',
+        category: 'Auto Leap',
+        subcategory: 'Settings'
+    })
+    autoLeapWitherDoor = false;
+
+    @SwitchProperty({
+        name: 'Auto Leap after i4',
+        description: 'Leaps to specified ign after i4 is completed.\n&c[TODO: Command to change ign.]',
+        category: 'Auto Leap',
+        subcategory: 'Settings'
+    })
+    autoLeapi4 = false;
+
+    @TextProperty({
+        name: "Leap Target",
+        description: "Default person to leap to.",
+        category: "Auto Leap",
+        placeholder: "Ghostyy",
+        subcategory: 'Settings'
+    })
+    autoLeapTarget = "Ghostyy";
 }
 
 export default new Settings();

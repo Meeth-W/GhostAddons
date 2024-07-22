@@ -111,9 +111,7 @@ const guiTrigger = register('guiRender', (x, y, gui) => {
     if (gui.class.getName() !== "net.minecraft.client.gui.inventory.GuiInventory") return;
 
     if (cursor) {
-        chat(`${cursor} Selected.`)
         const [x1, y1] = getSlotCoords(cursor)
-        chat(`${x1} ${y1}`)
         Renderer.translate(0, 0, 2);
         Renderer.drawRect(Renderer.RED, x1, y1, 16, 16);
         Renderer.translate(0, 0, 3);
@@ -159,12 +157,12 @@ const guiTrigger = register('guiRender', (x, y, gui) => {
 
 export function toggle() {
     if (config.slotBindingToggle && config.toggle) {
-        chat("&aStarting the &6Slot Binding &amodule.")
+        if (config.debug) chat("&aStarting the &6Slot Binding &amodule.")
         mainTrigger.register()
         guiTrigger.register()
         return
     }
-    chat("&cStopping the &6Slot Binding &cmodule.")
+    if (config.debug) chat("&cStopping the &6Slot Binding &cmodule.")
     mainTrigger.unregister()
     guiTrigger.unregister()
     return

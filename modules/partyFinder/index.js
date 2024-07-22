@@ -74,12 +74,12 @@ const trigger = register("chat", (username, dungeonClass, classLevel) => {
 
 export function toggle() {
     if (config.partyFinderToggle && config.toggle) {
-        chat("&aStarting the &6Party Finder &amodule.")
+        if (config.debug) chat("&aStarting the &6Party Finder &amodule.")
         leadCheck.register()
         trigger.register()
         return
     }
-    chat("&cStopping the &6Party Finder &cmodule.")
+    if (config.debug) chat("&cStopping the &6Party Finder &cmodule.")
     leadCheck.unregister()
     trigger.unregister()
     return

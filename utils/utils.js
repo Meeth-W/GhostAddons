@@ -94,3 +94,16 @@ export function getSlotCoords(i) {
   
     return [x, y];
 }
+
+export function leftClick() {
+    const leftClickMethod = Client.getMinecraft().getClass().getDeclaredMethod("func_147116_af", null)
+    leftClickMethod.setAccessible(true);
+    leftClickMethod.invoke(Client.getMinecraft(), null)
+}
+
+
+export function rightClick() {
+    const rightClickMethod = Client.getMinecraft().getClass().getDeclaredMethod("func_147121_ag", null)
+    rightClickMethod.setAccessible(true);
+    rightClickMethod.invoke(Client.getMinecraft(), null);
+} 
