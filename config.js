@@ -163,7 +163,7 @@ class Settings {
         description: 'The current preset in use. \nSelected preset will be edited with keybind.',
         category: 'Slot Binding',
         subcategory: 'Settings',
-        options: ['Mage', 'Archer', 'Berserker', 'Healer', 'Tank', 'General', 'Kuudra'],
+        options: ['Mage', 'Archer', 'Berserker', 'Healer', 'Tank', 'General'],
     })
     slotBindingPreset = 0;
 

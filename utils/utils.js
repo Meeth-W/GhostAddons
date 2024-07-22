@@ -1,4 +1,4 @@
-import { convertToPBTime } from "../../BloomCore/utils/Utils"
+import config from "../config"
 
 export const prefix = "§8[&6Ghost&8]§r "
 const defaultColor = "§7"
@@ -51,6 +51,46 @@ export function isInDungeon() {
     } catch (e) { chat(`&cError: ${e.reason}`)}
 }
 
+export function getClass() {
+    let index = TabList?.getNames()?.findIndex(line => line?.includes(Player.getName()))
+    if (index == -1) return
+    let match = TabList?.getNames()[index]?.removeFormatting().match(/.+ \((.+) .+\)/)
+    if (!match) return "EMPTY"
+    return match[1];
+}
+
 export function getPreset() {
-    return 0 // TODO: Make this work
+    if (!config.slotBindingautoSelect) return config.slotBindingPreset
+    if (!isInDungeon()) return config.slotBindingPreset
+
+    let selectedClass = getClass()
+    if (selectedClass == "Mage") return 0
+    else if (selectedClass == "Archer") return 1
+    else if (selectedClass == "Berserk") return 2
+    else if (selectedClass == "Healer") return 3
+    else if (selectedClass == "Tank") return 4
+    else return config.slotBindingPreset
+}
+
+export function getDynamicColor() {
+    if (!config.slotBindingdynamicColoring) return Renderer.WHITE
+
+    let preset = getPreset()
+    if (preset == 0) return Renderer.AQUA
+    else if (preset == 1) return Renderer.GOLD
+    else if (preset == 2) return Renderer.RED
+    else if (preset == 3) return Renderer.LIGHT_PURPLE
+    else if (preset == 4) return Renderer.DARK_GREEN
+    else return Renderer.WHITE
+}
+
+export function getSlotCoords(i) {
+    if (i >= Player.getContainer().getSize()) return [0, 0];
+
+    const gui = Client.currentGui.get();
+    const slot = gui.field_147002_h?.func_75139_a(i);
+    const x = slot.field_75223_e  + gui?.getGuiLeft() ?? 0;
+    const y = slot.field_75221_f  + gui?.getGuiTop() ?? 0;
+  
+    return [x, y];
 }

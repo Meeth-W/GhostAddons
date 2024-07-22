@@ -1,16 +1,19 @@
 import config from "../../config"
 import { data } from "../../utils/data"
-import { chat, getPreset } from "../../utils/utils"
+import { chat, getDynamicColor, getPreset, getSlotCoords } from "../../utils/utils"
 
 const bindKey = new KeyBind("Bind Slots", Keyboard.KEY_NONE, "GhostAddons")
 
 const getPlayerController = () => Client.getMinecraft().field_71442_b
 const onShiftClick = (slot) => {
     const container = Player.getContainer()
-    if (slot < 36 || slot > 44) { // Non Hotbar Click.
+
+    if (slot < 36 || slot > 44) {
+        if (!(slot in data.slotBinding.presets[getPreset()])) return
         const hotbarSlot = data.slotBinding.presets[getPreset()][slot] % 36
         if (hotbarSlot == null || hotbarSlot >= 9) return
 
+        World.playSound(config.slotBindingswapSound, 1, 2);
         getPlayerController().func_78753_a(
             container.getWindowId(), 
             slot, 
@@ -19,35 +22,37 @@ const onShiftClick = (slot) => {
             Player.getPlayer()
         )
 
-        // Save the swap we just did as last swap for the slot
         data.slotBinding.history[data.slotBinding.presets[getPreset()][slot]].last = slot
+        data.save()
         return
     }
-    // Hotbar Click
-    if (data.slotBinding.history[slot].last) { // Last found, swap there
+    if (data.slotBinding.history[slot].last) {
         const inventorySlot = data.slotBinding.history[slot].last
         if ( inventorySlot == null ) return
-        
+
+        World.playSound(config.slotBindingswapSound, 1, 2);
         getPlayerController().func_78753_a(
             container.getWindowId(), 
             inventorySlot, 
-            slot, 
+            slot % 36, 
             2,
             Player.getPlayer()
         )
-    } else if (data.slotBinding.history[slot].default) { // Swap w/ default
+    } else if (data.slotBinding.history[slot].default) {
         const inventorySlot = data.slotBinding.history[slot].default
         if ( inventorySlot == null ) return
         
+        World.playSound(config.slotBindingswapSound, 1, 2);
         getPlayerController().func_78753_a(
             container.getWindowId(), 
             inventorySlot, 
-            slot, 
+            slot % 36, 
             2,
             Player.getPlayer()
         )
 
         data.slotBinding.history[slot].last = inventorySlot
+        data.save()
     }
     return
 }
@@ -62,8 +67,8 @@ const onKeyLeftClick = (slot) => {
     if (!cursor) cursor = slot;
     if (cursor === slot) return;
 
-    data.slotBinding.presets[getPreset()][cursor] = slot // Save Binding
-    data.slotBinding.history[slot].default = cursor // Save cursor as default swap for hotbar slot
+    data.slotBinding.presets[getPreset()][cursor] = slot
+    data.slotBinding.history[slot].default = cursor
 
     data.save()
 
@@ -75,8 +80,9 @@ const onKeyRightClick = (slot) => {
     hotbarSlot = data.slotBinding.presets[getPreset()][slot]
 
     delete data.slotBinding.presets[getPreset()][slot] // Delete Binding
-    if (data.slotBinding.history[hotbarSlot].default == slot) data.slotBinding.history[hotbarSlot].default == null // Delete from history if slot is saved as default for its hotbar slot.
-
+    if (data.slotBinding.history[hotbarSlot].default == slot) data.slotBinding.history[hotbarSlot].default = null // Delete from history if slot is saved as default for its hotbar slot.
+    if (data.slotBinding.history[hotbarSlot].last == slot) data.slotBinding.history[hotbarSlot].last = null
+    data.save()
     chat(`&aSuccesfully Deleted: ${slot}.`)
 }
 
@@ -92,7 +98,9 @@ const mainTrigger = register("guiMouseClick", (x, y, mouseButton, gui, event) =>
         cancel(event);
         onKeyLeftClick(slot);
     }
-    if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && slot in data.slotBinding.presets[getPreset()]) {
+    if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+        if ((slot < 36 || slot > 44)) { if (!(slot in data.slotBinding.presets[getPreset()])) return} 
+        if (!(slot < 36 || slot > 44)) { if (!(data.slotBinding.history[slot].default)) return}
         cancel(event);
         onShiftClick(slot);
     }
@@ -101,6 +109,52 @@ const mainTrigger = register("guiMouseClick", (x, y, mouseButton, gui, event) =>
 
 const guiTrigger = register('guiRender', (x, y, gui) => {
     if (gui.class.getName() !== "net.minecraft.client.gui.inventory.GuiInventory") return;
+
+    if (cursor) {
+        chat(`${cursor} Selected.`)
+        const [x1, y1] = getSlotCoords(cursor)
+        chat(`${x1} ${y1}`)
+        Renderer.translate(0, 0, 2);
+        Renderer.drawRect(Renderer.RED, x1, y1, 16, 16);
+        Renderer.translate(0, 0, 3);
+        Renderer.drawLine(Renderer.RED, x1 + 8, y1 + 8, x, y, 1);
+    }
+
+    const hoverSlot = gui?.getSlotUnderMouse()?.field_75222_d;
+    const hotbarBind = (((hoverSlot < 36 || hoverSlot > 44)))? data.slotBinding.presets[getPreset()][`${hoverSlot}`]: null
+
+    if (hotbarBind) {
+        const [x1, y1] = getSlotCoords(hoverSlot);
+        const [x2, y2] = getSlotCoords(hotbarBind);
+
+        Renderer.translate(0, 0, 3);
+        Renderer.drawLine(getDynamicColor(), x1 + 8, y1 + 8, x2 + 8, y2 + 8, 1);
+
+        Renderer.translate(0, 0, 2);
+        Renderer.drawLine(getDynamicColor(), x2, y2, x2+16, y2, 1);
+        Renderer.translate(0, 0, 2);
+        Renderer.drawLine(getDynamicColor(), x2, y2, x2, y2+16, 1);
+        Renderer.translate(0, 0, 2);
+        Renderer.drawLine(getDynamicColor(), x2, y2+16, x2+16, y2+16, 1);
+        Renderer.translate(0, 0, 2);    
+        Renderer.drawLine(getDynamicColor(), x2+16, y2+16, x2+16, y2, 1);
+    }
+
+    Object.keys(data.slotBinding.presets[getPreset()]).forEach((bind) => {
+        const [x, y] = getSlotCoords(parseInt(bind))
+        Renderer.translate(0, 0, 1);
+        Renderer.drawRect(Renderer.DARK_GRAY, x, y, 16, 16);    
+        Renderer.translate(0, 0, 2);
+        Renderer.drawLine(getDynamicColor(), x, y, x+16, y, 1);
+        Renderer.translate(0, 0, 2);
+        Renderer.drawLine(getDynamicColor(), x, y, x, y+16, 1);
+        Renderer.translate(0, 0, 2);
+        Renderer.drawLine(getDynamicColor(), x, y+16, x+16, y+16, 1);
+        Renderer.translate(0, 0, 2);    
+        Renderer.drawLine(getDynamicColor(), x+16, y+16, x+16, y, 1);
+    })
+
+
 }).unregister();
 
 export function toggle() {
