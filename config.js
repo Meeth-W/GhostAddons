@@ -34,6 +34,9 @@ class Settings {
 
         // Auto Leap 
         this.setCategoryDescription('Auto Leap', '&6Automatically leaps to certain users on specific events.\n\n&4This module is a Cheat. Use at your own risk.')
+
+        // Blood Camp
+        this.setCategoryDescription('Blood Camp', '&6Blood Camp Features. Coming Soon TM')
     }
     
     // General

@@ -22,37 +22,19 @@ const onShiftClick = (slot) => {
             Player.getPlayer()
         )
 
-        data.slotBinding.history[data.slotBinding.presets[getPreset()][slot]].last = slot
+        data.slotBinding.history[data.slotBinding.presets[getPreset()][slot]] = slot
         data.save()
         return
     }
-    if (data.slotBinding.history[slot].last) {
-        const inventorySlot = data.slotBinding.history[slot].last
-        if ( inventorySlot == null ) return
-
+    if (data.slotBinding.history[slot]) {
         World.playSound(config.slotBindingswapSound, 1, 2);
         getPlayerController().func_78753_a(
             container.getWindowId(), 
-            inventorySlot, 
+            data.slotBinding.history[slot], 
             slot % 36, 
             2,
             Player.getPlayer()
         )
-    } else if (data.slotBinding.history[slot].default) {
-        const inventorySlot = data.slotBinding.history[slot].default
-        if ( inventorySlot == null ) return
-        
-        World.playSound(config.slotBindingswapSound, 1, 2);
-        getPlayerController().func_78753_a(
-            container.getWindowId(), 
-            inventorySlot, 
-            slot % 36, 
-            2,
-            Player.getPlayer()
-        )
-
-        data.slotBinding.history[slot].last = inventorySlot
-        data.save()
     }
     return
 }
@@ -68,7 +50,7 @@ const onKeyLeftClick = (slot) => {
     if (cursor === slot) return;
 
     data.slotBinding.presets[getPreset()][cursor] = slot
-    data.slotBinding.history[slot].default = cursor
+    data.slotBinding.history[slot] = cursor
 
     data.save()
 
@@ -79,9 +61,8 @@ const onKeyRightClick = (slot) => {
     if (!(slot in data.slotBinding.presets[getPreset()])) return chat(`&cError: That slot is not currently bound.`)
     hotbarSlot = data.slotBinding.presets[getPreset()][slot]
 
-    delete data.slotBinding.presets[getPreset()][slot] // Delete Binding
-    if (data.slotBinding.history[hotbarSlot].default == slot) data.slotBinding.history[hotbarSlot].default = null // Delete from history if slot is saved as default for its hotbar slot.
-    if (data.slotBinding.history[hotbarSlot].last == slot) data.slotBinding.history[hotbarSlot].last = null
+    delete data.slotBinding.presets[getPreset()][slot]
+    if (data.slotBinding.history[hotbarSlot] == slot) data.slotBinding.history[hotbarSlot] = null
     data.save()
     chat(`&aSuccesfully Deleted: ${slot}.`)
 }
@@ -100,7 +81,7 @@ const mainTrigger = register("guiMouseClick", (x, y, mouseButton, gui, event) =>
     }
     if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
         if ((slot < 36 || slot > 44)) { if (!(slot in data.slotBinding.presets[getPreset()])) return} 
-        if (!(slot < 36 || slot > 44)) { if (!(data.slotBinding.history[slot].default)) return}
+        if (!(slot < 36 || slot > 44)) { if (!(data.slotBinding.history[slot])) return}
         cancel(event);
         onShiftClick(slot);
     }
@@ -152,11 +133,22 @@ const guiTrigger = register('guiRender', (x, y, gui) => {
         Renderer.drawLine(getDynamicColor(), x+16, y+16, x+16, y, 1);
     })
     
-    const linkedSlot = (!(hoverSlot < 36 || hoverSlot > 44)? data.slotBinding.history[slot].default: null)
+    const linkedSlot = (!(hoverSlot < 36 || hoverSlot > 44)? data.slotBinding.history[hoverSlot]: null)
 
     if (linkedSlot) {
-        const [x, y] = getSlotCoords(parseInt(linkedSlot))
-        // TODO: Rendering when hovering over hotbar slot. 
+        const [x1, y1] = getSlotCoords(linkedSlot);
+        const [x2, y2] = getSlotCoords(parseInt(hoverSlot))
+        
+        Renderer.drawLine(getDynamicColor(), x1 + 8, y1 + 8, x2 + 8, y2 + 8, 1);
+
+        Renderer.translate(0, 0, 2);
+        Renderer.drawLine(getDynamicColor(), x2, y2, x2+16, y2, 1);
+        Renderer.translate(0, 0, 2);
+        Renderer.drawLine(getDynamicColor(), x2, y2, x2, y2+16, 1);
+        Renderer.translate(0, 0, 2);
+        Renderer.drawLine(getDynamicColor(), x2, y2+16, x2+16, y2+16, 1);
+        Renderer.translate(0, 0, 2);    
+        Renderer.drawLine(getDynamicColor(), x2+16, y2+16, x2+16, y2, 1);
     }
 }).unregister();
 
