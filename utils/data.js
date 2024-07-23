@@ -18,3 +18,5 @@ export const data = new PogObject("GhostAddons", {
         }
     }
 }, 'data/mainData.json')
+
+// TODO: Improve data structure, last & default both are redundant. Only need one. 
