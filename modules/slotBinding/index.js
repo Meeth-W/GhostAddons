@@ -151,8 +151,13 @@ const guiTrigger = register('guiRender', (x, y, gui) => {
         Renderer.translate(0, 0, 2);    
         Renderer.drawLine(getDynamicColor(), x+16, y+16, x+16, y, 1);
     })
+    
+    const linkedSlot = (!(hoverSlot < 36 || hoverSlot > 44)? data.slotBinding.history[slot].default: null)
 
-
+    if (linkedSlot) {
+        const [x, y] = getSlotCoords(parseInt(linkedSlot))
+        // TODO: Rendering when hovering over hotbar slot. 
+    }
 }).unregister();
 
 export function toggle() {
