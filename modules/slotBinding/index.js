@@ -22,15 +22,15 @@ const onShiftClick = (slot) => {
             Player.getPlayer()
         )
 
-        data.slotBinding.history[data.slotBinding.presets[getPreset()][slot]] = slot
+        data.slotBinding.history[getPreset()][data.slotBinding.presets[getPreset()][slot]] = slot
         data.save()
         return
     }
-    if (data.slotBinding.history[slot]) {
+    if (data.slotBinding.history[getPreset()][slot]) {
         World.playSound(config.slotBindingswapSound, 1, 2);
         getPlayerController().func_78753_a(
             container.getWindowId(), 
-            data.slotBinding.history[slot], 
+            data.slotBinding.history[getPreset()][slot], 
             slot % 36, 
             2,
             Player.getPlayer()
@@ -50,7 +50,7 @@ const onKeyLeftClick = (slot) => {
     if (cursor === slot) return;
 
     data.slotBinding.presets[getPreset()][cursor] = slot
-    data.slotBinding.history[slot] = cursor
+    data.slotBinding.history[getPreset()][slot] = cursor
 
     data.save()
 
@@ -62,7 +62,7 @@ const onKeyRightClick = (slot) => {
     hotbarSlot = data.slotBinding.presets[getPreset()][slot]
 
     delete data.slotBinding.presets[getPreset()][slot]
-    if (data.slotBinding.history[hotbarSlot] == slot) data.slotBinding.history[hotbarSlot] = null
+    if (data.slotBinding.history[getPreset()][hotbarSlot] == slot) data.slotBinding.history[hotbarSlot] = null
     data.save()
     chat(`&aSuccesfully Deleted: ${slot}.`)
 }
@@ -81,7 +81,7 @@ const mainTrigger = register("guiMouseClick", (x, y, mouseButton, gui, event) =>
     }
     if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
         if ((slot < 36 || slot > 44)) { if (!(slot in data.slotBinding.presets[getPreset()])) return} 
-        if (!(slot < 36 || slot > 44)) { if (!(data.slotBinding.history[slot])) return}
+        if (!(slot < 36 || slot > 44)) { if (!(data.slotBinding.history[getPreset()][slot])) return}
         cancel(event);
         onShiftClick(slot);
     }
@@ -133,7 +133,7 @@ const guiTrigger = register('guiRender', (x, y, gui) => {
         Renderer.drawLine(getDynamicColor(), x+16, y+16, x+16, y, 1);
     })
     
-    const linkedSlot = (!(hoverSlot < 36 || hoverSlot > 44)? data.slotBinding.history[hoverSlot]: null)
+    const linkedSlot = (!(hoverSlot < 36 || hoverSlot > 44)? data.slotBinding.history[getPreset()][hoverSlot]: null)
 
     if (linkedSlot) {
         const [x1, y1] = getSlotCoords(linkedSlot);
