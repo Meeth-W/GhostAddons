@@ -44,14 +44,14 @@ const i4Trigger = register("chat", (message) => {
     if (getDistanceToCoord(63.5, 127, 35.5) < 1.5) {
         openLeap()
     }
-}).setCriteria("${message}")
+}).setCriteria("${message}").unregister()
 
 const doorTrigger = register("chat", (user) => {
     if (user == Player.getName()) return
     leaptarget = user
     openLeap()
-}).setCriteria("${user} opened a WITHER door!")
-
+}).setCriteria("${user} opened a WITHER door!").unregister()
+    
 export function toggle() {
     if (config.autoLeapToggle && config.toggle) {
         if (config.debug) chat("&aStarting the &6Auto Leap &amodule.")

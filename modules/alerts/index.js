@@ -1,5 +1,5 @@
 import config from "../../config"
-import { getClass } from "../../utils/utils"
+import { chat, getClass } from "../../utils/utils"
 
 let showText = false
 let text = new Text("")

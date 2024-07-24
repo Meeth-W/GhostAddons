@@ -62,7 +62,7 @@ const onKeyRightClick = (slot) => {
     hotbarSlot = data.slotBinding.presets[getPreset()][slot]
 
     delete data.slotBinding.presets[getPreset()][slot]
-    if (data.slotBinding.history[getPreset()][hotbarSlot] == slot) data.slotBinding.history[hotbarSlot] = null
+    if (data.slotBinding.history[getPreset()][hotbarSlot] == slot) data.slotBinding.history[getPreset()][hotbarSlot] = null
     data.save()
     chat(`&aSuccesfully Deleted: ${slot}.`)
 }
