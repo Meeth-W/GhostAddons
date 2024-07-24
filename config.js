@@ -15,7 +15,7 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General', 'Slot Binding', 'Party Finder', 'Auto Leap'];
+        const categories = ['General', 'Slot Binding', 'Party Finder', 'Auto Leap', 'Alerts'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
@@ -37,11 +37,14 @@ class Settings {
 
         // Blood Camp
         this.setCategoryDescription('Blood Camp', '&6Blood Camp Features. Coming Soon TM')
+
+        // Alerts
+        this.setCategoryDescription('Alerts', '&6Displays titles at certain stages of the game.\n\n&7TODO: Command to change colors.')
     }
     
     // General
     @SwitchProperty({
-        name: 'Toggle Ghost Addons',
+        name: '&5&lToggle Ghost Addons',
         description: 'Decides whether all features of this mod are &aenabled&7/&cdisabled&7.',
         category: 'General'
     })
@@ -237,6 +240,54 @@ class Settings {
         subcategory: 'Settings'
     })
     autoLeapTarget = "Ghostyy";
+
+    // Alerts 
+    @SwitchProperty({
+        name: "&9Toggle Alerts",
+        description: "Decides wether all features in Auto Leap are &aenabled&7/&cdisabled&7.",
+        category: "Alerts"
+    })
+    alertToggle = false
+
+	@TextProperty({
+        name: 'Alert Sound',
+        description: "Sound ID to be played on each alert",
+        category: 'Alerts',
+		subcategory: "Settings"
+    })
+    alertSound = "note.pling";
+
+	@SwitchProperty({
+        name: "AutoPet Alert",
+        description: "Displays a title when autopet triggers.",
+        category: "Alerts",
+        subcategory: "Settings"
+    })
+    alertAutoPet = false
+
+	@SwitchProperty({
+        name: "P5 Rag Axe Alert",
+        description: "Displays a title when you should rag axe in drag phase.",
+        category: "Alerts",
+        subcategory: "Settings"
+    })
+    alertRag = false
+
+	@SwitchProperty({
+        name: "Blood Camp Alert",
+        description: "Displays a title when watcher is done spawning the first four mobs. Only works if you're mage.",
+        category: "Alerts",
+        subcategory: "Settings"
+    })
+    alertCamp = false
+
+	@SwitchProperty({
+        name: "Tact Alert",
+        description: "Displays a title at 3s timer, to help insta-clears.",
+        category: "Alerts",
+        subcategory: "Settings"
+    })
+    alertTact = false
 }
 
 export default new Settings();
