@@ -30,7 +30,7 @@ const onShiftClick = (slot) => {
         World.playSound(config.slotBindingswapSound, 1, 2);
         getPlayerController().func_78753_a(
             container.getWindowId(), 
-            data.slotBinding.history[slot], 
+            data.slotBinding.history[getPreset()][slot], 
             slot % 36, 
             2,
             Player.getPlayer()
@@ -81,7 +81,7 @@ const mainTrigger = register("guiMouseClick", (x, y, mouseButton, gui, event) =>
     }
     if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
         if ((slot < 36 || slot > 44)) { if (!(slot in data.slotBinding.presets[getPreset()])) return} 
-        if (!(slot < 36 || slot > 44)) { if (!(data.slotBinding.history[slot])) return}
+        if (!(slot < 36 || slot > 44)) { if (!(data.slotBinding.history[getPreset()][slot])) return}
         cancel(event);
         onShiftClick(slot);
     }
