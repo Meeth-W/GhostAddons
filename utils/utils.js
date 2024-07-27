@@ -121,3 +121,13 @@ export const inRange = (arr) => {
     }
     return false
 }
+
+export function getBlockFloor(x, y, z) {
+	return World.getBlockAt(Math.floor(x), Math.floor(y), Math.floor(z));
+}
+
+export function rotate(yaw, pitch) {
+	const player = Player.getPlayer();
+	player.field_70177_z = yaw;
+	player.field_70125_A = pitch;
+}

@@ -15,7 +15,7 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General', 'Slot Binding', 'Party Finder', 'Auto Leap', 'Alerts', 'Location Messages'];
+        const categories = ['General', 'Slot Binding', 'Party Finder', 'Auto Leap', 'Door Skip', 'Alerts', 'Location Messages'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
@@ -43,6 +43,9 @@ class Settings {
 
         // Location Messages
         this.setCategoryDescription('Location Messages', '&6Sends messages in party chat when you reach a certain set of coords in p3.')
+
+        // Doorless
+        this.setCategoryDescription('Door Skip', '&6Modified version of Doorless by soshimee.\n\n&4This module is a Cheat. Use at your own risk.')
     }
     
     // General
@@ -295,7 +298,7 @@ class Settings {
     // Location Messages
     @SwitchProperty({
         name: "&9Toggle Location Messages",
-        description: "Decides wether all features in Auto Leap are &aenabled&7/&cdisabled&7.",
+        description: "Decides wether all features in Location Messages are &aenabled&7/&cdisabled&7.",
         category: "Location Messages"
     })
     locationMessagesToggle = false
@@ -358,6 +361,14 @@ class Settings {
         subcategory: "Toggles"
     })
     tunnelCoord = false;
+
+    // Door Skip
+    @SwitchProperty({
+        name: "&9Toggle Door Skip",
+        description: "Decides wether all features in Auto Leap are &aenabled&7/&cdisabled&7.",
+        category: "Door Skip"
+    })
+    doorSkipToggle = false
 }
 
 export default new Settings();
