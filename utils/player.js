@@ -1,6 +1,6 @@
 import config from "../config"
 import request from "../../requestV2"
-import { chat, getSbLevelPrefix } from "./utils"
+import { chat, formatNum, getSbLevelPrefix } from "./utils"
 import { calcSkillLevel, convertToPBTime } from "../../BloomCore/utils/Utils"
 
 export default class playerData {
@@ -23,8 +23,8 @@ export default class playerData {
                 }
             },
             completions: {
-                catacombs: {},
-                master_catacombs: {}
+                catacombs: {f1: 0, f2: 0, f3: 0, f4: 0, f5: 0, f6: 0, f7: 0},
+                master_catacombs: {m1: 0, m2: 0, m3: 0, m4: 0, m5: 0, m6: 0, m7: 0}
             },
             experience: {
                 catacombs: null,
@@ -84,6 +84,26 @@ export default class playerData {
 
             this.rank = "&6"
 
+            this.stats.completions.master_catacombs = {
+                m1: profile?.data?.dungeons?.master_catacombs?.floors["1"]?.stats?.tier_completions,
+                m2: profile?.data?.dungeons?.master_catacombs?.floors["2"]?.stats?.tier_completions,
+                m3: profile?.data?.dungeons?.master_catacombs?.floors["3"]?.stats?.tier_completions,
+                m4: profile?.data?.dungeons?.master_catacombs?.floors["4"]?.stats?.tier_completions,
+                m5: profile?.data?.dungeons?.master_catacombs?.floors["5"]?.stats?.tier_completions,
+                m6: profile?.data?.dungeons?.master_catacombs?.floors["6"]?.stats?.tier_completions,
+                m7: profile?.data?.dungeons?.master_catacombs?.floors["7"]?.stats?.tier_completions
+            }
+
+            this.stats.completions.catacombs = {
+                f1: profile?.data?.dungeons?.catacombs?.floors["1"]?.stats?.tier_completions,
+                f2: profile?.data?.dungeons?.catacombs?.floors["2"]?.stats?.tier_completions,
+                f3: profile?.data?.dungeons?.catacombs?.floors["3"]?.stats?.tier_completions,
+                f4: profile?.data?.dungeons?.catacombs?.floors["4"]?.stats?.tier_completions,
+                f5: profile?.data?.dungeons?.catacombs?.floors["5"]?.stats?.tier_completions,
+                f6: profile?.data?.dungeons?.catacombs?.floors["6"]?.stats?.tier_completions,
+                f7: profile?.data?.dungeons?.catacombs?.floors["7"]?.stats?.tier_completions
+            }
+            
             this.updated.rest = true
             return this.updateToKick()
         }).catch(e => chat(`&cError: ${e.reason}`))
@@ -147,7 +167,33 @@ export default class playerData {
                 case 6: return ['M7', this.stats.dungeons.pb.master_catacombs['7']]
             }
         }
-        return {"S": null, "S+": null, "rawS": null, "rawS+": null}
+        return ["M10", {"S": null, "S+": null, "rawS": null, "rawS+": null}]
+    }
+
+    getSelectComps() {
+        if (!this.updated.rest) return chat(`&cError: No player data.`)
+            if (config.partyFinderDungeonType == 0) {
+                switch (config.partyFinderDungeonFloor) {
+                    case 0: return ['F1', this.stats.completions.catacombs.f1]
+                    case 1: return ['F2', this.stats.completions.catacombs.f2]
+                    case 2: return ['F3', this.stats.completions.catacombs.f3]
+                    case 3: return ['F4', this.stats.completions.catacombs.f4]
+                    case 4: return ['F5', this.stats.completions.catacombs.f5]
+                    case 5: return ['F6', this.stats.completions.catacombs.f6]
+                    case 6: return ['F7', this.stats.completions.catacombs.f7]
+                }
+            } else {
+                switch (config.partyFinderDungeonFloor) {
+                    case 0: return ['M1', this.stats.completions.master_catacombs.m1]
+                    case 1: return ['M2', this.stats.completions.master_catacombs.m2]
+                    case 2: return ['M3', this.stats.completions.master_catacombs.m3]
+                    case 3: return ['M4', this.stats.completions.master_catacombs.m4]
+                    case 4: return ['M5', this.stats.completions.master_catacombs.m5]
+                    case 5: return ['M6', this.stats.completions.master_catacombs.m6]
+                    case 6: return ['M7', this.stats.completions.master_catacombs.m7]
+                }
+            }
+            return ['M10', 0]
     }
 
     getString() {
@@ -163,11 +209,12 @@ export default class playerData {
             `&b⚡ Mage Level: &e${(this.updated.rest)? this.stats.experience.classes.Mage:(this.dungeonClass == "Mage")? this.classLevel: "..."} ${(this.dungeonClass == "Mage" && !this.cmdUsed)? "&b&l←": ""}`,
             `&d⚚ Healer Level: &e${(this.updated.rest)? this.stats.experience.classes.Healer:(this.dungeonClass == "Healer")? this.classLevel: "... "} ${(this.dungeonClass == "Healer" && !this.cmdUsed)? "&d&l←": ""}`,
             ` `,
-            `&bMagical Power: &6${(this.updated.rest)? this.stats.magical_power.mp: "..."} | ${(this.updated.rest)? this.stats.magical_power.reforge: "..."}`,
-            `&bSecret Count: &6${(this.updated.dungeons)? this.stats.dungeons.secrets: "..."}`,
+            `&bMagical Power: &6${(this.updated.rest)? formatNum(this.stats.magical_power.mp): "..."} | ${(this.updated.rest)? this.stats.magical_power.reforge: "..."}`,
+            `&bSecret Count: &6${(this.updated.dungeons)? formatNum(this.stats.dungeons.secrets): "..."}`,
             ` `,
-            `&aHighlighed PB: &6${(this.updated.dungeons)? this.getSelectPB()[0]: "..."} | ${(this.updated.dungeons)? this.getSelectPB()[1]['S+']:"..."}`,
-            `&aTotal Completions: &6${this.stats.dungeons.runs}`,
+            `&a${(this.updated.dungeons)? this.getSelectPB()[0]: "..."} PB: &6${(this.updated.dungeons)? this.getSelectPB()[1]['S+']:"..."}`,
+            `&a${(this.updated.rest)? this.getSelectComps()[0]: "..."} Completions: &6${(this.updated.rest)? formatNum(this.getSelectComps()[1]): "..."}`,
+            `&aTotal Completions: &6${(this.updated.dungeons)? formatNum(this.stats.dungeons.runs): "..."}`,
             `&${this.toKick[0]? "c":"a"}&l&m--------------------`
         ]
     }

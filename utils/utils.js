@@ -3,7 +3,7 @@ import config from "../config"
 export const prefix = "§8[&6Ghost&8]§r "
 const defaultColor = "§7"
 
-export function chat(message , id = null) {
+export function chat(message , id = null, hoverElement) {
     if (!id) return new Message(prefix + defaultColor + message.toString().replaceAll("§r", defaultColor)).chat()
     return new Message(message).setChatLineId(id).chat()
 }
@@ -130,4 +130,15 @@ export function rotate(yaw, pitch) {
 	const player = Player.getPlayer();
 	player.field_70177_z = yaw;
 	player.field_70125_A = pitch;
+}
+
+export function formatNum(num) {
+    if (isNaN(num)) {
+        return 'Invalid number';
+    }
+    
+    const [integerPart, fractionalPart] = num.toString().split('.');
+    const integerWithCommas = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    
+    return fractionalPart ? `${integerWithCommas}.${fractionalPart}` : integerWithCommas;
 }
