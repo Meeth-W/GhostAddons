@@ -28,7 +28,6 @@ const leadCheck = register('chat', (rank, leader) => {
 }).setCriteria("Party Leader: ${rank} ${leader} ●").unregister()
 
 const trigger = register("chat", (username, dungeonClass, classLevel) => {
-    chat("&cTrigger")
     let player = new playerData(username, dungeonClass, classLevel)
     chat(player.getString().join("\n"), 6969)
     try { player.init().then(() => {
