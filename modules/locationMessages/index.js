@@ -1,6 +1,6 @@
 import { registerWhen } from "../../../BloomCore/utils/Utils"
 import config from "../../config"
-import { chat } from "../../utils/utils"
+import { chat, inRange } from "../../utils/utils"
 
 let text = new Text('').setScale(2).setShadow(true).setAlign('CENTER').setColor(Renderer.YELLOW)
 let startTime
