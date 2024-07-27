@@ -107,3 +107,17 @@ export function rightClick() {
     rightClickMethod.setAccessible(true);
     rightClickMethod.invoke(Client.getMinecraft(), null);
 } 
+
+export const inRange = (arr) => {
+    let x = Player.getX()
+    let y = Player.getY()
+    let z = Player.getZ()
+    if (x > arr[1][0] && x <= arr[1][1]) {
+        if (y > arr[2][0] && y <= arr[2][1]) {
+            if (z > arr[3][0] && z <= arr[3][1]) {
+                return true
+            }
+        }
+    }
+    return false
+}

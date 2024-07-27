@@ -15,7 +15,7 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General', 'Slot Binding', 'Party Finder', 'Auto Leap', 'Alerts'];
+        const categories = ['General', 'Slot Binding', 'Party Finder', 'Auto Leap', 'Alerts', 'Location Messages'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
@@ -40,6 +40,9 @@ class Settings {
 
         // Alerts
         this.setCategoryDescription('Alerts', '&6Displays titles at certain stages of the game.\n\n&7TODO: Command to change colors.')
+
+        // Location Messages
+        this.setCategoryDescription('Location Messages', '&6Sends messages in party chat when you reach a certain set of coords in p3.')
     }
     
     // General
@@ -288,6 +291,73 @@ class Settings {
         subcategory: "Settings"
     })
     alertTact = false
+
+    // Location Messages
+    @SwitchProperty({
+        name: "&9Toggle Location Messages",
+        description: "Decides wether all features in Auto Leap are &aenabled&7/&cdisabled&7.",
+        category: "Location Messages"
+    })
+    locationMessagesToggle = false
+
+    @SwitchProperty({
+        name: "Alert Toggle",
+        description: "Shows a title and plays a sound when a party member sends a location message",
+        category: "Location Messages",
+        subcategory: "Location Title"
+    })
+    locationNotif = false;
+
+    @TextProperty({
+        name: "Location Notification Sound",
+        description: "Sound used for Location Notification Sound",
+        category: "Location Messages",
+        subcategory: "Location Title",
+        placeholder: "note.harp"
+    })
+    locationSound = "note.harp";
+
+    @SwitchProperty({
+        name: "SS Nearby Message",
+        category: "Location Messages",
+        subcategory: "Toggles"
+    })
+    ssCoord = false;
+
+    @SwitchProperty({
+        name: "Pre Enter 2 Nearby Message",
+        category: "Location Messages",
+        subcategory: "Toggles"
+    })
+    pre2Coord = false;
+
+    @SwitchProperty({
+        name: "Insta 3 Nearby Message",
+        category: "Location Messages",
+        subcategory: "Toggles"
+    })
+    i3Coord = false;
+
+    @SwitchProperty({
+        name: "Pre Enter 3 Nearby Message",
+        category: "Location Messages",
+        subcategory: "Toggles"
+    })
+    pre3Coord = false;
+    
+    @SwitchProperty({
+        name: "At Core Message",
+        category: "Location Messages",
+        subcategory: "Toggles"
+    })
+    slingshotCoord = false;
+
+    @SwitchProperty({
+        name: "Inside Tunnel Message",
+        category: "Location Messages",
+        subcategory: "Toggles"
+    })
+    tunnelCoord = false;
 }
 
 export default new Settings();
