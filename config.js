@@ -15,7 +15,7 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General', 'Slot Binding', 'Party Finder', 'Auto Leap', 'Door Skip', 'Alerts', 'Location Messages'];
+        const categories = ['General', 'Slot Binding', 'Party Finder', 'Auto Leap', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
@@ -46,6 +46,9 @@ class Settings {
 
         // Doorless
         this.setCategoryDescription('Door Skip', '&6Modified version of Doorless by soshimee.\n\n&4This module is a Cheat. Use at your own risk.')
+
+        // Rat Protection
+        this.setCategoryDescription('Rat Protection', '&6Prevents you getting logged out from another location.')
     }
     
     // General
@@ -369,6 +372,29 @@ class Settings {
         category: "Door Skip"
     })
     doorSkipToggle = false
+
+    // Rat Prot
+    @SwitchProperty({
+		name: "Toggle",
+		description: "Toggle Rat Protection",
+		category: "Rat Protection"
+	})
+	ratProtectionToggle = false;
+
+	@NumberProperty({
+		name: "Amount",
+		category: "Rat Protection",
+		min: 1,
+		max: 40
+	})
+	ratProtectionamount = 20;
+
+	@SwitchProperty({
+		name: "Overlay",
+		description: "Show overlay (this is only an approximation)",
+		category: "Rat Protection"
+	})
+	ratProtectionoverlayEnabled = false;
 }
 
 export default new Settings();

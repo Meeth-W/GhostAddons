@@ -68,6 +68,8 @@ export default class playerData {
             if (data.error) return chat(`&cError: ${data.error}`)
             const profile = Object.values(data.profiles).find(profile => profile.current === true)
 
+            this.username = profile?.data?.display_name
+            
             this.stats.magical_power.mp = profile?.raw?.accessory_bag_storage?.highest_magical_power
             let reforge = profile?.raw?.accessory_bag_storage?.selected_power
             this.stats.magical_power.reforge = reforge[0].toUpperCase() + reforge.slice(1)

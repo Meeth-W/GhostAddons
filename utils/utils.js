@@ -3,7 +3,7 @@ import config from "../config"
 export const prefix = "§8[&6Ghost&8]§r "
 const defaultColor = "§7"
 
-export function chat(message , id = null, hoverElement) {
+export function chat(message, id = null, hoverElement) {
     if (!id) return new Message(prefix + defaultColor + message.toString().replaceAll("§r", defaultColor)).chat()
     return new Message(message).setChatLineId(id).chat()
 }
@@ -25,7 +25,7 @@ export const sbLevelsPrefix = {
     "&c": [440, 479]
 }
 
-export class queueChat{
+export class queueChat {
     static queue = []
     static lastMessage = 0
     static timeout = 400
@@ -48,7 +48,7 @@ export class queueChat{
 export function isInDungeon() {
     try {
         return TabList?.getNames()?.some(a => a.removeFormatting() == 'Dungeon: Catacombs')
-    } catch (e) { chat(`&cError: ${e.reason}`)}
+    } catch (e) { chat(`&cError: ${e.reason}`) }
 }
 
 export function getClass() {
@@ -89,9 +89,9 @@ export function getSlotCoords(i) {
 
     const gui = Client.currentGui.get();
     const slot = gui.field_147002_h?.func_75139_a(i);
-    const x = slot.field_75223_e  + gui?.getGuiLeft() ?? 0;
-    const y = slot.field_75221_f  + gui?.getGuiTop() ?? 0;
-  
+    const x = slot.field_75223_e + gui?.getGuiLeft() ?? 0;
+    const y = slot.field_75221_f + gui?.getGuiTop() ?? 0;
+
     return [x, y];
 }
 
@@ -106,7 +106,7 @@ export function rightClick() {
     const rightClickMethod = Client.getMinecraft().getClass().getDeclaredMethod("func_147121_ag", null)
     rightClickMethod.setAccessible(true);
     rightClickMethod.invoke(Client.getMinecraft(), null);
-} 
+}
 
 export const inRange = (arr) => {
     let x = Player.getX()
@@ -123,22 +123,22 @@ export const inRange = (arr) => {
 }
 
 export function getBlockFloor(x, y, z) {
-	return World.getBlockAt(Math.floor(x), Math.floor(y), Math.floor(z));
+    return World.getBlockAt(Math.floor(x), Math.floor(y), Math.floor(z));
 }
 
 export function rotate(yaw, pitch) {
-	const player = Player.getPlayer();
-	player.field_70177_z = yaw;
-	player.field_70125_A = pitch;
+    const player = Player.getPlayer();
+    player.field_70177_z = yaw;
+    player.field_70125_A = pitch;
 }
 
 export function formatNum(num) {
     if (isNaN(num)) {
         return 'Invalid number';
     }
-    
+
     const [integerPart, fractionalPart] = num.toString().split('.');
     const integerWithCommas = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    
+
     return fractionalPart ? `${integerWithCommas}.${fractionalPart}` : integerWithCommas;
 }
