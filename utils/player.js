@@ -117,15 +117,15 @@ export default class playerData {
             let pb = this.getSelectPB()[1]['rawS+']
             switch ( config.partyFinderminPB ) {
                 case 0: // 4:40 = 280000
-                    if ( parseInt(pb) > 280000) { return this.toKick = [true, `Slow PB: [${this.getSelectPB()[1]['S+']} > 4:40]`] }
+                    if ( parseInt(pb) > 280000) { return this.toKick = [true, `Slow PB: [${this.getSelectPB()[1]['S+']} > 4:40]`] } break;
                 case 1: // 5:00 = 300000
-                    if ( parseInt(pb) > 300000) { return this.toKick = [true, `Slow PB: [${this.getSelectPB()[1]['S+']} > 5:00]`] }
+                    if ( parseInt(pb) > 300000) { return this.toKick = [true, `Slow PB: [${this.getSelectPB()[1]['S+']} > 5:00]`] } break;
                 case 2: // 5:30 = 330000
-                    if ( parseInt(pb) > 330000) { return this.toKick = [true, `Slow PB: [${this.getSelectPB()[1]['S+']} > 5:30]`] }
+                    if ( parseInt(pb) > 330000) { return this.toKick = [true, `Slow PB: [${this.getSelectPB()[1]['S+']} > 5:30]`] } break;
                 case 3: // 6:00 = 360000
-                    if ( parseInt(pb) > 360000) { return this.toKick = [true, `Slow PB: [${this.getSelectPB()[1]['S+']} > 6:00]`] }
+                    if ( parseInt(pb) > 360000) { return this.toKick = [true, `Slow PB: [${this.getSelectPB()[1]['S+']} > 6:00]`] } break;
                 case 4: // Custom PB
-                    if ( parseInt(pb) > parseInt(config.partyFindercustomMinPB)) { return this.toKick = [true, `Slow PB: [${convertToPBTime(pb)} > ${convertToPBTime(parseInt(config.partyFindercustomMinPB))}]`] }
+                    if ( parseInt(pb) > parseInt(config.partyFindercustomMinPB)) { return this.toKick = [true, `Slow PB: [${convertToPBTime(pb)} > ${convertToPBTime(parseInt(config.partyFindercustomMinPB))}]`] } break;
             }
 
             // Cata Level
@@ -217,6 +217,8 @@ export default class playerData {
             `&a${(this.updated.dungeons)? this.getSelectPB()[0]: "..."} PB: &6${(this.updated.dungeons)? this.getSelectPB()[1]['S+']:"..."}`,
             `&a${(this.updated.rest)? this.getSelectComps()[0]: "..."} Completions: &6${(this.updated.rest)? formatNum(this.getSelectComps()[1]): "..."}`,
             `&aTotal Completions: &6${(this.updated.dungeons)? formatNum(this.stats.dungeons.runs): "..."}`,
+            ``,
+            `&dKick:${(this.toKick[0])? '&c': '&a'} ${this.toKick[1]}`,
             `&${this.toKick[0]? "c":"a"}&l&m--------------------`
         ]
     }
