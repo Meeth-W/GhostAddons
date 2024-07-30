@@ -1,6 +1,7 @@
 import config from "../config"
 import request from "../../requestV2"
 import { chat, formatNum, getSbLevelPrefix } from "./utils"
+import { data } from './data.js'
 import { calcSkillLevel, convertToPBTime } from "../../BloomCore/utils/Utils"
 
 export default class playerData {
@@ -113,6 +114,9 @@ export default class playerData {
 
     updateToKick() {
         if (this.updated.dungeons && !this.updated.rest && !this.kicked) { // PB, Cata Level, Secrets, Class XP
+            if ( data.partyFinder.blacklist[this.uuid] ) return this.toKick = [true, `Blacklisted Player. Reason: ${data.partyFinder.blacklist[this.uuid].reason}`]
+            if ( data.partyFinder.whitelist[this.uuid] ) return this.toKick = [false, `Whitelisted Player`]
+            
             // PB 
             let pb = this.getSelectPB()[1]['rawS+']
             switch ( config.partyFinderminPB ) {
@@ -138,6 +142,9 @@ export default class playerData {
             if (parseInt(this.classLevel) < config.partyFinderminClass) return this.toKick = [true, `Low Class Level: [${this.classLevel} < ${config.partyFinderminClass}]`]
 
         } if (this.updated.rest && !this.kicked) { // SB Level, MP
+            if ( data.partyFinder.blacklist[this.uuid] ) return this.toKick = [true, `Blacklisted Player. Reason: ${data.partyFinder.blacklist[this.uuid].reason}`] // Second ouccurance just incase.
+            if ( data.partyFinder.whitelist[this.uuid] ) return this.toKick = [false, `Whitelisted Player`]
+            
             // Magical Power
             if (parseInt(this.stats.magical_power.mp) < parseInt(config.partyFinderminMP)) return this.toKick = [true, `Low Magical Power: [${this.stats.magical_power.mp} < ${config.partyFinderminMP}]`]
 
