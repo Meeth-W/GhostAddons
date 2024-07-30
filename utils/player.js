@@ -201,23 +201,23 @@ export default class playerData {
     getString() {
         return [
             `&${this.toKick[0]? "c":"a"}&l&m--------------------`,
-            `&8[${(this.updated.rest)? this.stats.sb_level: "&r..."}&8] ${(this.updated.rest)? this.rank: "&6"} ${this.username}`, // TODO: Rank Integration.
-            `&c☠ Cata Level: &e${(this.updated.dungeons)? this.stats.experience.catacombs: "..."}`,
+            `&8[${(this.updated.rest)? this.stats.sb_level: "&r&k...&r"}&8] ${(this.updated.rest)? this.rank: "&6"} ${this.username}`, // TODO: Rank Integration.
+            `&c☠ Cata Level: &e${(this.updated.dungeons)? this.stats.experience.catacombs: "&k...&r"}`,
             ` `,
-            `&f&l⚛&r &fClass Average: &e${(this.updated.rest)? this.stats.experience.classAverage: "..."}`,
-            `&c➶ Archer Level: &e${(this.updated.rest)? this.stats.experience.classes.Archer:(this.dungeonClass == "Archer")? this.classLevel: "..."} ${(this.dungeonClass == "Archer" && !this.cmdUsed)? "&c&l←": ""}`,
-            `&6☄ Berserk Level: &e${(this.updated.rest)? this.stats.experience.classes.Berserker:(this.dungeonClass == "Berserk")? this.classLevel: "..."} ${(this.dungeonClass == "Berserk" && !this.cmdUsed)? "&6&l←)": ""}`,
-            `&a⚓Tank Level: &e${(this.updated.rest)? this.stats.experience.classes.Tank:(this.dungeonClass == "Tank")? this.classLevel: "..."} ${(this.dungeonClass == "Tank" && !this.cmdUsed)? "&a&l←": ""}`,
-            `&b⚡ Mage Level: &e${(this.updated.rest)? this.stats.experience.classes.Mage:(this.dungeonClass == "Mage")? this.classLevel: "..."} ${(this.dungeonClass == "Mage" && !this.cmdUsed)? "&b&l←": ""}`,
+            `&f&l⚛&r &fClass Average: &e${(this.updated.rest)? this.stats.experience.classAverage: "&k...&r"}`,
+            `&c➶ Archer Level: &e${(this.updated.rest)? this.stats.experience.classes.Archer:(this.dungeonClass == "Archer")? this.classLevel: "&k...&r"} ${(this.dungeonClass == "Archer" && !this.cmdUsed)? "&c&l←": ""}`,
+            `&6☄ Berserk Level: &e${(this.updated.rest)? this.stats.experience.classes.Berserker:(this.dungeonClass == "Berserk")? this.classLevel: "&k...&r"} ${(this.dungeonClass == "Berserk" && !this.cmdUsed)? "&6&l←)": ""}`,
+            `&a⚓Tank Level: &e${(this.updated.rest)? this.stats.experience.classes.Tank:(this.dungeonClass == "Tank")? this.classLevel: "&k...&r"} ${(this.dungeonClass == "Tank" && !this.cmdUsed)? "&a&l←": ""}`,
+            `&b⚡ Mage Level: &e${(this.updated.rest)? this.stats.experience.classes.Mage:(this.dungeonClass == "Mage")? this.classLevel: "&k...&r"} ${(this.dungeonClass == "Mage" && !this.cmdUsed)? "&b&l←": ""}`,
             `&d⚚ Healer Level: &e${(this.updated.rest)? this.stats.experience.classes.Healer:(this.dungeonClass == "Healer")? this.classLevel: "... "} ${(this.dungeonClass == "Healer" && !this.cmdUsed)? "&d&l←": ""}`,
             ` `,
-            `&bMagical Power: &6${(this.updated.rest)? formatNum(this.stats.magical_power.mp): "..."} | ${(this.updated.rest)? this.stats.magical_power.reforge: "..."}`,
-            `&bSecret Count: &6${(this.updated.dungeons)? formatNum(this.stats.dungeons.secrets): "..."}`,
+            `&bMagical Power: &6${(this.updated.rest)? formatNum(this.stats.magical_power.mp): "&k...&r"} | ${(this.updated.rest)? this.stats.magical_power.reforge: "&k...&r"}`,
+            `&bSecret Count: &6${(this.updated.dungeons)? formatNum(this.stats.dungeons.secrets): "&k...&r"} | ${(this.updated.dungeons)? (this.stats.dungeons.secrets / this.stats.dungeons.runs).toFixed(2): "&k...&r"} SPR`,
             ` `,
-            `&a${(this.updated.dungeons)? this.getSelectPB()[0]: "..."} PB: &6${(this.updated.dungeons)? this.getSelectPB()[1]['S+']:"..."}`,
-            `&a${(this.updated.rest)? this.getSelectComps()[0]: "..."} Completions: &6${(this.updated.rest)? formatNum(this.getSelectComps()[1]): "..."}`,
-            `&aTotal Completions: &6${(this.updated.dungeons)? formatNum(this.stats.dungeons.runs): "..."}`,
-            ``,
+            `&a${(this.updated.dungeons)? this.getSelectPB()[0]: "&k...&r"} PB: &6${(this.updated.dungeons)? this.getSelectPB()[1]['S+']:"&k...&r"}`,
+            `&a${(this.updated.rest)? this.getSelectComps()[0]: "&k...&r"} Completions: &6${(this.updated.rest)? formatNum(this.getSelectComps()[1]): "&k...&r"}`,
+            `&aTotal Completions: &6${(this.updated.dungeons)? formatNum(this.stats.dungeons.runs): "&k...&r"}`,
+            ` `,
             `&dKick:${(this.toKick[0])? '&c': '&a'} ${this.toKick[1]}`,
             `&${this.toKick[0]? "c":"a"}&l&m--------------------`
         ]
