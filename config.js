@@ -15,11 +15,16 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General', 'Slot Binding', 'Party Finder', 'Auto Leap', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four'];
+        const categories = ['General', 'Slot Binding', 'Party Finder', 'Timers', 'Auto Leap', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
 class Settings {
+
+    relicSpawnTimerGui = new Gui()
+    dragonSpawnTimerGui = new Gui()
+    crystalSpawnTimerGui = new Gui()
+
     constructor() {
         this.initialize(this);
 
@@ -52,6 +57,9 @@ class Settings {
 
         // Auto Pre 4
         this.setCategoryDescription('Auto Four', '&6Automatically does the fourth device for you.')
+
+        // Timers
+        this.setCategoryDescription('Timers', '&6Tick accurate timers. Displayed at specific events.')
     }
     
     // General
@@ -77,12 +85,12 @@ class Settings {
     })
     partyFinderToggle = false;
 
-    @SwitchProperty({
-        name: '&9Toggle Stats Command',
-        description: 'Decides wether the &4/m7stats&7 command is &aenabled&7/&cdisabled&7.',
-        category: 'Party Finder'
-    })
-    m7StatsToggle = false;
+    // @SwitchProperty({
+    //     name: '&9Toggle Stats Command',
+    //     description: 'Decides wether the &4/m7stats&7 command is &aenabled&7/&cdisabled&7.',
+    //     category: 'Party Finder'
+    // })
+    // m7StatsToggle = false;
 
     @SwitchProperty({
         name: '&9Toggle Auto Kick',
@@ -419,6 +427,82 @@ class Settings {
         category: "Auto Four"
     })
     autoFourToggle = false
+
+    // Spawn Timers
+    @SwitchProperty({
+        name: "&9Toggle Timers",
+        description: "Decides wether all features in Timers are &aenabled&7/&cdisabled&7.",
+        category: "Timers"
+    })
+    timersToggle = false
+
+    @SwitchProperty({
+        name: "Relic Timer",
+        description: "Displays a timer on your screen when relic is about to spawn",
+        category: "Timers",
+        subcategory: "Relics",
+    })
+    relicToggle = false
+
+    @TextProperty({
+        name: "Relic Spawn Timer Amount",
+        description: "Since relic spawn is so rng, choose your own time... \nDefault is 42",
+        category: "Timers",
+        subcategory: "Relics",
+        placeholder: "42"
+    })
+    relicSpawnTimerAmt = "42"
+
+    @ButtonProperty({
+        name: "Move Relic Spawn Timer",
+        description: "Scroll to change scale, middle click to reset",
+        category: "Timers",
+        subcategory: "Relics",
+        placeholder: "Move"
+    })
+    MoveRelicSpawnTimerGui() {
+        this.relicSpawnTimerGui.open()
+    };
+
+    @SwitchProperty({
+        name: "Crystal Timer",
+        description: "Displays a timer on your screen when crystals are about to spawn",
+        category: "Timers",
+        subcategory: "Crystals",
+    })
+    crystalToggle = false
+
+    @ButtonProperty({
+        name: "Move Crystal Spawn Timer",
+        description: "Scroll to change scale, middle click to reset",
+        category: "Timers",
+        subcategory: "Crystals",
+        placeholder: "Move"
+    })
+    MoveCrystalSpawnTimerGui() {
+        this.crystalSpawnTimerGui.open()
+    };
+
+    @SwitchProperty({
+        name: "Drag Timer",
+        description: "Displays a timer on your screen when a dragon is about to spawn.\nHas Built-In Drag Prio.",
+        category: "Timers",
+        subcategory: "Dragon Timer",
+    })
+    dragToggle = false
+
+    @ButtonProperty({
+        name: "Move Dragon Spawn Timer",
+        description: "Scroll to change scale, middle click to reset",
+        category: "Timers",
+        subcategory: "Dragon Timer",
+        placeholder: "Move"
+    })
+    MoveDragonSpawnTimerGui() {
+        this.dragonSpawnTimerGui.open()
+    };
+
+
 }
 
 export default new Settings();

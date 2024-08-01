@@ -116,17 +116,16 @@ const renderTrigger = register('renderOverlay', () => {
     Renderer.drawStringWithShadow(getcol3().join('\n'), offsetX*4.2, offsetY*2 + 30)
 
     Tessellator.popMatrix();
-
 })
 
 export function toggle() {
-    if (config.m7StatsToggle && config.toggle) {
-        if (config.debug) chat("&aStarting the &6Party Finder &amodule.")
-        commandRegister.register()
-        return
-    }
-    if (config.debug) chat("&cStopping the &6Party Finder &cmodule.")
-    commandRegister.unregister()
-    return
+    // if (config.m7StatsToggle && config.toggle) {
+    //     if (config.debug) chat("&aStarting the &6Dungeon Stats &amodule.")
+    //     commandRegister.register()
+    //     return
+    // }
+    // if (config.debug) chat("&cStopping the &6Dungeon Stats &cmodule.")
+    // commandRegister.unregister()
+    return commandRegister.register();
 }
 export default { toggle };

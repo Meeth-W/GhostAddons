@@ -58,13 +58,13 @@ let delay
 let doneCoords = new Set()
 
 const commandTrigger = register("command", () => {
-    if (config.auto4) {
+    if (config.autoFourToggle) {
         chat("&c Disabling Auto 4");
-        config.auto4 = false;
+        config.autoFourToggle = false;
     } else {
         chat("&a Enabling Auto 4");
         doneCoords.clear()
-        config.auto4 = true;
+        config.autoFourToggle = true;
     }
 }).setName("/auto4").unregister()
 
@@ -138,15 +138,13 @@ register("worldUnload", () => {
 export function toggle() {
     if (config.autoFourToggle && config.toggle) {
         if (config.debug) chat("&aStarting the &6Auto Four &amodule.")
-        openMenuTrigger.register()
-        if (config.autoLeapi4) trigger.register()
-        if (config.autoLeapWitherDoor) commandTrigger.register()
+        trigger.register()
+        commandTrigger.register()
         return
     }
     if (config.debug) chat("&cStopping the &6Auto Four &cmodule.")
-    openMenuTrigger.unregister()
-    if (config.autoLeapi4) trigger.unregister()
-    if (config.autoLeapWitherDoor) commandTrigger.unregister()
+    trigger.unregister()
+    commandTrigger.unregister()
     return
 }
 export default { toggle };

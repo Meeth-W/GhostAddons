@@ -7,9 +7,10 @@ import locationMessages from "./locationMessages";
 import partyFinder from "./partyFinder";
 import ratProtection from "./ratProtection";
 import slotBinding from "./slotBinding";
+import spawnTimers from "./spawnTimers";
 
 export const modules = [
-    slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4
+    slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4, spawnTimers
 ]
 
 export default { modules };

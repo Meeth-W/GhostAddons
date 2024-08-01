@@ -20,5 +20,20 @@ export const data = new PogObject("GhostAddons", {
         },
         whitelist: {
         }
+    },
+    relicSpawnTimer: {
+        x: Renderer.screen.getWidth() / 2,
+        y: Renderer.screen.getHeight() / 2 + 10,
+        scale: 1
+    },
+    dragonSpawnTimer: {
+        x: Renderer.screen.getWidth() / 2,
+        y: Renderer.screen.getHeight() / 2 + 40,
+        scale: 3
+    },
+    crystalSpawnTimer: {
+        x: Renderer.screen.getWidth() / 2,
+        y: Renderer.screen.getHeight() / 2 + 10,
+        scale: 1
     }
 }, 'data/mainData.json')

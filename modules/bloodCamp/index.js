@@ -64,10 +64,10 @@ const onBloodDone = register('chat', () => {
 
 export function toggle() {
     if (config.bloodCampToggle && config.toggle) {
-        if (config.debug) chat("&aStarting the &6Slot Binding &amodule.")
+        if (config.debug) chat("&aStarting the &6Blood Camp &amodule.")
         return
     }
-    if (config.debug) chat("&cStopping the &6Slot Binding &cmodule.")
+    if (config.debug) chat("&cStopping the &6Blood Camp &cmodule.")
     return
 }
 export default { toggle };

@@ -44,7 +44,7 @@ const trigger = register("chat", (username, _, __) => {
 
             if (config.partyFinderPartyChat && !player.toKick[0] && !player.kicked) {
                 queueChat.queueCommands([
-                    () => {ChatLib.command(`party chat [GH] [${parseInt(player.stats.sb_level)}] ${username} | Floor PB: ${player.getSelectPB()[1]['S+']} | Highest Magical Power: ${player.stats.magical_power.mp} | SPR: ${(player.stats.dungeons.secretCount / player.stats.dungeons.completions.total).toFixed(2)}`)}
+                    () => {ChatLib.command(`party chat [GH] [${parseInt(player.stats.sb_level_raw)}] ${username} | Floor PB: ${player.getSelectPB()[1]['S+']} | Highest Magical Power: ${player.stats.magical_power.mp} | Secrets: ${player.stats.dungeons.secrets}`)}
                 ])
             }
         })
