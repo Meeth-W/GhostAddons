@@ -15,7 +15,7 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General', 'Slot Binding', 'Party Finder', 'Auto Leap', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection'];
+        const categories = ['General', 'Slot Binding', 'Party Finder', 'Auto Leap', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
@@ -49,6 +49,9 @@ class Settings {
 
         // Rat Protection
         this.setCategoryDescription('Rat Protection', '&6Prevents you getting logged out from another location.')
+
+        // Auto Pre 4
+        this.setCategoryDescription('Auto Four', '&6Automatically does the fourth device for you.')
     }
     
     // General
@@ -75,11 +78,24 @@ class Settings {
     partyFinderToggle = false;
 
     @SwitchProperty({
+        name: '&9Toggle Stats Command',
+        description: 'Decides wether the &4/m7stats&7 command is &aenabled&7/&cdisabled&7.',
+        category: 'Party Finder'
+    })
+    m7StatsToggle = false;
+
+    @SwitchProperty({
         name: '&9Toggle Auto Kick',
         description: 'Decides wether players are automatically kicked from the party.',
         category: 'Party Finder'
     })
     partyFinderAutoKick = false;
+
+    @ColorProperty({
+		name: "Stats Menu Background Color",
+		category: "Party Finder"
+	})
+	m7StatsBackgroundColor = new Color(Renderer.color(0, 0, 0, 127), true);
 
     @SwitchProperty({
         name: 'Party Chat',
@@ -368,7 +384,7 @@ class Settings {
     // Door Skip
     @SwitchProperty({
         name: "&9Toggle Door Skip",
-        description: "Decides wether all features in Auto Leap are &aenabled&7/&cdisabled&7.",
+        description: "Decides wether all features in Door Skip are &aenabled&7/&cdisabled&7.",
         category: "Door Skip"
     })
     doorSkipToggle = false
@@ -395,6 +411,14 @@ class Settings {
 		category: "Rat Protection"
 	})
 	ratProtectionoverlayEnabled = false;
+
+    // Auto 4
+    @SwitchProperty({
+        name: "&9Toggle Auto Four",
+        description: "Decides wether all features in Auto Four are &aenabled&7/&cdisabled&7.",
+        category: "Auto Four"
+    })
+    autoFourToggle = false
 }
 
 export default new Settings();
