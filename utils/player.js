@@ -30,7 +30,7 @@ export default class playerData {
             experience: {
                 catacombs: null,
                 classes: {
-                    Mage: null, Archer: null, Berserker: null, Tank: null, Healer: null
+                    Mage: null, Archer: null, Berserk: null, Tank: null, Healer: null
                 },
                 classAverage: null
             },
@@ -64,6 +64,15 @@ export default class playerData {
         }).catch(e => chat(`&cError: ${e.reason}`))
     }
 
+    updateRank() {
+        return request({url: `https://api.icarusphantom.dev/v1/sbecommands/cata/${this.username}`, headers: {'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json'}, json: true}).then(data => {
+            if (!data.status) return chat(`&cError: ${data.issue}`)
+                try { this.rank = (data?.data?.rank).replaceAll('Â', '') } catch (e) { this.rank = "&7" }
+            this.updated.rank = true
+            return this.updateToKick()
+        }).catch(e => chat(`&cSBE API Error: ${e.reason}`))
+    }
+
     updateRest() {
         return request({url: `https://sky.shiiyu.moe/api/v2/profile/${this.uuid}`, headers: {'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json'}, json: true}).then(data => {
             if (data.error) return chat(`&cError: ${data.error}`)
@@ -74,11 +83,11 @@ export default class playerData {
             this.stats.magical_power.mp = profile?.raw?.accessory_bag_storage?.highest_magical_power
             let reforge = profile?.raw?.accessory_bag_storage?.selected_power
             this.stats.magical_power.reforge = reforge[0].toUpperCase() + reforge.slice(1)
-            this.stats.sb_level = `${getSbLevelPrefix(profile?.raw?.leveling?.experience/100)}${profile?.raw?.leveling?.experience/100}`
+            this.stats.sb_level = `${getSbLevelPrefix(profile?.raw?.leveling?.experience/100)}${parseInt(profile?.raw?.leveling?.experience/100)}`
             this.stats.sb_level_raw = profile?.raw?.leveling?.experience/100
 
             this.stats.experience.classes.Archer = calcSkillLevel("catacombs", profile?.raw?.dungeons?.player_classes?.archer?.experience)
-            this.stats.experience.classes.Berserker = calcSkillLevel("catacombs", profile?.raw?.dungeons?.player_classes?.berserk?.experience)
+            this.stats.experience.classes.Berserk = calcSkillLevel("catacombs", profile?.raw?.dungeons?.player_classes?.berserk?.experience)
             this.stats.experience.classes.Tank = calcSkillLevel("catacombs", profile?.raw?.dungeons?.player_classes?.tank?.experience)
             this.stats.experience.classes.Healer = calcSkillLevel("catacombs", profile?.raw?.dungeons?.player_classes?.healer?.experience)
             this.stats.experience.classes.Mage = calcSkillLevel("catacombs", profile?.raw?.dungeons?.player_classes?.mage?.experience) // Best Class
@@ -108,7 +117,7 @@ export default class playerData {
             }
             
             this.updated.rest = true
-            return this.updateToKick()
+            return this.updateRank()
         }).catch(e => chat(`&cError: ${e.reason}`))
     }
 
@@ -213,7 +222,7 @@ export default class playerData {
             ` `,
             `&f&l⚛&r &fClass Average: &e${(this.updated.rest)? this.stats.experience.classAverage: "&k...&r"}`,
             `&c➶ Archer Level: &e${(this.updated.rest)? this.stats.experience.classes.Archer:(this.dungeonClass == "Archer")? this.classLevel: "&k...&r"} ${(this.dungeonClass == "Archer" && !this.cmdUsed)? "&c&l←": ""}`,
-            `&6☄ Berserk Level: &e${(this.updated.rest)? this.stats.experience.classes.Berserker:(this.dungeonClass == "Berserk")? this.classLevel: "&k...&r"} ${(this.dungeonClass == "Berserk" && !this.cmdUsed)? "&6&l←)": ""}`,
+            `&6☄ Berserk Level: &e${(this.updated.rest)? this.stats.experience.classes.Berserk:(this.dungeonClass == "Berserk")? this.classLevel: "&k...&r"} ${(this.dungeonClass == "Berserk" && !this.cmdUsed)? "&6&l←)": ""}`,
             `&a⚓Tank Level: &e${(this.updated.rest)? this.stats.experience.classes.Tank:(this.dungeonClass == "Tank")? this.classLevel: "&k...&r"} ${(this.dungeonClass == "Tank" && !this.cmdUsed)? "&a&l←": ""}`,
             `&b⚡ Mage Level: &e${(this.updated.rest)? this.stats.experience.classes.Mage:(this.dungeonClass == "Mage")? this.classLevel: "&k...&r"} ${(this.dungeonClass == "Mage" && !this.cmdUsed)? "&b&l←": ""}`,
             `&d⚚ Healer Level: &e${(this.updated.rest)? this.stats.experience.classes.Healer:(this.dungeonClass == "Healer")? this.classLevel: "... "} ${(this.dungeonClass == "Healer" && !this.cmdUsed)? "&d&l←": ""}`,
