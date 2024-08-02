@@ -115,6 +115,7 @@ const messageReset = register('worldLoad', () => {
     }
 })
 
+
 export function toggle() {
     if (config.locationMessagesToggle && config.toggle) {
         if (config.debug) chat("&aStarting the &6Location Messages &amodule.")
