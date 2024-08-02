@@ -92,7 +92,7 @@ const getBowShootSpeed = () => {
 
 
 const trigger = register("tick", () => {
-    if (!config.auto4) return;
+    if (!config.autoFourToggle) return;
     if (Player.getHeldItem()?.getID() !== 261) return;
     if (Date.now() - lastShot < getBowShootSpeed()) return;
     if (!isNearPlate()) {
