@@ -60,6 +60,7 @@ const trigger = register("tick", () => {
 			if (southWither || westWither || northWither || eastWither) Blocks.field_150402_ci.func_149676_a(-1, -1, -1, -1, -1, -1);
 			else if (southBlood || westBlood || northBlood || eastBlood) Blocks.field_150406_ce.func_149676_a(-1, -1, -1, -1, -1, -1);
 			Client.scheduleTask(0, () => rotate(initialYaw, initialPitch));
+			chat(`Door Skipping.`)
 			trigger2.unregister();
 		}).setFilteredClass(S08PacketPlayerPosLook);
 		cancel(event);
