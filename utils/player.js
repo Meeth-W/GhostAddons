@@ -32,7 +32,8 @@ export default class playerData {
                 classes: {
                     Mage: null, Archer: null, Berserk: null, Tank: null, Healer: null
                 },
-                classAverage: null
+                classAverage: null,
+                selectedClass: null
             },
             magical_power: {
                 mp: null, reforge: null
@@ -64,10 +65,11 @@ export default class playerData {
         }).catch(e => chat(`&cError: ${e.reason}`))
     }
 
-    updateRank() {
+    updateSBE() {
         return request({url: `https://api.icarusphantom.dev/v1/sbecommands/cata/${this.username}`, headers: {'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json'}, json: true}).then(data => {
             if (!data.status) return chat(`&cError: ${data.issue}`)
                 try { this.rank = (data?.data?.rank).replaceAll('Â', '') } catch (e) { this.rank = "&7" }
+            this.stats.experience.selectedClass = data?.data?.dungeons?.selected_class
             this.updated.rank = true
             return this.updateToKick()
         }).catch(e => chat(`&cSBE API Error: ${e.reason}`))
@@ -92,7 +94,7 @@ export default class playerData {
             this.stats.experience.classes.Healer = calcSkillLevel("catacombs", profile?.raw?.dungeons?.player_classes?.healer?.experience)
             this.stats.experience.classes.Mage = calcSkillLevel("catacombs", profile?.raw?.dungeons?.player_classes?.mage?.experience) // Best Class
 
-            this.stats.experience.classAverage = ((this.stats.experience.classes.Archer + this.stats.experience.classes.Berserker + this.stats.experience.classes.Healer + this.stats.experience.classes.Mage + this.stats.experience.classes.Tank ) / 5).toFixed(2)
+            this.stats.experience.classAverage = ((this.stats.experience.classes.Archer + this.stats.experience.classes.Berserk + this.stats.experience.classes.Healer + this.stats.experience.classes.Mage + this.stats.experience.classes.Tank ) / 5).toFixed(2)
 
             this.rank = "&6"
 
@@ -117,7 +119,7 @@ export default class playerData {
             }
             
             this.updated.rest = true
-            return this.updateRank()
+            return this.updateSBE()
         }).catch(e => chat(`&cError: ${e.reason}`))
     }
 

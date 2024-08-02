@@ -5,6 +5,7 @@ import { chat } from "../../utils/utils";
 let showGUI = false
 let player = null
 let windowSize = 60
+let displaytime = null
 
 function getcol1() {
     return [
@@ -20,14 +21,14 @@ function getcol1() {
     `&cTank Level: &6${player.stats.experience.classes.Tank}`,
     `&cHealer Level: &6${player.stats.experience.classes.Healer}`,
     ``,
+    `&cSelected Class: &6${player.stats.experience.selectedClass}`,
     ``,
     ``,
     ``,
     ``,
     ``,
-    ``,
-    ``,
-    ``
+    `&cMenu Closing In:`,
+    `&d${displaytime? ((5000 - (Date.now() - displaytime))/1000).toFixed(2) : 'Loading Data...'}`
 ]}
 function getcol2() {
     return [
@@ -72,18 +73,22 @@ function getcol3() {
     ``,
     ``,
     ``,
-    ``,
-    ``
+    `&cKick Status`,
+    `${player.toKick[0]? "&c":"&a"}${player.toKick[1]}`
 ]}
 const commandRegister = register("command", (username) => {
     if (!username) username = Player.getName()
     player = new playerData(username) // Defaulting to Mage 50 cuz this is dependant and updates later anyway.
     showGUI = true;
+    displaytime = null
     try { player.init().then(() => {
         player.updateRest().then(() => {
+            displaytime = Date.now()
             setTimeout(() => {
                 showGUI = false
+                displaytime = null
             }, 5000);
+            chat(player.getString().join('\n'))
         })
     }) } catch(e) {chat(`&cError: ${e.reason}`)}
 }).setName("nicepb").setAliases("m7stats");

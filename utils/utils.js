@@ -73,7 +73,7 @@ export function getPreset() {
 }
 
 export function getDynamicColor() {
-    if (!config.slotBindingdynamicColoring) return Renderer.WHITE
+    if (!config.slotBindingdynamicColoring) return config.slotBindingdefaultColor.getRGB()
 
     let preset = getPreset()
     if (preset == 0) return Renderer.AQUA
@@ -81,7 +81,7 @@ export function getDynamicColor() {
     else if (preset == 2) return Renderer.RED
     else if (preset == 3) return Renderer.LIGHT_PURPLE
     else if (preset == 4) return Renderer.DARK_GREEN
-    else return Renderer.WHITE
+    else return config.slotBindingdefaultColor.getRGB()
 }
 
 export function getSlotCoords(i) {

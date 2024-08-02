@@ -241,6 +241,13 @@ class Settings {
     })
     slotBindingdynamicColoring = false
 
+    @ColorProperty({
+		name: "Default Color",
+		category: "Slot Binding",
+        description: "Changes the default Slot Binding Overlay Color."
+	})
+	slotBindingdefaultColor = new Color(Renderer.color(0, 0, 0, 127), true);
+
     // Auto Leap 
     @SwitchProperty({
         name: '&9Toggle Auto Leap',
