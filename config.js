@@ -376,6 +376,13 @@ class Settings {
     pre3Coord = false;
     
     @SwitchProperty({
+        name: "Pre Enter 4 Nearby Message",
+        category: "Location Messages",
+        subcategory: "Toggles"
+    })
+    pre4Coord = false;
+
+    @SwitchProperty({
         name: "At Core Message",
         category: "Location Messages",
         subcategory: "Toggles"
