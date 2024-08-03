@@ -1,5 +1,5 @@
 import config from "../../config";
-import { chat, rightClick } from "../../utils/utils";
+import { calcYawPitch, chat, rightClick, snapTo } from "../../utils/utils";
 
 const DevBlocks = [
     { x: 64, y: 126, z: 50 },
@@ -13,46 +13,7 @@ const DevBlocks = [
     { x: 68, y: 130, z: 50 }
 ];
 
-
 let lastShot
-
-function getEyePos() {
-    return {
-        x: Player.getX(),
-        y: Player.getY() + Player.getPlayer().func_70047_e(),
-        z: Player.getZ()
-    };
-}
-
-function snapTo(yaw, pitch) {
-    const player = Player.getPlayer();
-
-    player.field_70177_z = yaw
-    player.field_70125_A = pitch;
-}
-
-function calcYawPitch(blcPos, plrPos) {
-    if (!plrPos) plrPos = getEyePos();
-    let d = {
-        x: blcPos.x - plrPos.x,
-        y: blcPos.y - plrPos.y,
-        z: blcPos.z - plrPos.z
-    };
-    let yaw = 0;
-    let pitch = 0;
-    if (d.x != 0) {
-        if (d.x < 0) { yaw = 1.5 * Math.PI; } else { yaw = 0.5 * Math.PI; }
-        yaw = yaw - Math.atan(d.z / d.x);
-    } else if (d.z < 0) { yaw = Math.PI; }
-    d.xz = Math.sqrt(Math.pow(d.x, 2) + Math.pow(d.z, 2));
-    pitch = -Math.atan(d.y / d.xz);
-    yaw = -yaw * 180 / Math.PI;
-    pitch = pitch * 180 / Math.PI;
-    if (pitch < -90 || pitch > 90 || isNaN(yaw) || isNaN(pitch) || yaw == null || pitch == null || yaw == undefined || pitch == null) return;
-
-    return [yaw, pitch]
-
-}
 
 let delay
 let doneCoords = new Set()

@@ -15,7 +15,7 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General', 'Slot Binding', 'Party Finder', 'Timers', 'Auto Leap', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four', 'Lowballing'];
+        const categories = ['General', 'Slot Binding', 'Party Finder', 'Blood Helper', 'Timers', 'Auto Leap', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four', 'Lowballing'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
@@ -37,11 +37,11 @@ class Settings {
         // Slot Binding
         this.setCategoryDescription('Slot Binding', '&6Slot Binding Settings\n\n&7Set hotkey from Minecraft Controls Settings.')
 
+        // Blood Helper
+        this.setCategoryDescription('Blood Helper', '&6Blood Camp Helper.\n\n&7Auto Camp is still a WIP. Misses mobs if server lags.')
+
         // Auto Leap 
         this.setCategoryDescription('Auto Leap', '&6Automatically leaps to certain users on specific events.\n\n&4This module is a Cheat. Use at your own risk.')
-
-        // Blood Camp
-        this.setCategoryDescription('Blood Camp', '&6Blood Camp Features. Coming Soon TM')
 
         // Alerts
         this.setCategoryDescription('Alerts', '&6Displays titles at certain stages of the game.\n\n&7TODO: Command to change colors.')
@@ -525,6 +525,37 @@ class Settings {
         category: 'Lowballing'
     })
     purse = "1b";
+
+    @SwitchProperty({
+        name: "&9Toggle Blood Helper",
+        description: "Decides wether all features in Blood Helper are &aenabled&7/&cdisabled&7.",
+        category: "Blood Helper"
+    })
+    bloodHelperToggle = false
+
+    @SwitchProperty({
+        name: "Blood Triggerbot",
+        description: "Automatically left clicks when the blood mob is about to spawn.",
+        category: "Blood Helper",
+        subcategory: 'Triggerbot'
+    })
+    bloodTriggerbot = false
+
+    @TextProperty({
+        name: 'Delay',
+        description: 'Time on timer to swing at. (0.1-0.5)',
+        category: 'Blood Helper',
+        subcategory: 'Triggerbot'
+    })
+    bloodSwingCheck = "0.5";
+
+    @SwitchProperty({
+        name: "Auto Rotate",
+        description: "Automatically snaps to the mob spawn location.",
+        category: "Blood Helper",
+        subcategory: 'Triggerbot'
+    })
+    bloodAutoRotate = false
 }
 
 export default new Settings();

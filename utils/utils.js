@@ -142,3 +142,89 @@ export function formatNum(num) {
 
     return fractionalPart ? `${integerWithCommas}.${fractionalPart}` : integerWithCommas;
 }
+
+export function getEyePos() {
+    return {
+        x: Player.getX(),
+        y: Player.getY() + Player.getPlayer().func_70047_e(),
+        z: Player.getZ()
+    };
+}
+
+export function snapTo(yaw, pitch) {
+    const player = Player.getPlayer();
+
+    player.field_70177_z = yaw
+    player.field_70125_A = pitch;
+}
+
+export function calcYawPitch(blcPos, plrPos) {
+    if (!plrPos) plrPos = getEyePos();
+    let d = {
+        x: blcPos.x - plrPos.x,
+        y: blcPos.y - plrPos.y,
+        z: blcPos.z - plrPos.z
+    };
+    let yaw = 0;
+    let pitch = 0;
+    if (d.x != 0) {
+        if (d.x < 0) { yaw = 1.5 * Math.PI; } else { yaw = 0.5 * Math.PI; }
+        yaw = yaw - Math.atan(d.z / d.x);
+    } else if (d.z < 0) { yaw = Math.PI; }
+    d.xz = Math.sqrt(Math.pow(d.x, 2) + Math.pow(d.z, 2));
+    pitch = -Math.atan(d.y / d.xz);
+    yaw = -yaw * 180 / Math.PI;
+    pitch = pitch * 180 / Math.PI;
+    if (pitch < -90 || pitch > 90 || isNaN(yaw) || isNaN(pitch) || yaw == null || pitch == null || yaw == undefined || pitch == null) return;
+
+    return [yaw, pitch]
+
+}
+
+let canLook = true
+let fromYaw
+let fromPitch
+let destYaw
+let destPitch
+let startTime
+let time
+
+const convertYawToInternal = (destinationYaw) => {
+    let currentYaw = Player.getPlayer().field_70177_z
+    let mcYaw = ((currentYaw + 180) % 360) - 180
+    let deltaYaw = mcYaw - destinationYaw
+    deltaYaw += (deltaYaw > 180) ? -360 : (deltaYaw < -180) ? 360 : 0
+    return currentYaw - deltaYaw
+}
+const interpolate = (f, t, start, dur) => {
+    let x = Date.now() - start
+    let u = (f - t) / 2
+    return u * Math.cos(((x * Math.PI) / dur)) - u + f
+}
+export const smoothLook = (dYaw, dPitch, dTime) => {
+    if (!canLook) return
+    time = dTime
+    canLook = false
+    shouldLook = true
+    fromYaw = Player.getPlayer().field_70177_z
+    fromPitch = Player.getPlayer().field_70125_A
+    destYaw = dYaw
+    destPitch = dPitch
+    startTime = Date.now()
+}
+
+let shouldLook = false
+
+register("renderWorld", () => {
+    if (!shouldLook) return
+    if (Date.now() <= (startTime + time)) {
+        let newYaw = interpolate(fromYaw, convertYawToInternal(destYaw), startTime, time)
+        let newPitch = interpolate(fromPitch, destPitch, startTime, time)
+        Player.getPlayer().field_70177_z = newYaw
+        Player.getPlayer().field_70125_A = newPitch
+    } else {
+        shouldLook = false
+        canLook = true
+        turning = false
+    }
+})
