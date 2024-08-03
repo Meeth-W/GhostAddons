@@ -1,12 +1,13 @@
 {
     "name": "GhostAddons",
     "creator": "Ghostyy",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Dungeons QOL.",
     "entry": "index.js",
     "requires": [
       "Vigilance", 
       "requestV2",
-      "BloomCore"
+      "BloomCore",
+      "RenderLib"
     ]
   }

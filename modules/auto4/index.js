@@ -1,5 +1,5 @@
 import config from "../../config";
-import { calcYawPitch, chat, rightClick, snapTo } from "../../utils/utils";
+import { calcYawPitch, chat, rightClick, smoothLook, snapTo } from "../../utils/utils";
 
 const DevBlocks = [
     { x: 64, y: 126, z: 50 },
@@ -82,7 +82,7 @@ const trigger = register("tick", () => {
     if (itemId !== "TERMINATOR") xdiff = 0.5;
 
     let [yaw, pitch] = calcYawPitch({ x: emeraldLocation.x + xdiff, y: emeraldLocation.y + 1.1, z: emeraldLocation.z });
-    snapTo(yaw, pitch);
+    if (config.autoFourSmooth) {smoothLook(yaw, pitch, 150)} else { snapTo(yaw, pitch); }
 
     Client.scheduleTask(0, () => {
         rightClick();
