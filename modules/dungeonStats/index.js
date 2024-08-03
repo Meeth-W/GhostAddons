@@ -25,10 +25,10 @@ function getcol1() {
     ``,
     ``,
     ``,
-    ``,
-    ``,
     `&cMenu Closing In:`,
-    `&d${displaytime? ((5000 - (Date.now() - displaytime))/1000).toFixed(2) : 'Loading Data...'}`
+    `&d${displaytime? ((10000 - (Date.now() - displaytime))/1000).toFixed(2) : 'Loading Data...'}`,
+    ``,
+    `&6Click ${Keyboard.getKeyName(closeKey.getKeyCode())} to Close.`
 ]}
 function getcol2() {
     return [
@@ -87,8 +87,8 @@ const commandRegister = register("command", (username) => {
             setTimeout(() => {
                 showGUI = false
                 displaytime = null
-            }, 5000);
-            chat(player.getString().join('\n'))
+            }, 10000);
+            ChatLib.chat(player.getString().join('\n'))
         })
     }) } catch(e) {chat(`&cError: ${e.reason}`)}
 }).setName("nicepb").setAliases("m7stats");
@@ -123,14 +123,14 @@ const renderTrigger = register('renderOverlay', () => {
     Tessellator.popMatrix();
 })
 
+const closeKey = new KeyBind("Close GUI", Keyboard.KEY_ESCAPE, "GhostAddons");
+
+closeKey.registerKeyPress(() => {
+    if (!showGUI) return
+    showGUI = false
+});
+
 export function toggle() {
-    // if (config.m7StatsToggle && config.toggle) {
-    //     if (config.debug) chat("&aStarting the &6Dungeon Stats &amodule.")
-    //     commandRegister.register()
-    //     return
-    // }
-    // if (config.debug) chat("&cStopping the &6Dungeon Stats &cmodule.")
-    // commandRegister.unregister()
     return commandRegister.register();
 }
 export default { toggle };

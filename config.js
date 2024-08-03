@@ -15,7 +15,7 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General', 'Slot Binding', 'Party Finder', 'Timers', 'Auto Leap', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four'];
+        const categories = ['General', 'Slot Binding', 'Party Finder', 'Timers', 'Auto Leap', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four', 'Lowballing'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
@@ -60,6 +60,9 @@ class Settings {
 
         // Timers
         this.setCategoryDescription('Timers', '&6Tick accurate timers. Displayed at specific events.')
+
+        // Lowballing
+        this.setCategoryDescription('Lowballing', '&6Lowballing stuff.\n\nSetup keybind for lowballing messages in settings.')
     }
     
     // General
@@ -516,7 +519,12 @@ class Settings {
         this.dragonSpawnTimerGui.open()
     };
 
-
+    @TextProperty({
+        name: 'Purse',
+        description: 'Purse for Lowball Message',
+        category: 'Lowballing'
+    })
+    purse = "1b";
 }
 
 export default new Settings();
