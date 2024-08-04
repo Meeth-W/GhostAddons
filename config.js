@@ -618,6 +618,55 @@ class Settings {
         subcategory: 'Highlights'
     })
     secretHighlightDelay = "3000";
+
+    @SwitchProperty({
+        name: 'Toggle Auto Etherwarp',
+        description: 'Toggles auto-etherwarping',
+        category: 'Secrets',
+        subcategory: 'Auto Etherwarp',
+    })
+    autoEtherToggle = false
+
+    @SwitchProperty({
+        name: 'Toggle Sound',
+        description: 'Plays a ding each time rightclick procs',
+        category: 'Secrets',
+        subcategory: 'Auto Etherwarp',
+    })
+    etherDing = false
+
+    @SliderProperty({
+        name: 'Click Delay',
+        description: 'Delay between each right-click',
+        category: 'Secrets',
+        subcategory: 'Auto Etherwarp',
+        min: 150,
+        max: 500,
+        step: 10,
+    })
+    etherDelay = 150;
+
+    @TextProperty({
+        name: 'Blocks',
+        description: "Block ID's of the block's to etherwarp to.",
+        category: 'Secrets',
+        subcategory: 'Auto Etherwarp'
+    })
+    etherBlocks = "emerald_block, lapis_block";
+
+    @ColorProperty({
+		name: "Text Color",
+		category: "Secrets",
+        subcategory: "Auto Etherwarp"
+	})
+	autoEtherTextColor = new Color(Renderer.color(0, 0, 0, 127), true);
+
+    @ColorProperty({
+        name: "Overlay Color",
+        category: "Secrets",
+        subcategory: "Auto Etherwarp"
+    })
+    autoEtherColor = Color.BLUE;
 }
 
 export default new Settings();
