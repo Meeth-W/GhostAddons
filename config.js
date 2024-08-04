@@ -15,7 +15,7 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General', 'Slot Binding', 'Party Finder', 'Blood Helper', 'Timers', 'Auto Leap', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four', 'Lowballing'];
+        const categories = ['General', 'Slot Binding', 'Party Finder', 'Blood Helper', 'Timers', 'Auto Leap', 'Secrets', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four', 'Lowballing'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
@@ -45,6 +45,9 @@ class Settings {
 
         // Alerts
         this.setCategoryDescription('Alerts', '&6Displays titles at certain stages of the game.\n\n&7TODO: Command to change colors.')
+
+        // Secrets
+        this.setCategoryDescription('Secrets', '&6Secrets Utils.\n\n&4This Module Contains Cheats.')
 
         // Location Messages
         this.setCategoryDescription('Location Messages', '&6Sends messages in party chat when you reach a certain set of coords in p3.')
@@ -541,6 +544,12 @@ class Settings {
     })
     bloodHelperToggle = false
 
+    @ColorProperty({
+		name: "Helper Color",
+		category: "Blood Helper"
+	})
+	bloodHelperColor = new Color(Renderer.color(0, 0, 255, 255), true);
+
     @SwitchProperty({
         name: "Blood Triggerbot",
         description: "Automatically left clicks when the blood mob is about to spawn.",
@@ -563,7 +572,52 @@ class Settings {
         category: "Blood Helper",
         subcategory: 'Triggerbot'
     })
-    bloodAutoRotate = false
+    bloodAutoRotate = false;
+
+    @SwitchProperty({
+        name: "&9Toggle Secrets",
+        description: "Decides wether all features in Secrets are &aenabled&7/&cdisabled&7.",
+        category: "Secrets"
+    })
+    secretsToggle = false;
+
+    @SwitchProperty({
+        name: "Secret Highlight",
+        description: "Renders an outline over clicked secrets.",
+        category: "Secrets",
+        subcategory: "Highlights"
+    })
+    secretHighlightToggle = false;
+
+    @TextProperty({
+        name: 'Highlight Text',
+        description: 'Shows text when you click on secrets.\n{text} Chest! | {text} Essence! | etc.',
+        category: 'Secrets',
+        subcategory: 'Highlights'
+    })
+    secretHighlightText = "Clicked";
+
+    @ColorProperty({
+		name: "Text Color",
+		category: "Secrets",
+        subcategory: "Highlights"
+	})
+	secretHighlightTextColor = new Color(Renderer.color(0, 0, 0, 127), true);
+
+    @ColorProperty({
+        name: "Overlay Color",
+        category: "Secrets",
+        subcategory: "Highlights"
+    })
+    secretHighlightColor = Color.BLUE;
+
+    @TextProperty({
+        name: 'Delay',
+        description: 'Decides how long the overlay lasts.',
+        category: 'Secrets',
+        subcategory: 'Highlights'
+    })
+    secretHighlightDelay = "3000";
 }
 
 export default new Settings();

@@ -228,3 +228,10 @@ register("renderWorld", () => {
         turning = false
     }
 })
+
+export function isInArray(input, array) {
+    for (e in array) {
+        if (array[e].toString() == input.toString()) return true
+    }
+    return false
+}

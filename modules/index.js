@@ -8,11 +8,12 @@ import locationMessages from "./locationMessages";
 import lowballing from "./lowballing";
 import partyFinder from "./partyFinder";
 import ratProtection from "./ratProtection";
+import secretHighlight from "./secretHighlight";
 import slotBinding from "./slotBinding";
 import spawnTimers from "./spawnTimers";
 
 export const modules = [
-    slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4, spawnTimers, lowballing, bloodCamp
+    slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4, spawnTimers, lowballing, bloodCamp, secretHighlight
 ]
 
 export default { modules };
