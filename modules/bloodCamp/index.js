@@ -18,7 +18,7 @@ let swinging = false
 const renderTrigger = register("renderWorld", () => {
 	for (let o of Object.entries(entities)) {
 		let [k, v] = o;
-		RenderLib.drawEspBox(v.final[0], v.final[1] + 1, v.final[2], 0.75, 0.75, 0, 0, 1, 1, true);
+		RenderLib.drawEspBox(v.final[0], v.final[1] + 1, v.final[2], 0.75, 0.75, config.bloodHelperColor.getRed()/255, config.bloodHelperColor.getGreen()/255, config.bloodHelperColor.getBlue()/255, config.bloodHelperColor.getAlpha()/255, true);
 		const vec1 = new Vector3(v.final[0], v.final[1], v.final[2]).subtract(new Vector3(v.entity.getRenderX(), v.entity.getRenderY(), v.entity.getRenderZ()));
 		const vec2 = new Vector3(v.final[0], v.final[1], v.final[2]).subtract(new Vector3(v.initial[0], v.initial[1], v.initial[2]));
 		const progress = vec1.getLength() / vec2.getLength();
