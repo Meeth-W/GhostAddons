@@ -24,6 +24,7 @@ class Settings {
     relicSpawnTimerGui = new Gui()
     dragonSpawnTimerGui = new Gui()
     crystalSpawnTimerGui = new Gui()
+    invincibilityTimerGui = new Gui()
 
     constructor() {
         this.initialize(this);
@@ -530,6 +531,25 @@ class Settings {
         this.dragonSpawnTimerGui.open()
     };
 
+    @SwitchProperty({
+        name: "Invincibility Timer",
+        description: "Displays a timer on your screen when invincibility procs.",
+        category: "Timers",
+        subcategory: "Invincibility Timer",
+    })
+    invincibilityToggle = false
+
+    @ButtonProperty({
+        name: "Move Invincibility Spawn Timer",
+        description: "Scroll to change scale, middle click to reset",
+        category: "Timers",
+        subcategory: "Invincibility Timer",
+        placeholder: "Move"
+    })
+    MoveInvincibilityTimerGui() {
+        this.invincibilityTimerGui.open()
+    };
+
     @TextProperty({
         name: 'Purse',
         description: 'Purse for Lowball Message',
@@ -574,6 +594,7 @@ class Settings {
     })
     bloodAutoRotate = false;
 
+    // Secrets
     @SwitchProperty({
         name: "&9Toggle Secrets",
         description: "Decides wether all features in Secrets are &aenabled&7/&cdisabled&7.",
