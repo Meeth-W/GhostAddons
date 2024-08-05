@@ -449,13 +449,13 @@ class Settings {
     })
     autoFourToggle = false
 
-    @SwitchProperty({
-        name: "Smooth Look",
-        description: "Turns off snapping in auto four. Rotates smoothly over 150 ms.",
-        category: "Auto Four",
-        subcategory: "Settings"
-    })
-    autoFourSmooth = false
+    // @SwitchProperty({ Coming Soon TM
+    //     name: "Smooth Look",
+    //     description: "Turns off snapping in auto four. Rotates smoothly over 150 ms.",
+    //     category: "Auto Four",
+    //     subcategory: "Settings"
+    // })
+    // autoFourSmooth = false
 
     // Spawn Timers
     @SwitchProperty({

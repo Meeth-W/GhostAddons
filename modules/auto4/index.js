@@ -82,8 +82,7 @@ const trigger = register("tick", () => {
     if (itemId !== "TERMINATOR") xdiff = 0.5;
 
     let [yaw, pitch] = calcYawPitch({ x: emeraldLocation.x + xdiff, y: emeraldLocation.y + 1.1, z: emeraldLocation.z });
-    if (config.autoFourSmooth) {smoothLook(yaw, pitch, 150)} else { snapTo(yaw, pitch); }
-
+    snapTo(yaw, pitch); 
     Client.scheduleTask(0, () => {
         rightClick();
     });
