@@ -28,11 +28,16 @@ const renderTrigger = register("renderWorld", () => {
                 swinging = true
                 setTimeout(() => {
 					let [yaw, pitch] = calcYawPitch({ x: v.final[0], y: v.final[1] + 1, z: v.final[2] });
-    				if (config.bloodAutoRotate) smoothLook(yaw, pitch, 150);
-
-                    leftClick()
-                    World.playSound("note.harp", 2, 2)
-                    swinging = false
+    				if (config.bloodAutoRotate) {
+						smoothLook(yaw, pitch, 150);
+						setTimeout(() => { leftClick() }, 150);
+						World.playSound("note.harp", 2, 2)
+						swinging = false
+						return;
+					}
+					leftClick();
+					World.playSound("note.harp", 2, 2)
+					swinging = false
                 }, 300);
             }
         }
