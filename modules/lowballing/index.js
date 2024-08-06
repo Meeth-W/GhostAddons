@@ -1,17 +1,14 @@
 import Config from "../../config"
-import { prefix } from "../../utils/utils";
+import { chat, prefix } from "../../utils/utils";
 
 var index = 0;
+let timeSent 
 
 const lowballMessages = [
-    `✦ Lowballing with ${Config.purse} purse ✦`,
-    `✦ Lowballing w/ ${Config.purse} purse! 25m+ items ✦`,
-    `✦ Lowballing w/ ${Config.purse} purse! visit me! 25m+ items ✦`,
-    `✦ Lowballing w/ ${Config.purse} purse! 25m+ items, visit me! ✦`,
-    `✪ Lowballing with ${Config.purse} purse ✪`,
-    `✪ Lowballing w/ ${Config.purse} purse! 25m+ items ✪`,
-    `✪ Lowballing w/ ${Config.purse} purse! visit me! 25m+ items ✪`,
-    `✪ Lowballing w/ ${Config.purse} purse! 25m+ items, visit me! ✪`,
+    `Lowballing with ${Config.purse} purse`,
+    `Lowballing w/ ${Config.purse} purse! 25m+ items`,
+    `Lowballing w/ ${Config.purse} purse! visit me! 25m+ items`,
+    `Lowballing w/ ${Config.purse} purse! 25m+ items, visit me!`
 ];
 
 function convertExpression(expression) {
@@ -33,8 +30,12 @@ register("command", (expression) => {
 }).setName("calc").setAliases("eval", "math");
 
 function sendLowballMessage() {
+    if (Date.now() - timeSent < 5000) return chat(`&cYou're spamming this!`)
+    chat(`&aSending Lowball Message ${index + 1}/${lowballMessages.length}`)
     ChatLib.command(`ac ${lowballMessages[index]}`)
-    index++
+    timeSent = Date.now()
+    if (index == lowballMessages.length-1) index = 0
+    else index++
 }
 
 const lowballButton = new KeyBind("Lowball Message", Keyboard.KEY_NONE, "GhostAddons");
