@@ -27,7 +27,7 @@ const renderTrigger = register("renderWorld", () => {
             if (!swinging && config.bloodTriggerbot && watcherPhase == 1) {
                 swinging = true
                 setTimeout(() => {
-					let [yaw, pitch] = calcYawPitch({ x: v.final[0], y: v.final[1] + 1, z: v.final[2] });
+					let [yaw, pitch] = calcYawPitch({ x: v.final[0], y: v.final[1] + 2, z: v.final[2] });
     				if (config.bloodAutoRotate) {
 						smoothLook(yaw, pitch, 150);
 						setTimeout(() => { leftClick() }, 150);
