@@ -50,7 +50,7 @@ const renderTrigger = register('renderOverlay', () => {
 const handleClick = register(Java.type("net.minecraftforge.client.event.MouseEvent"), (event) => {
     if (event.button != 0 || !isHoldingLeapItem() || waitingLeap || !event.buttonstate || !Client.isTabbedIn()) return
     if (!leaptarget) return chat(`&cNo Leap Targets.`)
-    
+    cancel(event)
     waitingLeap = true
     chat('&aAttempting to leap.')
     rightClick();
