@@ -1,3 +1,5 @@
+import Dungeon from "../../BloomCore/dungeons/Dungeon"
+import { getSkyblockItemID } from "../../BloomCore/utils/Utils"
 import config from "../config"
 
 export const prefix = "§8[&6Ghost&8]§r "
@@ -235,3 +237,18 @@ export function isInArray(input, array) {
     }
     return false
 }
+
+export function getClasses() {
+    const party = Dungeon.playerClasses;
+    let classes = {"Mage": null, "Archer": null, "Tank": null, "Berserk": null, "Healer": null};
+    for (let ign in party) { classes[party[ign].class] = ign; }
+    return classes;
+}
+
+export const isHoldingLeapItem = () => {
+    const held = Player.getHeldItem();
+    const sbId = getSkyblockItemID(held);
+
+    if (sbId !== "SPIRIT_LEAP" && sbId !== "INFINITE_SPIRIT_LEAP") return false;
+    return true;
+};

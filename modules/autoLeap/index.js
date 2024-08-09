@@ -1,5 +1,5 @@
 import config from "../../config";
-import { chat, rightClick } from "../../utils/utils";
+import { chat, getClasses, rightClick } from "../../utils/utils";
 
 let waitingLeap = false
 let leaptarget = null
@@ -22,6 +22,7 @@ const S2DPacketOpenWindow = Java.type("net.minecraft.network.play.server.S2DPack
 const openMenuTrigger = register("packetReceived", (packet) => {
     if (!waitingLeap) return
     waitingLeap = false
+    let classes = ['Mage', 'Archer', 'Berserker', 'Healer', 'Tank', 'General'];
     Client.scheduleTask(1, () => {
         if (Player.getContainer().getName() !== "Spirit Leap") return
         const items = Player.getContainer()?.getItems() 
@@ -30,7 +31,7 @@ const openMenuTrigger = register("packetReceived", (packet) => {
             if (leaptarget && item == leaptarget.toLowerCase()) {
                 Player.getContainer().click(i)
                 leaptarget = null
-            } else if (item == (config.autoLeapTarget.toLowerCase())) {
+            } else if (item == (getClasses()[classes[config.autoLeapTarget]])) {
                 Player.getContainer().click(i)
             }
         }
@@ -51,7 +52,7 @@ const doorTrigger = register("chat", (user) => {
     leaptarget = user
     openLeap()
 }).setCriteria("${user} opened a WITHER door!").unregister()
-    
+
 export function toggle() {
     if (config.autoLeapToggle && config.toggle) {
         if (config.debug) chat("&aStarting the &6Auto Leap &amodule.")
