@@ -42,7 +42,7 @@ const trigger = register("chat", (username, _, __) => {
                 if (!isleader) chat("&cCancelling Auto-Kick, Not party leader.")
             }
 
-            if (config.partyFinderPartyChat && !player.toKick[0] && !player.kicked) {
+            if (config.partyFinderPartyChat && !player.toKick[0] && !player.kicked && !config.partyFinderOnlyKickMessage) {
                 queueChat.queueCommands([
                     () => {ChatLib.command(`party chat [GH] [${parseInt(player.stats.sb_level_raw)}] ${username} | Floor PB: ${player.getSelectPB()[1]['S+']} | Highest Magical Power: ${player.stats.magical_power.mp} | Secrets: ${player.stats.dungeons.secrets}`)}
                 ])

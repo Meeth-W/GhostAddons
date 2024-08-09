@@ -70,7 +70,7 @@ class Settings {
         this.setCategoryDescription('Lowballing', '&6Lowballing stuff.\n\nSetup keybind for lowballing messages in settings.')
 
         // Fast Leap
-        this.setCategoryDescription('Fast Leap', '&6Left click your InfiniLeap to leap to the current leap target.\n\nSelects targets based on their positional messages.\n&9Party &8> &6[MVP&0++&6] Ghostyy&f: At Core!')
+        this.setCategoryDescription('Fast Leap', '&6Left click your InfiniLeap to leap to the current leap target.\n\nSelects targets based on their positional messages.\n&9Party &8> &6[MVP&0++&6] Ghostyy&f: At Core!\n\n&4This module is a cheat. Use at your own risk.')
     }
     
     // General
@@ -122,6 +122,12 @@ class Settings {
         category: 'Party Finder'
     })
     partyFinderPartyChat = false;
+
+    @SwitchProperty({
+        name: 'Only send Auto Kick messages',
+        category: 'Party Finder'
+    })
+    partyFinderOnlyKickMessage = false;
 
     @SelectorProperty({
         name: 'Dungeon Type',
