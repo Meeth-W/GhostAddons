@@ -709,6 +709,14 @@ class Settings {
     })
     leapGuiToggle = false
 
+    @SwitchProperty({
+        name: "Party Chat Toggle",
+        description: "Sends your leap message in party chat.\n&9Party &8> &6[MVP&0++&6] Ghostyy&f: Leaping to Core!",
+        category: "Fast Leap",
+        subcategory: "Settings",
+    })
+    leappchatToggle = false
+
     @ButtonProperty({
         name: "Move Fast Leap GUI",
         description: "Scroll to change scale, middle click to reset",
