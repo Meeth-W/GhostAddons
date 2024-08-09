@@ -19,7 +19,7 @@ const trigger = register('tick', () => {
     rightClick()
     if (config.etherDing) World.playSound('note.pling', 1, 1);
     setTimeout(() => { recentTPs.shift() }, 1000)  
-})
+}).unregister();
 
 const renderTrigger = register('renderWorld', () => {
     if (!recentTPs.length) return;
