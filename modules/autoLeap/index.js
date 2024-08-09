@@ -22,7 +22,7 @@ const S2DPacketOpenWindow = Java.type("net.minecraft.network.play.server.S2DPack
 const openMenuTrigger = register("packetReceived", (packet) => {
     if (!waitingLeap) return
     waitingLeap = false
-    let classes = ['Mage', 'Archer', 'Berserker', 'Healer', 'Tank', 'General'];
+    let classes = ['Mage', 'Archer', 'Berserk', 'Healer', 'Tank'];
     Client.scheduleTask(1, () => {
         if (Player.getContainer().getName() !== "Spirit Leap") return
         const items = Player.getContainer()?.getItems() 

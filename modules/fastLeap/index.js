@@ -1,12 +1,14 @@
 import config from "../../config";
 import { data } from "../../utils/data";
-import { chat, isHoldingLeapItem, rightClick } from "../../utils/utils";
+import { chat, getClasses, isHoldingLeapItem, isInDungeon, rightClick } from "../../utils/utils";
 
 let waitingLeap = false
 let leaptarget = null
 let leaplocation = null
 let item
 let text = new Text('').setScale(1).setShadow(true).setAlign('LEFT').setColor(Renderer.WHITE);
+
+const classes = ['Mage', 'Archer', 'Berserk', 'Healer', 'Tank']
 
 const getString = () => {
     if (leaptarget) return `&7Leap Target: &6${(leaptarget)} &7| &d${(leaplocation)}`
@@ -33,14 +35,42 @@ const openMenuTrigger = register("packetReceived", (packet) => {
 }).setFilteredClass(S2DPacketOpenWindow).unregister();
 
 // Setting Target
-const setTarget = register("chat", (n, a, p) => {
+const p3Locations = register("chat", (n, a, p) => {
     if (n.toLowerCase() == Player.getName().toLowerCase()) return
     leaptarget = n
     leaplocation = p
-    startTime = Date.now()
 }).setCriteria(/Party > .+ (\w+): (At|Inside) (.+)(!)?/).unregister();
 
+const maxorEnd = register("chat", () => {
+    leaptarget = (getClasses()[classes[config.maxorEnd]])
+    leaplocation = `Storm Phase. [${classes[config.maxorEnd]}]`
+}).setCriteria(`[BOSS] Maxor: YOU TRICKED ME!`).unregister();
+
+const stormEnd = register("chat", () => {
+    leaptarget = (getClasses()[classes[config.stormEnd]])
+    leaplocation = `Goldor Phase. [${classes[config.stormEnd]}]`
+}).setCriteria(`[BOSS] Storm: I should have known that I stood no chance.`).unregister();
+
+const goldorEnd = register("chat", () => {
+    leaptarget = (getClasses()[classes[config.goldorEnd]])
+    leaplocation = `Necron Phase. [${classes[config.goldorEnd]}]`
+}).setCriteria(`[BOSS] Necron: I'm afraid, your journey ends now.`).unregister();
+
+const necronEnd = register("chat", () => {
+    leaptarget = (getClasses()[classes[config.necronEnd]])
+    leaplocation = `Dragons Phase. [${classes[config.necronEnd]}]`
+}).setCriteria(`[BOSS] Necron: ARGH!`).unregister();
+
+const relicPickup = register("chat", (username, relic) => {
+    if ((relic == 'Red' || relic == 'Orange') || username != Player.getName()) return
+    leaptarget = (getClasses()[classes[config.relicPickup]])
+    leaplocation = `${classes[config.relicPickup]} Class.`
+}).setCriteria('${username} picked the Corrupted ${relic} Relic!').unregister();
+
+
+// Render Handling
 const renderTrigger = register('renderOverlay', () => {
+    if (!config.leapGuiToggle) return
     text.setString(getString())
     text.setScale(data.fastLeapGui.scale)
     text.draw(data.fastLeapGui.x, data.fastLeapGui.y)
@@ -49,6 +79,7 @@ const renderTrigger = register('renderOverlay', () => {
 // Handle Leap Click
 const handleClick = register(Java.type("net.minecraftforge.client.event.MouseEvent"), (event) => {
     if (event.button != 0 || !isHoldingLeapItem() || waitingLeap || !event.buttonstate || !Client.isTabbedIn()) return
+    if (!isInDungeon()) return chat(`&cFast Leap only works inside dungeons.`)
     if (!leaptarget) return chat(`&cNo Leap Targets.`)
     cancel(event)
     waitingLeap = true
@@ -99,16 +130,26 @@ export function toggle() {
     if (config.fastLeapToggle && config.toggle) {
         if (config.debug) chat("&aStarting the &6Fast Leap &amodule.")
         if (config.leapGuiToggle) renderTrigger.register()
-        setTarget.register()
+        p3Locations.register()
         handleClick.register()
         openMenuTrigger.register()
+        maxorEnd.register()
+        stormEnd.register()
+        goldorEnd.register()
+        necronEnd.register()
+        relicPickup.register()
         return
-    }
+    } 
     if (config.debug) chat("&cStopping the &6Fast Leap &cmodule.")
-    if (!config.leapGuiToggle)renderTrigger.unregister()
-    setTarget.unregister()
+    if (!config.leapGuiToggle) renderTrigger.unregister()
+    p3Locations.unregister()
     handleClick.unregister()
     openMenuTrigger.unregister()
+    maxorEnd.unregister()
+    stormEnd.unregister()
+    goldorEnd.unregister()
+    necronEnd.unregister()
+    relicPickup.unregister()
     return
 }
 export default { toggle };

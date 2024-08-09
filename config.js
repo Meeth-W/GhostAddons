@@ -229,7 +229,7 @@ class Settings {
         description: 'The current preset in use. \nSelected preset will be edited with keybind.',
         category: 'Slot Binding',
         subcategory: 'Settings',
-        options: ['Mage', 'Archer', 'Berserker', 'Healer', 'Tank', 'General'],
+        options: ['Mage', 'Archer', 'Berserk', 'Healer', 'Tank', 'General'],
     })
     slotBindingPreset = 0;
 
@@ -294,7 +294,7 @@ class Settings {
         description: 'The Class to Leap to after I4 is Complete',
         category: 'Auto Leap',
         subcategory: 'Settings',
-        options: ['Mage', 'Archer', 'Berserker', 'Healer', 'Tank'],
+        options: ['Mage', 'Archer', 'Berserk', 'Healer', 'Tank'],
     })
     autoLeapTarget = 0;
 
@@ -733,6 +733,51 @@ class Settings {
     MoveFastLeapGui() {
         this.fastLeapGui.open()
     };
+
+    @SelectorProperty({
+        name: 'Maxor End',
+        description: 'Leaps to this class once Maxor phase ends.\nTrigger: &4[BOSS] Maxor&c: YOU TRICKED ME!',
+        category: 'Fast Leap',
+        subcategory: 'Custom Targets',
+        options: ['Mage', 'Archer', 'Berserk', 'Healer', 'Tank'],
+    })
+    maxorEnd = 0;
+
+    @SelectorProperty({
+        name: 'Storm End',
+        description: 'Leaps to this class once Storm phase ends.\nTrigger: &4[BOSS] Storm&c: I should have known that I stood no chance.',
+        category: 'Fast Leap',
+        subcategory: 'Custom Targets',
+        options: ['Mage', 'Archer', 'Berserk', 'Healer', 'Tank'],
+    })
+    stormEnd = 0;
+
+    @SelectorProperty({
+        name: 'Goldor End',
+        description: `Leaps to this class once Goldor phase ends.\nTrigger: &4[BOSS] Necron&c: I'm afraid, your journey ends now.`,
+        category: 'Fast Leap',
+        subcategory: 'Custom Targets',
+        options: ['Mage', 'Archer', 'Berserk', 'Healer', 'Tank'],
+    })
+    goldorEnd = 0;
+
+    @SelectorProperty({
+        name: 'Necron End',
+        description: 'Leaps to this class once Necron phase ends.\nTrigger: &4[BOSS] Necron&c: ARGH!',
+        category: 'Fast Leap',
+        subcategory: 'Custom Targets',
+        options: ['Mage', 'Archer', 'Berserk', 'Healer', 'Tank'],
+    })
+    necronEnd = 0;
+
+    @SelectorProperty({
+        name: 'Relic Pickup',
+        description: 'Leaps to this class once Blue/Purple/Green Relic is picked up.\nTrigger: &6Ghostyy &apicked the &cCorrupted Blue Relic!',
+        category: 'Fast Leap',
+        subcategory: 'Custom Targets',
+        options: ['Mage', 'Archer', 'Berserk', 'Healer', 'Tank'],
+    })
+    relicPickup = 0;
 }
 
 export default new Settings();
