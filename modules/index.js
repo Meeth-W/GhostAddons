@@ -5,6 +5,7 @@ import autoLeap from "./autoLeap";
 import bloodCamp from "./bloodCamp";
 import doorSkip from "./doorSkip";
 import dungeonStats from "./dungeonStats";
+import fastLeap from "./fastLeap";
 import invincibilityTimers from "./invincibilityTimers";
 import locationMessages from "./locationMessages";
 import lowballing from "./lowballing";
@@ -15,7 +16,7 @@ import slotBinding from "./slotBinding";
 import spawnTimers from "./spawnTimers";
 
 export const modules = [
-    slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4, spawnTimers, lowballing, bloodCamp, secretHighlight, autoEther, invincibilityTimers
+    slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4, spawnTimers, lowballing, bloodCamp, secretHighlight, autoEther, invincibilityTimers, fastLeap
 ]
 
 export default { modules };

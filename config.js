@@ -15,7 +15,7 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General', 'Slot Binding', 'Party Finder', 'Blood Helper', 'Timers', 'Auto Leap', 'Secrets', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four', 'Lowballing'];
+        const categories = ['General', 'Slot Binding', 'Party Finder', 'Blood Helper', 'Timers', 'Auto Leap', 'Fast Leap', 'Secrets', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four', 'Lowballing'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
@@ -25,6 +25,7 @@ class Settings {
     dragonSpawnTimerGui = new Gui()
     crystalSpawnTimerGui = new Gui()
     invincibilityTimerGui = new Gui()
+    fastLeapGui = new Gui()
 
     constructor() {
         this.initialize(this);
@@ -67,6 +68,9 @@ class Settings {
 
         // Lowballing
         this.setCategoryDescription('Lowballing', '&6Lowballing stuff.\n\nSetup keybind for lowballing messages in settings.')
+
+        // Fast Leap
+        this.setCategoryDescription('Fast Leap', '&6Left click your InfiniLeap to leap to the current leap target.\n\nSelects targets based on their positional messages.\n&9Party &8> &6[MVP&0++&6] Ghostyy&f: At Core!')
     }
     
     // General
@@ -279,14 +283,14 @@ class Settings {
     })
     autoLeapi4 = false;
 
-    @TextProperty({
-        name: "Leap Target",
-        description: "Default person to leap to.",
-        category: "Auto Leap",
-        placeholder: "Ghostyy",
-        subcategory: 'Settings'
+    @SelectorProperty({
+        name: 'I4 AutoLeap Target Class',
+        description: 'The Class to Leap to after I4 is Complete',
+        category: 'Auto Leap',
+        subcategory: 'Settings',
+        options: ['Mage', 'Archer', 'Berserker', 'Healer', 'Tank'],
     })
-    autoLeapTarget = "Ghostyy";
+    autoLeapTarget = 0;
 
     // Alerts 
     @SwitchProperty({
@@ -688,6 +692,33 @@ class Settings {
         subcategory: "Auto Etherwarp"
     })
     autoEtherColor = Color.BLUE;
+
+    // Fast Leap
+    @SwitchProperty({
+        name: "&9Toggle Fast Leap",
+        description: "Decides wether all features in Fast Leap are &aenabled&7/&cdisabled&7.",
+        category: "Fast Leap"
+    })
+    fastLeapToggle = false;
+
+    @SwitchProperty({
+        name: "Display Fast Leap GUI",
+        description: "Displays text on your screen showing the selected leap target.",
+        category: "Fast Leap",
+        subcategory: "Settings",
+    })
+    leapGuiToggle = false
+
+    @ButtonProperty({
+        name: "Move Fast Leap GUI",
+        description: "Scroll to change scale, middle click to reset",
+        category: "Fast Leap",
+        subcategory: "Settings",
+        placeholder: "Move"
+    })
+    MoveFastLeapGui() {
+        this.fastLeapGui.open()
+    };
 }
 
 export default new Settings();

@@ -40,5 +40,10 @@ export const data = new PogObject("GhostAddons", {
         x: Renderer.screen.getWidth() / 2,
         y: Renderer.screen.getHeight() / 2 + 10,
         scale: 1
+    },
+    fastLeapGui: {
+        x: Renderer.screen.getWidth() / 2,
+        y: Renderer.screen.getHeight() / 2 + 10,
+        scale: 1
     }
 }, 'data/mainData.json')
