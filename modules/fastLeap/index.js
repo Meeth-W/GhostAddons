@@ -98,14 +98,14 @@ register("guiMouseClick", (x, y, bn) => {
 export function toggle() {
     if (config.fastLeapToggle && config.toggle) {
         if (config.debug) chat("&aStarting the &6Fast Leap &amodule.")
-        renderTrigger.register()
+        if (config.leapGuiToggle) renderTrigger.register()
         setTarget.register()
         handleClick.register()
         openMenuTrigger.register()
         return
     }
     if (config.debug) chat("&cStopping the &6Fast Leap &cmodule.")
-    renderTrigger.unregister()
+    if (!config.leapGuiToggle)renderTrigger.unregister()
     setTarget.unregister()
     handleClick.unregister()
     openMenuTrigger.unregister()
