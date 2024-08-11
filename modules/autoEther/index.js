@@ -36,14 +36,14 @@ const renderTrigger = register('renderWorld', () => {
 
 export function toggle() {
     if (config.secretsToggle && config.toggle) {
-        if (config.debug) chat("&aStarting the &6Secret Highlight &amodule.")
+        if (config.debug) chat("&aStarting the &6Auto Etherwarp &amodule.")
         if (config.autoEtherToggle) {
             trigger.register()
             renderTrigger.register()
         }
         return
     }
-    if (config.debug) chat("&cStopping the &6Secret Highlight &cmodule.")
+    if (config.debug) chat("&cStopping the &6Auto Etherwarp &cmodule.")
     if (!config.autoEtherToggle) {
         trigger.unregister()
         renderTrigger.unregister()

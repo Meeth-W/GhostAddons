@@ -27,6 +27,7 @@ const openMenuTrigger = register("packetReceived", (packet) => {
             if (leaptarget && item == leaptarget.toLowerCase()) {
                 Player.getContainer().click(i)
                 if (config.leappchatToggle) ChatLib.command(`pc Leaping to ${leaplocation}`)
+                else chat(`&aLeaping to &6${leaplocation}`)
                 leaptarget = null
                 leaplocation = null
             }
