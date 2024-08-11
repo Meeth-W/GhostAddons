@@ -27,6 +27,17 @@ export const sbLevelsPrefix = {
     "&c": [440, 479]
 }
 
+export function getItemIndex(item) {
+    let hotbar = Player.getInventory().getItems().slice(0, 8)
+    for (i = 0; i < 8; i ++) {
+        if (hotbar[i] && hotbar[i].getLore()[0].includes(item)) {
+            return i
+        }
+    }
+    chat(`${item} not in Hotbar!`)
+    return Player.getHeldItemIndex()
+}
+
 export class queueChat {
     static queue = []
     static lastMessage = 0
@@ -298,4 +309,9 @@ export const dragInfo = {
     ICE: { dragString: "§b§lBlue", prio: [3, 4], spawned: false, easy: false, time: 1920 },
     SOUL: { dragString: "§5§lPurple", prio: [4, 5], spawned: false, easy: true, time: 2000 },
     APEX: { dragString: "§a§lGreen", prio: [5, 2], spawned: false, easy: true, time: 2600 },
+}
+
+export function randomize(num, flux) {
+    const randomizedNum = Math.round((Math.random() * 2 - 1) * flux * 100) / 100; // round to two decimal places
+    return num + randomizedNum;
 }

@@ -15,6 +15,7 @@ const leadChecktransfer = register('chat', (rank, name, _, __) => {
 
 const trigger = register("chat", (username, _, __) => {
     let player = new playerData(username)
+    World.playSound(`note.pling`, 1, 1)
     chat(player.getString().join("\n"), 6969)
     try { player.init().then(() => {
         ChatLib.clearChat(6969)
