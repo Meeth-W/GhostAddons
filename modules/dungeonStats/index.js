@@ -89,6 +89,7 @@ const commandRegister = register("command", (username) => {
                 displaytime = null
             }, 10000);
             ChatLib.chat(player.getString().join('\n'))
+            ChatLib.command(`[GH] [${parseInt(player.stats.sb_level_raw)}] ${username} | Floor PB: ${player.getSelectPB()[1]['S+']} | Highest Magical Power: ${player.stats.magical_power.mp} | Secrets: ${player.stats.dungeons.secrets}`, true)
         })
     }) } catch(e) {chat(`&cError: ${e.reason}`)}
 }).setName("nicepb").setAliases("m7stats");

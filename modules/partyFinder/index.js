@@ -52,6 +52,7 @@ const trigger = register("chat", (username, _, __) => {
                 queueChat.queueCommands([
                     () => {ChatLib.command(`party chat [GH] [${parseInt(player.stats.sb_level_raw)}] ${username} | Floor PB: ${player.getSelectPB()[1]['S+']} | Highest Magical Power: ${player.stats.magical_power.mp} | Secrets: ${player.stats.dungeons.secrets}`)}
                 ])
+                ChatLib.command(`[GH] [${parseInt(player.stats.sb_level_raw)}] ${username} | Floor PB: ${player.getSelectPB()[1]['S+']} | Highest Magical Power: ${player.stats.magical_power.mp} | Secrets: ${player.stats.dungeons.secrets}`, true)
             }
         })
     }) } catch(e) {chat(`&cError: ${e.reason}`)}
