@@ -453,19 +453,21 @@ class Settings {
 
     // Auto 4
     @SwitchProperty({
-        name: "&9Toggle Auto Four",
-        description: "Decides wether all features in Auto Four are &aenabled&7/&cdisabled&7.",
-        category: "Auto Four"
+        name: '&9Toggle Auto Four',
+        category: 'Auto Four',
+        description: 'Decides wether all features in Auto Four are &aenabled&7/&cdisabled&7.'
     })
-    autoFourToggle = false
+    pre4Toggle = false;
 
-    // @SwitchProperty({ Coming Soon TM
-    //     name: "Smooth Look",
-    //     description: "Turns off snapping in auto four. Rotates smoothly over 150 ms.",
-    //     category: "Auto Four",
-    //     subcategory: "Settings"
-    // })
-    // autoFourSmooth = false
+    @SliderProperty({
+        name: "Smooth Look Steps",
+        category: "Auto Four",
+        subcategory: 'Settings',
+        min: 1,
+        max: 10,
+        step: 1,
+    })
+    smoothLookSteps = 1;
 
     // Spawn Timers
     @SwitchProperty({
