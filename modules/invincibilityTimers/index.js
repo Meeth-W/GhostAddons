@@ -6,7 +6,7 @@ let timerText = new Text('').setScale(1).setShadow(true).setAlign('LEFT').setCol
 let ticks = {bonzo: 0, spirit: 0, phoenix: 0, invincible: 0};
 
 function getString() {
-    return `&9Bonzo Mask: &c${(ticks.bonzo==0)? "&aREADY!": (ticks.bonzo/20)}\n&fSpirit Mask: &c${(ticks.spirit==0)? "&aREADY!": (ticks.spirit/20)}\n&6Phoenix Mask: &c${(ticks.phoenix==0)? "&aREADY!": (ticks.phoenix/20)}\n\n&bInvincible: &a${(ticks.invincible==0)? "&c✖": (ticks.invincible/20)}`
+    return `&9Bonzo Mask: &c${(ticks.bonzo==0)? "&aREADY!": (ticks.bonzo/20)}\n&fSpirit Mask: &c${(ticks.spirit==0)? "&aREADY!": (ticks.spirit/20)}\n&6Phoenix Pet: &c${(ticks.phoenix==0)? "&aREADY!": (ticks.phoenix/20)}\n\n&bInvincible: &a${(ticks.invincible==0)? "&c✖": (ticks.invincible/20)}`
 }
 const tickCounter = register('tick', () => {
     if (ticks.bonzo > 0) ticks.bonzo--
