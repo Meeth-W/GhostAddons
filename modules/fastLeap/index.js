@@ -74,6 +74,7 @@ const renderTrigger = register('renderOverlay', () => {
     if (!config.leapGuiToggle) return
     text.setString(getString())
     text.setScale(data.fastLeapGui.scale)
+    text.setShadow(true)
     text.draw(data.fastLeapGui.x, data.fastLeapGui.y)
 }).unregister();
 
@@ -98,6 +99,7 @@ register("renderOverlay", () => {
     if (config.fastLeapGui.isOpen() && !config.fastLeapGui) {
         text.setString(`&6Leap Target: &a${Player.getName()} &7| &dCore!`)
         text.setScale(data.fastLeapGui.scale)
+        text.setShadow(true)
         text.draw(data.fastLeapGui.x, data.fastLeapGui.y)
     }
 })

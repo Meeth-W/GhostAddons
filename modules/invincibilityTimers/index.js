@@ -39,6 +39,7 @@ const renderTrigger = register('renderOverlay', () => {
     if (!config.invincibilityToggle) return
     timerText.setString(getString())
     timerText.setScale(data.invincibilityTimerGui.scale)
+    timerText.setShadow(true)
     timerText.draw(data.invincibilityTimerGui.x, data.invincibilityTimerGui.y)
 }).unregister();
 
