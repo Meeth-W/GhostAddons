@@ -15,7 +15,7 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General', 'Slot Binding', 'Party Finder', 'Blood Helper', 'Timers', 'Auto Leap', 'Fast Leap', 'Secrets', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four', 'Lowballing'];
+        const categories = ['General', 'Slot Binding', 'Party Finder', 'Blood Helper', 'Drag Prio', 'Timers', 'Auto Leap', 'Fast Leap', 'Secrets', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four', 'Lowballing'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
@@ -71,6 +71,9 @@ class Settings {
 
         // Fast Leap
         this.setCategoryDescription('Fast Leap', '&6Left click your InfiniLeap to leap to the current leap target.\n\nSelects targets based on their positional messages.\n&9Party &8> &6[MVP&0++&6] Ghostyy&f: At Core!\n\n&4This module is a cheat. Use at your own risk.')
+
+        // Drag Prio
+        this.setCategoryDescription('Drag Prio', '&6Displays what dragon to go to in p5 of m7.\n\n&4This module contains cheats. Use at your own risk.')
     }
     
     // General
@@ -780,6 +783,80 @@ class Settings {
         options: ['Mage', 'Archer', 'Berserk', 'Healer', 'Tank'],
     })
     relicPickup = 0;
+
+    // Drag Prio
+    // Credits: Bxsy & Tbone
+    @SwitchProperty({
+        name: "&9Toggle Drag Prio",
+        description: "Decides wether all features in Drag Prio are &aenabled&7/&cdisabled&7.",
+        category: "Drag Prio"
+    })
+    dragPrioToggle = false;
+
+    @SliderProperty({
+        name: "Set Power",
+        description: "Set the power that you split on",
+        category: "Drag Prio",
+        subcategory: 'Settings',
+        min: 0,
+        max: 32
+    })
+    splitPower = 22;
+
+    @SliderProperty({
+        name: "Set Easy Power",
+        description: "Set the power that you split on for easy drags (O/P/G)",
+        category: "Drag Prio",
+        subcategory: 'Settings',
+        min: 0,
+        max: 32
+    })
+    easyPower = 19;
+
+    @SwitchProperty({
+        name: "Show Non-Split drags",
+        description: "Display \"X Dragon is spawning!\" on non-split drags",
+        category: "Drag Prio",
+        subcategory: 'Settings',
+    })
+    showSingleDragons = true;
+
+    @SelectorProperty({
+        name: "Healer",
+        description: "Set the team the healer will go with",
+        category: "Drag Prio",
+        subcategory: "Normal Teams",
+        options: ["Arch Team", "Bers Team"]
+    })
+    healerNormal = 0;
+
+    @SelectorProperty({
+        name: "Tank",
+        description: "Set the team the tank will go with",
+        category: "Drag Prio",
+        subcategory: "Normal Teams",
+        options: ["Arch Team", "Bers Team"]
+    })
+    tankNormal = 0;
+
+    @SelectorProperty({
+        name: "Healer",
+        description: "Set the team the healer will go with when purple",
+        category: "Drag Prio",
+        subcategory: "Purple Teams",
+        options: ["Arch Team", "Bers Team"]
+    })
+    healerPurp = 1;
+
+    @SelectorProperty({
+        name: "Tank",
+        description: "Set the team the tank will go with when purple",
+        category: "Drag Prio",
+        subcategory: "Purple Teams",
+        options: ["Arch Team", "Bers Team"]
+    })
+    tankPurp = 0;
+
 }
 
 export default new Settings();

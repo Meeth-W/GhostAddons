@@ -252,3 +252,50 @@ export const isHoldingLeapItem = () => {
     if (sbId !== "SPIRIT_LEAP" && sbId !== "INFINITE_SPIRIT_LEAP") return false;
     return true;
 };
+
+const blessings = {
+    power: /Blessing of Power (.+)/,
+    time: /Blessing of Time (.+)/,
+}
+const romanHash = {
+    I: 1,
+    V: 5,
+    X: 10,
+}
+export function roundToHalf(number) {
+    const rounded = Math.round(number * 2) / 2
+    return Number.isInteger(rounded) ? Math.floor(rounded) : rounded
+}
+
+function romanToInt(s) {
+    let accumulator = 0
+    for (let i = 0; i < s.length; i++) {
+        if (s[i] === 'I' && (s[i + 1] === 'V' || s[i + 1] === 'X')) {
+            accumulator += romanHash[s[i + 1]] - romanHash[s[i]]
+            i++
+        } else {
+            accumulator += romanHash[s[i]]
+        }
+    }
+    return accumulator
+}
+
+export function getPower() {
+    let footer = TabList?.getFooter()?.removeFormatting()
+    return footer.match(blessings.power) ? romanToInt(footer.match(blessings.power)[1]) : 0
+}
+
+export function getTime() {
+    let footer = TabList?.getFooter()?.removeFormatting()
+    return footer.match(blessings.time) ? romanToInt(footer.match(blessings.time)[1]) : 0
+}
+
+export function getTruePower() { return getPower() + getTime() / 2 }
+
+export const dragInfo = {
+    POWER: { dragColor: "Red", renderColor: Renderer.RED, prio: [1, 3], spawned: false, easy: false, time: 2500 },
+    FLAME: { dragColor: "Orange", renderColor: Renderer.GOLD, prio: [2, 1], spawned: false, easy: true, time: 3080 },
+    ICE: { dragColor: "Blue", renderColor: Renderer.BLUE, prio: [3, 4], spawned: false, easy: false, time: 1920 },
+    SOUL: { dragColor: "Purple", renderColor: Renderer.LIGHT_PURPLE, prio: [4, 5], spawned: false, easy: true, time: 2000 },
+    APEX: { dragColor: "Green", renderColor: Renderer.GREEN, prio: [5, 2], spawned: false, easy: true, time: 2600 },
+}

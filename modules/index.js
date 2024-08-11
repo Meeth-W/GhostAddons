@@ -4,6 +4,7 @@ import autoEther from "./autoEther";
 import autoLeap from "./autoLeap";
 import bloodCamp from "./bloodCamp";
 import doorSkip from "./doorSkip";
+import dragPrio from "./dragPrio";
 import dungeonStats from "./dungeonStats";
 import fastLeap from "./fastLeap";
 import invincibilityTimers from "./invincibilityTimers";
@@ -16,7 +17,7 @@ import slotBinding from "./slotBinding";
 import spawnTimers from "./spawnTimers";
 
 export const modules = [
-    slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4, spawnTimers, lowballing, bloodCamp, secretHighlight, autoEther, invincibilityTimers, fastLeap
+    slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4, spawnTimers, lowballing, bloodCamp, secretHighlight, autoEther, invincibilityTimers, fastLeap, dragPrio
 ]
 
 export default { modules };
