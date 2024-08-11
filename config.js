@@ -526,7 +526,7 @@ class Settings {
     MoveCrystalSpawnTimerGui() {
         this.crystalSpawnTimerGui.open()
     };
-    
+
     @SwitchProperty({
         name: "Invincibility Timer",
         description: "Displays a timer on your screen when invincibility procs.",
@@ -774,6 +774,71 @@ class Settings {
     })
     dragPrioToggle = false;
 
+    @SwitchProperty({
+        name: "&dAuto Debuff",
+        description: "Main Toggle for Auto Debuff",
+        category: "Drag Prio",
+        subcategory: "Auto Debuff",
+    })
+    autoDBToggle = false
+
+    @SwitchProperty({
+        name: "Only LB Split",
+        description: "Only auto LB the split dragon)",
+        category: "Drag Prio",
+        subcategory: "Auto Debuff",
+    })
+    autoLBsplit = false
+
+    @SwitchProperty({
+        name: "Auto Jump Spray",
+        description: "Toggles Jump Spray on Dragons.",
+        category: "Drag Prio",
+        subcategory: "Auto Debuff",
+    })
+    autoSpray = false
+
+    @SwitchProperty({
+        name: "Only Spray Split",
+        description: "Only auto jump spray the split dragon",
+        category: "Drag Prio",
+        subcategory: "Auto Debuff",
+    })
+    autoSpraySplit = false
+
+    @NumberProperty({
+        name: 'Slot Swap',
+        description: "Decides what slot to swap to after ice spraying.\nUse 0 to swap back to the item you were previously holding.",
+        category: 'Drag Prio',
+		subcategory: "Auto Debuff",
+        min: 0,
+        max: 9
+    })
+    swapSlot = 0;
+
+    @TextProperty({
+        name: "Spam LB Delay",
+        category: "Drag Prio",
+        subcategory: "Auto Debuff Timings",
+    })
+    spamLBdelay = "450"
+
+    @TextProperty({
+        name: "Jump Spray Delay",
+        description: "4700-5000 recommended",
+        category: "Drag Prio",
+        subcategory: "Auto Debuff Timings",
+    })
+    jumpSprayDelay = "4800"
+
+    @TextProperty({
+        name: "Random Fluctuation",
+        description: "Set randomizer for the lb and spray delays, it will do +/- a random number from zero to this number",
+        category: "Drag Prio",
+        subcategory: "Auto Debuff Timings",
+    })
+    randomFlux = "25"
+
     @SliderProperty({
         name: "Set Power",
         description: "Set the power that you split on",
@@ -837,7 +902,6 @@ class Settings {
         options: ["Arch Team", "Bers Team"]
     })
     tankPurp = 0;
-
 }
 
 export default new Settings();

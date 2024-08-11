@@ -1,5 +1,5 @@
 import config from "../../config";
-import { chat, dragInfo, getClass, getTruePower } from "../../utils/utils";
+import { chat, dragInfo, getClass, getItemIndex, getTruePower, randomize } from "../../utils/utils";
 
 // Variables
 let scanParticles = false;
@@ -18,6 +18,20 @@ let mageTeam = false
 let soulSpawn = false
 let healer = false
 let tank = false
+
+let dragAlive
+
+let keybinds = {
+    jump: Client.getMinecraft().field_71474_y.field_74314_A.func_151463_i(),
+    rightclick: Client.getMinecraft().field_71474_y.field_74313_G.func_151463_i()
+}
+const keyState = {};
+Object.keys(keybinds).forEach(keyName => keyState[keyName] = false);
+
+const KeyBinding = Java.type("net.minecraft.client.settings.KeyBinding");
+export function updateKeys() {
+	Object.keys(keyState).forEach(keyName => KeyBinding.func_74510_a(keybinds[keyName], keyState[keyName]));
+}
 
 // Functions
 function isEasySplit() { return (currDragons[0].easy && currDragons[1].easy) }
@@ -89,6 +103,9 @@ function assignDrag(drag) {
     }
     else if (config.showSingleDragons) {
         displayText = `${drag.dragString} dragon`
+
+        if (config.autoDBToggle && config.autoSpray && !config.autoSpraySplit) { jumpSpray(drag) }
+        if (config.autoDBToggle && !config.autoLBsplit) { autoLB(drag) }
     }
 }
 function determinePrio() {
@@ -113,14 +130,81 @@ function displayDragon(bersDrag, archDrag, normalDrag, split) {
     if (split) {
         if ((mageTeam) || (soulSpawn && ((healer && config.healerPurp == 1) || (tank && config.tankPurp == 1)))) {
             displayText = `${bersDrag.dragString}!`
+            if (config.autoSpray && config.autoDBToggle) { jumpSpray(bersDrag) }
+            if (config.autoDBToggle) { autoLB(bersDrag) }
         } else {
             displayText = `${archDrag.dragString}!`
+            if (config.autoSpray && config.autoDBToggle) { jumpSpray(archDrag) }
+            if (config.autoDBToggle) { autoLB(archDrag) }
         }
     } else {
         displayText = `${normalDrag.dragString}!`
+        if (config.autoSpray && config.autoDBToggle) { jumpSpray(normalDrag) }
+            if (config.autoDBToggle) { autoLB(normalDrag) }
     }
 }
+function inDebuffPosition() { return (Player.getPitch() < -70) }
+function jumpSpray(drag) {
+    setTimeout(() => {
+        chat(`&cStarting Jump Spray on ${drag? drag.dragString: ''}&r&c!`)
+        keyState.jump = true
+        updateKeys()
+        setTimeout(() => { 
+            keyState.jump = false
+            updateKeys()
+        }, randomize(100, 25))
+        setTimeout(() => {
+            if (keyState.rightclick) { 
+                keyState.rightclick = false
+                updateKeys() 
+            }
+            setTimeout(() => { 
+                spraySlot = getItemIndex('Ice Spray Wand')
+                Player.setHeldItemIndex(spraySlot) 
+            }, randomize(25, 5))
+        }, randomize(200, 25))
 
+        setTimeout(() => {
+            keyState.rightclick = true
+            updateKeys()
+            setTimeout(() => {
+                keyState.rightclick = false
+                updateKeys()
+                setTimeout(() => { Player.setHeldItemIndex(config.swapSlot) }, randomize(25, 5))
+            }, randomize(100, 25))
+        }, randomize(300, 25))
+    }, randomize(parseInt(config.jumpSprayDelay), parseInt(config.randomFlux)))
+}
+function spamDebuff() {
+    if (!inDebuffPosition()) return
+    if (dragAlive) return
+    setTimeout(() => { 
+        keyState.rightclick = true
+        updateKeys() 
+    }, randomize(60, 10))
+    setTimeout(() => {
+        keyState.rightclick = false
+        updateKeys()
+        spamDebuff()
+    }, randomize(parseInt(config.spamLBdelay), parseInt(config.randomFlux)))
+}
+function spamLB() {
+    if (dragAlive) return
+    if (!inDebuffPosition) {
+        setTimeout(() => { spamLB() }, 100);
+    } else {
+        spamDebuff();
+    }
+}
+function autoLB(drag) {
+    setTimeout(() => {
+        chat(`&aStarting Auto Debuff on ${drag? drag.dragString: ''}&r&a!`)
+        Player.setHeldItemIndex(getItemIndex('Last Breath'))
+        setTimeout(() => {
+            spamLB();
+        }, randomize(25, 5));
+    }, randomize(2500, parseInt(config.randomFlux)));
+}
 
 // Registers
 const handleStart = register('chat', () => {
@@ -159,14 +243,32 @@ const handleParticles = register("packetReceived", (packet) => {
 const handleRender = register('renderOverlay', () => {
     if (ticks > 0) {
         const displayColor = (ticks > 60)? "&a" : (ticks > 20)? "&e": "&c";
-        if (ticks > 60) Client.Companion.showTitle(displayText, `&7Spawn in ${displayColor}${(ticks/20).toFixed(2)}`, 0, 2, 0)
+        if (ticks > 60) Client.Companion.showTitle((displayText)? displayText: " ", `&7Spawn in ${displayColor}${(ticks/20).toFixed(2)}`, 0, 2, 0)
         else Client.Companion.showTitle(" ", `&7Spawn in ${displayColor}${(ticks/20).toFixed(2)}`, 0, 2, 0)
     }
 })
 
+const dragSpawnChecker = register(Java.type("net.minecraftforge.event.entity.EntityJoinWorldEvent"), (event) => {
+    const entity = new Entity(event.entity)
+    if (entity.getClassName() === "EntityDragon") {
+        dragAlive = true
+        displayText = null
+        setTimeout(() => { dragAlive = false }, 150)
+    }
+}).unregister();
+
 register('worldLoad', () => {
     scanParticles = false
 })
+
+register("command", () => {
+    jumpSpray(dragInfo.APEX)
+    autoLB(dragInfo.APEX)
+    setTimeout(() => {
+        dragAlive = true
+        setTimeout(() => { dragAlive = false }, 1000)
+    }, 5000);
+}).setName("debuff")
 
 export function toggle() {
     if (config.dragPrioToggle && config.toggle) {
@@ -174,12 +276,14 @@ export function toggle() {
         handleStart.register()
         handleParticles.register()
         handleRender.register()
+        dragSpawnChecker.register()
         return
     }
     if (config.debug) chat("&cStopping the &6Drag Prio &cmodule.")
     handleStart.unregister()
     handleParticles.unregister()
     handleRender.unregister()
+    dragSpawnChecker.unregister()
     return
 }
 export default { toggle };
