@@ -293,9 +293,9 @@ export function getTime() {
 export function getTruePower() { return getPower() + getTime() / 2 }
 
 export const dragInfo = {
-    POWER: { dragColor: "Red", renderColor: Renderer.RED, prio: [1, 3], spawned: false, easy: false, time: 2500 },
-    FLAME: { dragColor: "Orange", renderColor: Renderer.GOLD, prio: [2, 1], spawned: false, easy: true, time: 3080 },
-    ICE: { dragColor: "Blue", renderColor: Renderer.BLUE, prio: [3, 4], spawned: false, easy: false, time: 1920 },
-    SOUL: { dragColor: "Purple", renderColor: Renderer.LIGHT_PURPLE, prio: [4, 5], spawned: false, easy: true, time: 2000 },
-    APEX: { dragColor: "Green", renderColor: Renderer.GREEN, prio: [5, 2], spawned: false, easy: true, time: 2600 },
+    POWER: { dragString: "§c§lRed", prio: [1, 3], spawned: false, easy: false, time: 2500 },
+    FLAME: { dragString: "§6§lOrange", prio: [2, 1], spawned: false, easy: true, time: 3080 },
+    ICE: { dragString: "§b§lBlue", prio: [3, 4], spawned: false, easy: false, time: 1920 },
+    SOUL: { dragString: "§5§lPurple", prio: [4, 5], spawned: false, easy: true, time: 2000 },
+    APEX: { dragString: "§a§lGreen", prio: [5, 2], spawned: false, easy: true, time: 2600 },
 }

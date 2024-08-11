@@ -4,8 +4,15 @@ import { chat, dragInfo, getClass, getTruePower } from "../../utils/utils";
 // Variables
 let scanParticles = false;
 let currDragons = [null, null]
-let displayText = new Text("")
-let showText = false
+let displayText = null
+
+let ticks 
+
+const tickCounter = register("packetReceived", () => {
+    ticks--
+    if (ticks <= 0) tickCounter.unregister()
+}).setFilteredClass(Java.type("net.minecraft.network.play.server.S32PacketConfirmTransaction")).unregister()
+
 
 let mageTeam = false
 let soulSpawn = false
@@ -21,6 +28,8 @@ function checkBlockPos(x, y, z) {
             if (!(dragInfo.POWER.spawned)) {
                 dragInfo.POWER.spawned = true
                 assignDrag(dragInfo.POWER)
+                ticks = 100
+                tickCounter.register()
                 setTimeout(() => {
                     dragInfo.POWER.spawned = false
                 }, 8000)
@@ -29,6 +38,8 @@ function checkBlockPos(x, y, z) {
             if (!(dragInfo.APEX.spawned)) {
                 dragInfo.APEX.spawned = true
                 assignDrag(dragInfo.APEX)
+                ticks = 100
+                tickCounter.register()
                 setTimeout(() => {
                     dragInfo.APEX.spawned = false
                 }, 8000)
@@ -39,6 +50,8 @@ function checkBlockPos(x, y, z) {
             if (!(dragInfo.ICE.spawned)) {
                 dragInfo.ICE.spawned = true
                 assignDrag(dragInfo.ICE)
+                ticks = 100
+                tickCounter.register()
                 setTimeout(() => {
                     dragInfo.ICE.spawned = false
                 }, 8000)
@@ -47,6 +60,8 @@ function checkBlockPos(x, y, z) {
             if (!(dragInfo.FLAME.spawned)) {
                 dragInfo.FLAME.spawned = true
                 assignDrag(dragInfo.FLAME)
+                ticks = 100
+                tickCounter.register()
                 setTimeout(() => {
                     dragInfo.FLAME.spawned = false
                 }, 8000)
@@ -57,6 +72,8 @@ function checkBlockPos(x, y, z) {
             dragInfo.SOUL.spawned = true
             purpleSpawn = true
             assignDrag(dragInfo.SOUL)
+            ticks = 100
+            tickCounter.register()
             setTimeout(() => {
                 dragInfo.SOUL.spawned = false
             }, 8000)
@@ -71,11 +88,7 @@ function assignDrag(drag) {
         determinePrio()
     }
     else if (config.showSingleDragons) {
-        displayText = new Text(`${drag.dragColor} Dragon!`).setScale(5).setColor(drag.renderColor).setShadow(true)
-        showText = true
-        setTimeout(() => {
-            showText = false
-        }, 2000)
+        displayText = `${drag.dragString} dragon`
     }
 }
 function determinePrio() {
@@ -99,17 +112,13 @@ function determinePrio() {
 function displayDragon(bersDrag, archDrag, normalDrag, split) {
     if (split) {
         if ((mageTeam) || (soulSpawn && ((healer && config.healerPurp == 1) || (tank && config.tankPurp == 1)))) {
-            displayText = new Text(`${bersDrag.dragColor} Dragon!`).setScale(5).setColor(bersDrag.renderColor).setShadow(true)
+            displayText = `${bersDrag.dragString}!`
         } else {
-            displayText = new Text(`${archDrag.dragColor} Dragon!`).setScale(5).setColor(archDrag.renderColor).setShadow(true)
+            displayText = `${archDrag.dragString}!`
         }
     } else {
-        displayText = new Text(`${normalDrag.dragColor} Dragon!`).setScale(5).setColor(normalDrag.renderColor).setShadow(true)
+        displayText = `${normalDrag.dragString}!`
     }
-    showText = true
-    setTimeout(() => {
-        showText = false
-    }, 2000)
 }
 
 
@@ -129,14 +138,14 @@ const handleStart = register('chat', () => {
     let selectedClass = getClass()
 
     if (selectedClass[0] == 'B' || selectedClass[0] == 'M') {
-        bersTeam = true
+        mageTeam = true
     } else if (selectedClass[0] == 'H') {
         healer = true
-        if (Settings.healerNormal == 1) { bersTeam = true }
+        if (config.healerNormal == 1) { mageTeam = true }
     } else if (selectedClass[0] == 'T') {
         tank = true
-        if (Settings.tankNormal == 1) { bersTeam = true }
-    } else { bersTeam = false }
+        if (config.tankNormal == 1) { mageTeam = true }
+    } else { mageTeam = false }
 
     scanParticles = true;
 }).setCriteria(/(.+)&r&a picked the &r&cCorrupted Blue Relic&r&a!&r/).unregister();
@@ -148,13 +157,17 @@ const handleParticles = register("packetReceived", (packet) => {
 }).setFilteredClass(net.minecraft.network.play.server.S2APacketParticles).unregister();
 
 const handleRender = register('renderOverlay', () => {
-    if (showText) { displayText.draw((Renderer.screen.getWidth() - displayText.getWidth()) / 2, (Renderer.screen.getHeight() - displayText.getHeight()) / 2 - 2) }
+    if (ticks > 0) {
+        const displayColor = (ticks > 60)? "&a" : (ticks > 20)? "&e": "&c";
+        if (ticks > 60) Client.Companion.showTitle(displayText, `&7Spawn in ${displayColor}${(ticks/20).toFixed(2)}`, 0, 2, 0)
+        else Client.Companion.showTitle(" ", `&7Spawn in ${displayColor}${(ticks/20).toFixed(2)}`, 0, 2, 0)
+    }
 })
 
 register('worldLoad', () => {
     scanParticles = false
 })
-  
+
 export function toggle() {
     if (config.dragPrioToggle && config.toggle) {
         if (config.debug) chat("&aStarting the &6Drag Prio &amodule.")

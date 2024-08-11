@@ -526,26 +526,7 @@ class Settings {
     MoveCrystalSpawnTimerGui() {
         this.crystalSpawnTimerGui.open()
     };
-
-    @SwitchProperty({
-        name: "Drag Timer",
-        description: "Displays a timer on your screen when a dragon is about to spawn.\nHas Built-In Drag Prio.",
-        category: "Timers",
-        subcategory: "Dragon Timer",
-    })
-    dragToggle = false
-
-    @ButtonProperty({
-        name: "Move Dragon Spawn Timer",
-        description: "Scroll to change scale, middle click to reset",
-        category: "Timers",
-        subcategory: "Dragon Timer",
-        placeholder: "Move"
-    })
-    MoveDragonSpawnTimerGui() {
-        this.dragonSpawnTimerGui.open()
-    };
-
+    
     @SwitchProperty({
         name: "Invincibility Timer",
         description: "Displays a timer on your screen when invincibility procs.",
