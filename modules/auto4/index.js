@@ -30,7 +30,7 @@ register('chat', () => {
     bossFightActive = false
 }).setCriteria("[BOSS] Goldor: Closer to me!")
 
-register("chat", () => {
+const handleRod = register("chat", () => {
     if (!bossFightActive) return;
 
     swapItem('Rod');
@@ -40,7 +40,7 @@ register("chat", () => {
             swapItem('Terminator')
         }, 100); // Adjust delay as needed
     }, 100); // 3000ms delay for 3 seconds
-}).setChatCriteria(/^Your (?:⚚ )?Bonzo's Mask saved your life!$/);
+}).setChatCriteria(/^Your (?:⚚ )?Bonzo's Mask saved your life!$/).unregister();
 
 
 // Helper Functions and Constants
@@ -252,11 +252,13 @@ export function toggle() {
         if (config.debug) chat("&aStarting the &6Auto Four &amodule.")
         handlei4.register()
         commandTrigger.register()
+        handleRod.register()
         return
     }
     if (config.debug) chat("&cStopping the &6Auto Four &cmodule.")
     handlei4.unregister()
     commandTrigger.unregister()
+    handleRod.unregister()
     return
 }
 export default { toggle };
