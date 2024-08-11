@@ -8,6 +8,11 @@ const leadCheck = register('chat', (rank, leader) => {
     else { isleader = false }
 }).setCriteria("Party Leader: ${rank} ${leader} ●").unregister()
 
+const leadChecktransfer = register('chat', (rank, name, _, __) => {
+    if ( name == Player.getName() ) isleader = true
+    else isleader = false
+}).setCriteria("The party was transferred to ${tank} {leader} by ${rank_2} ${name}").unregister()
+
 const trigger = register("chat", (username, _, __) => {
     let player = new playerData(username)
     chat(player.getString().join("\n"), 6969)
@@ -56,11 +61,13 @@ export function toggle() {
     if (config.partyFinderToggle && config.toggle) {
         if (config.debug) chat("&aStarting the &6Party Finder &amodule.")
         leadCheck.register()
+        leadChecktransfer.register()
         trigger.register()
         return
     }
     if (config.debug) chat("&cStopping the &6Party Finder &cmodule.")
     leadCheck.unregister()
+    leadChecktransfer.unregister()
     trigger.unregister()
     return
 }
