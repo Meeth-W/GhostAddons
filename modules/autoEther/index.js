@@ -35,7 +35,7 @@ const renderTrigger = register('renderWorld', () => {
 }).unregister();
 
 export function toggle() {
-    if (config.secretsToggle && config.toggle) {
+    if (config.secretsToggle && config.toggle && config.cheatToggle) {
         if (config.debug) chat("&aStarting the &6Auto Etherwarp &amodule.")
         if (config.autoEtherToggle) {
             trigger.register()

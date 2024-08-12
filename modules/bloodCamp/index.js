@@ -24,7 +24,7 @@ const renderTrigger = register("renderWorld", () => {
 		const progress = vec1.getLength() / vec2.getLength();
 		Tessellator.drawString((progress * v.ticks / 20).toFixed(2) + "s", v.final[0], v.final[1] + 1.5, v.final[2]);
         if ((progress * v.ticks / 20).toFixed(2) <= parseFloat(config.bloodSwingCheck) && (progress * v.ticks / 20).toFixed(2) >= (parseFloat(config.bloodSwingCheck) - 0.25)) {
-            if (!swinging && config.bloodTriggerbot && watcherPhase == 1) {
+            if (config.cheatToggle && !swinging && config.bloodTriggerbot && watcherPhase == 1) {
                 swinging = true
                 setTimeout(() => {
 					let [yaw, pitch] = calcYawPitch({ x: v.final[0], y: v.final[1] + 1.5, z: v.final[2] });

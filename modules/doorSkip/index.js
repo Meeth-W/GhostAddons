@@ -68,7 +68,7 @@ const trigger = register("tick", () => {
 }).unregister();
 
 export function toggle() {
-    if (config.doorSkipToggle && config.toggle) {
+    if (config.doorSkipToggle && config.toggle && config.cheatToggle) {
         if (config.debug) chat("&aStarting the &6Door Skip &amodule.")
         trigger.register()
         return

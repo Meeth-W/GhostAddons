@@ -248,7 +248,7 @@ const commandTrigger = register("command", () => {
 }).setName("/auto4").unregister()
 
 export function toggle() {
-    if (config.pre4Toggle && config.toggle) {
+    if (config.pre4Toggle && config.toggle && config.cheatToggle) {
         if (config.debug) chat("&aStarting the &6Auto Four &amodule.")
         handlei4.register()
         commandTrigger.register()

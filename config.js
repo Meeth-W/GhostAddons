@@ -73,7 +73,7 @@ class Settings {
         this.setCategoryDescription('Fast Leap', '&6Left click your InfiniLeap to leap to the current leap target.\n\nSelects targets based on their positional messages.\n&9Party &8> &6[MVP&0++&6] Ghostyy&f: At Core!\n\n&4This module is a cheat. Use at your own risk.')
 
         // Drag Prio
-        this.setCategoryDescription('Drag Prio', '&6Displays what dragon to go to in p5 of m7.\n\n&4This module contains cheats. Use at your own risk.')
+        this.setCategoryDescription('Drag Prio', '&6Displays what dragon to go to in p5 of m7.\n\n&4This module contains cheats. Use at your own risk.\n&7Try to be under the dragon before the title dissapears.')
     }
     
     // General
@@ -90,6 +90,14 @@ class Settings {
         category: 'General'
     })
     debug = false;
+
+    @SwitchProperty({
+        name: '&4&lToggle Cheats',
+        description: 'Decides wether all &4cheat&7 features are &aenabled&7/&cdisabled&7.',
+        category: 'General',
+        subcategory: 'Cheater'
+    })
+    cheatToggle = false;
 
     // Party Finder
     @SwitchProperty({

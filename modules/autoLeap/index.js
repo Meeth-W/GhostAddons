@@ -54,7 +54,7 @@ const doorTrigger = register("chat", (user) => {
 }).setCriteria("${user} opened a WITHER door!").unregister()
 
 export function toggle() {
-    if (config.autoLeapToggle && config.toggle) {
+    if (config.autoLeapToggle && config.toggle && config.cheatToggle) {
         if (config.debug) chat("&aStarting the &6Auto Leap &amodule.")
         openMenuTrigger.register()
         if (config.autoLeapi4) i4Trigger.register()

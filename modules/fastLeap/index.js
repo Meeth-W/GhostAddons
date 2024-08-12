@@ -130,7 +130,7 @@ register("guiMouseClick", (x, y, bn) => {
 })
 
 export function toggle() {
-    if (config.fastLeapToggle && config.toggle) {
+    if (config.fastLeapToggle && config.toggle && config.cheatToggle) {
         if (config.debug) chat("&aStarting the &6Fast Leap &amodule.")
         if (config.leapGuiToggle) renderTrigger.register()
         p3Locations.register()

@@ -104,8 +104,8 @@ function assignDrag(drag) {
     else if (config.showSingleDragons) {
         displayText = `${drag.dragString} dragon`
 
-        if (config.autoDBToggle && config.autoSpray && !config.autoSpraySplit) { jumpSpray(drag) }
-        if (config.autoDBToggle && !config.autoLBsplit) { autoLB(drag) }
+        if (config.autoDBToggle && config.autoSpray && !config.autoSpraySplit && config.cheatToggle) { jumpSpray(drag) }
+        if (config.autoDBToggle && !config.autoLBsplit && config.cheatToggle) { autoLB(drag) }
     }
 }
 function determinePrio() {
@@ -130,17 +130,17 @@ function displayDragon(bersDrag, archDrag, normalDrag, split) {
     if (split) {
         if ((mageTeam) || (soulSpawn && ((healer && config.healerPurp == 1) || (tank && config.tankPurp == 1)))) {
             displayText = `${bersDrag.dragString}!`
-            if (config.autoSpray && config.autoDBToggle) { jumpSpray(bersDrag) }
-            if (config.autoDBToggle) { autoLB(bersDrag) }
+            if (config.autoSpray && config.autoDBToggle && config.cheatToggle) { jumpSpray(bersDrag) }
+            if (config.autoDBToggle && config.cheatToggle) { autoLB(bersDrag) }
         } else {
             displayText = `${archDrag.dragString}!`
-            if (config.autoSpray && config.autoDBToggle) { jumpSpray(archDrag) }
-            if (config.autoDBToggle) { autoLB(archDrag) }
+            if (config.autoSpray && config.autoDBToggle && config.cheatToggle) { jumpSpray(archDrag) }
+            if (config.autoDBToggle && config.cheatToggle) { autoLB(archDrag) }
         }
     } else {
         displayText = `${normalDrag.dragString}!`
-        if (config.autoSpray && config.autoDBToggle) { jumpSpray(normalDrag) }
-            if (config.autoDBToggle) { autoLB(normalDrag) }
+        if (config.autoSpray && config.autoDBToggle && config.cheatToggle) { jumpSpray(normalDrag) }
+        if (config.autoDBToggle && config.cheatToggle) { autoLB(normalDrag) }
     }
 }
 function inDebuffPosition() { return (Player.getPitch() < -70) }
@@ -191,8 +191,10 @@ function spamDebuff() {
 function spamLB() {
     if (dragAlive) return
     if (!inDebuffPosition) {
+        if (config.debug) chat('Not in position. Trying Again.')
         setTimeout(() => { spamLB() }, 100);
     } else {
+        if (config.debug) chat(`Starting Spam Debuff. In postion.`)
         spamDebuff();
     }
 }
