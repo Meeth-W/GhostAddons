@@ -71,7 +71,7 @@ const relicPickup = register("chat", (username, relic) => {
 
 // Render Handling
 const renderTrigger = register('renderOverlay', () => {
-    if (!config.leapGuiToggle) return
+    if (!config.leapGuiToggle || !config.cheatToggle || !config.fastLeapToggle) return
     text.setString(getString())
     text.setScale(data.fastLeapGui.scale)
     text.setShadow(true)

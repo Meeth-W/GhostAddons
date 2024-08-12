@@ -36,7 +36,7 @@ const procCatch = register("packetReceived", (packet, event) => {
 }).setFilteredClass(S02PacketChat).unregister();
 
 const renderTrigger = register('renderOverlay', () => {
-    if (!config.invincibilityToggle) return
+    if (!config.invincibilityToggle || !config.toggle) return
     timerText.setString(getString())
     timerText.setScale(data.invincibilityTimerGui.scale)
     timerText.setShadow(true)
