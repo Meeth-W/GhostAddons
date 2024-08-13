@@ -70,7 +70,7 @@ class Settings {
         this.setCategoryDescription('Lowballing', '&6Lowballing stuff.\n\nSetup keybind for lowballing messages in settings.')
 
         // Fast Leap
-        this.setCategoryDescription('Fast Leap', '&6Left click your InfiniLeap to leap to the current leap target.\n\nSelects targets based on their positional messages.\n&9Party &8> &6[MVP&0++&6] Ghostyy&f: At Core!\n\n&4This module is a cheat. Use at your own risk.')
+        this.setCategoryDescription('Fast Leap', '&6Left click your InfiniLeap to leap to the current leap target.\n\nSelects targets based on their positional messages / Chat Messages.\n&9Party &8> &6[MVP&0++&6] Ghostyy&f: At Core!\n\n&4This module is a cheat. Use at your own risk.')
 
         // Drag Prio
         this.setCategoryDescription('Drag Prio', '&6Displays what dragon to go to in p5 of m7.\n\n&4This module contains cheats. Use at your own risk.\n&7Try to be under the dragon before the title dissapears.')
@@ -783,8 +783,8 @@ class Settings {
     dragPrioToggle = false;
 
     @SwitchProperty({
-        name: "&dAuto Debuff",
-        description: "Main Toggle for Auto Debuff",
+        name: "&dAuto Last Breath",
+        description: "Main Toggle for Auto Last Breath",
         category: "Drag Prio",
         subcategory: "Auto Debuff",
     })
@@ -799,8 +799,8 @@ class Settings {
     autoLBsplit = false
 
     @SwitchProperty({
-        name: "Auto Jump Spray",
-        description: "Toggles Jump Spray on Dragons.",
+        name: "&dAuto Jump Spray",
+        description: "Main Toggle for Auto Jump Spray",
         category: "Drag Prio",
         subcategory: "Auto Debuff",
     })
@@ -816,11 +816,11 @@ class Settings {
 
     @NumberProperty({
         name: 'Slot Swap',
-        description: "Decides what slot to swap to after ice spraying.\nUse 0 to swap back to the item you were previously holding.",
+        description: "Decides what slot to swap to after ice spraying.",
         category: 'Drag Prio',
 		subcategory: "Auto Debuff",
         min: 0,
-        max: 9
+        max: 8
     })
     swapSlot = 0;
 
