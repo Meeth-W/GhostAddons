@@ -68,6 +68,11 @@ const relicPickup = register("chat", (username, relic) => {
     leaplocation = `${classes[config.relicPickup]} Class.`
 }).setCriteria('${username} picked the Corrupted ${relic} Relic!').unregister();
 
+const doorTrigger = register("chat", (user) => {
+    if (user == Player.getName()) return
+    leaptarget = user
+    leaplocation = "Wither Door"
+}).setCriteria("${user} opened a WITHER door!").unregister()
 
 // Render Handling
 const renderTrigger = register('renderOverlay', () => {
@@ -141,6 +146,7 @@ export function toggle() {
         goldorEnd.register()
         necronEnd.register()
         relicPickup.register()
+        doorTrigger.register()
         return
     } 
     if (config.debug) chat("&cStopping the &6Fast Leap &cmodule.")
@@ -153,6 +159,7 @@ export function toggle() {
     goldorEnd.unregister()
     necronEnd.unregister()
     relicPickup.unregister()
+    doorTrigger.unregister()
     return
 }
 export default { toggle };
