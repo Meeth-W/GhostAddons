@@ -104,7 +104,7 @@ function assignDrag(drag) {
     else if (config.showSingleDragons) {
         displayText = `${drag.dragString} dragon`
 
-        if (config.autoDBToggle && config.autoSpray && !config.autoSpraySplit && config.cheatToggle) { jumpSpray(drag) }
+        if (config.autoSpray && !config.autoSpraySplit && config.cheatToggle) { jumpSpray(drag) }
         if (config.autoDBToggle && !config.autoLBsplit && config.cheatToggle) { autoLB(drag) }
     }
 }
@@ -130,16 +130,16 @@ function displayDragon(bersDrag, archDrag, normalDrag, split) {
     if (split) {
         if ((mageTeam) || (soulSpawn && ((healer && config.healerPurp == 1) || (tank && config.tankPurp == 1)))) {
             displayText = `${bersDrag.dragString}!`
-            if (config.autoSpray && config.autoDBToggle && config.cheatToggle) { jumpSpray(bersDrag) }
+            if (config.autoSpray && config.cheatToggle) { jumpSpray(bersDrag) }
             if (config.autoDBToggle && config.cheatToggle) { autoLB(bersDrag) }
         } else {
             displayText = `${archDrag.dragString}!`
-            if (config.autoSpray && config.autoDBToggle && config.cheatToggle) { jumpSpray(archDrag) }
+            if (config.autoSpray && config.cheatToggle) { jumpSpray(archDrag) }
             if (config.autoDBToggle && config.cheatToggle) { autoLB(archDrag) }
         }
     } else {
         displayText = `${normalDrag.dragString}!`
-        if (config.autoSpray && config.autoDBToggle && config.cheatToggle) { jumpSpray(normalDrag) }
+        if (config.autoSpray && config.cheatToggle) { jumpSpray(normalDrag) }
         if (config.autoDBToggle && config.cheatToggle) { autoLB(normalDrag) }
     }
 }
