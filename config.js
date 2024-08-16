@@ -1,3 +1,4 @@
+import { manhattanDistance } from "../BloomCore/utils/Utils";
 import {
     @ButtonProperty,
     @CheckboxProperty,
@@ -35,24 +36,45 @@ class Settings {
 
         // Party Finder
         this.setCategoryDescription('Party Finder', '&6Party Finder Settings\n\n&7/nicepb {user} | /m7stats {user}')
+        this.addDependency('Only send Auto Kick messages', 'Party Chat')
 
         // Slot Binding
         this.setCategoryDescription('Slot Binding', '&6Slot Binding Settings\n\n&7Set hotkey from Minecraft Controls Settings.')
 
         // Blood Helper
         this.setCategoryDescription('Blood Helper', '&6Blood Camp Helper.\n\n&7Auto Camp is still a WIP. Misses mobs if server lags.')
+        this.addDependency("Initial Color", "Toggle Dynamic Color")
+        this.addDependency("Secondary Color", "Toggle Dynamic Color")
+        this.addDependency("Final Color", "Toggle Dynamic Color")
 
         // Auto Leap 
         this.setCategoryDescription('Auto Leap', '&6Automatically leaps to certain users on specific events.\n\n&4This module is a Cheat. Use at your own risk.')
+        this.addDependency("I4 AutoLeap Target Class", "Auto Leap after i4")
 
         // Alerts
         this.setCategoryDescription('Alerts', '&6Displays titles at certain stages of the game.\n\n&7TODO: Command to change colors.')
 
         // Secrets
         this.setCategoryDescription('Secrets', '&6Secrets Utils.\n\n&4This Module Contains Cheats.')
+        this.addDependency('Toggle Sound', 'Toggle Auto Etherwarp')
+        this.addDependency('Click Delay', 'Toggle Auto Etherwarp')
+        this.addDependency('Blocks', 'Toggle Auto Etherwarp')
+        this.addDependency('Etherwarp Text Color', 'Toggle Auto Etherwarp')
+        this.addDependency('Etherwarp Overlay Color', 'Toggle Auto Etherwarp')
+        this.addDependency('Highlight Text', 'Secret Highlight')
+        this.addDependency('Secret Text Color', 'Secret Highlight')
+        this.addDependency('Secret Overlay Color', 'Secret Highlight')
+        this.addDependency('Highlight Delay', 'Secret Highlight')
 
         // Location Messages
         this.setCategoryDescription('Location Messages', '&6Sends messages in party chat when you reach a certain set of coords in p3.')
+        this.addDependency('SS Nearby Message', '&9Toggle Location Messages')
+        this.addDependency('Pre Enter 2 Nearby Message', '&9Toggle Location Messages')
+        this.addDependency('Insta 3 Nearby Message', '&9Toggle Location Messages')
+        this.addDependency('Pre Enter 3 Nearby Message', '&9Toggle Location Messages')
+        this.addDependency('Pre Enter 4 Nearby Message', '&9Toggle Location Messages')
+        this.addDependency('At Core Message', '&9Toggle Location Messages')
+        this.addDependency('Inside Tunnel Message', '&9Toggle Location Messages')
 
         // Doorless
         this.setCategoryDescription('Door Skip', '&6Modified version of Doorless by soshimee.\n\n&4This module is a Cheat. Use at your own risk.')
@@ -71,9 +93,19 @@ class Settings {
 
         // Fast Leap
         this.setCategoryDescription('Fast Leap', '&6Left click your InfiniLeap to leap to the current leap target.\n\nSelects targets based on their positional messages / Chat Messages.\n&9Party &8> &6[MVP&0++&6] Ghostyy&f: At Core!\n\n&4This module is a cheat. Use at your own risk.')
+        this.addDependency('Maxor End', '&9Toggle Fast Leap')
+        this.addDependency('Storm End', '&9Toggle Fast Leap')
+        this.addDependency('Goldor End', '&9Toggle Fast Leap')
+        this.addDependency('Necron End', '&9Toggle Fast Leap')
+        this.addDependency('Relic Pickup', '&9Toggle Fast Leap')
 
         // Drag Prio
         this.setCategoryDescription('Drag Prio', '&6Displays what dragon to go to in p5 of m7.\n\n&4This module contains cheats. Use at your own risk.\n&7Try to be under the dragon before the title dissapears.')
+        this.addDependency('Only LB Split', '&dAuto Last Breath')
+        this.addDependency('Spam LB Delay', '&dAuto Last Breath')
+        this.addDependency('Only Spray Split', '&dAuto Jump Spray')
+        this.addDependency('Slot Swap', '&dAuto Jump Spray')
+        this.addDependency('Jump Spray Delay', '&dAuto Jump Spray')
     }
     
     // General
@@ -122,8 +154,10 @@ class Settings {
     partyFinderAutoKick = false;
 
     @ColorProperty({
-		name: "Stats Menu Background Color",
-		category: "Party Finder"
+		name: "Menu Background",
+		category: "Party Finder",
+        subcategory: "Stats Command",
+        description: "Background color for the Stats Menu.\nAccessed through /nicepb {user} or /m7stats {user}"
 	})
 	m7StatsBackgroundColor = new Color(Renderer.color(0, 0, 0, 127), true);
 
@@ -570,9 +604,40 @@ class Settings {
 
     @ColorProperty({
 		name: "Helper Color",
-		category: "Blood Helper"
+		category: "Blood Helper",
+        subcategory: "Colors"
 	})
 	bloodHelperColor = new Color(Renderer.color(0, 0, 255, 255), true);
+
+    @SwitchProperty({
+        name: "Toggle Dynamic Color",
+        description: "Automatically decides the color of your blood helper.",
+        category: "Blood Helper",
+        subcategory: "Colors"
+    })
+    bloodHelperDynamicColor = false
+
+    @ColorProperty({
+		name: "Initial Color",
+		category: "Blood Helper",
+        subcategory: "Colors"
+	})
+	bloodHelperInitialColor = new Color(Renderer.color(0, 255, 0, 255), true);
+
+    @ColorProperty({
+		name: "Secondary Color",
+		category: "Blood Helper",
+        subcategory: "Colors"
+	})
+	bloodHelperSecondaryColor = new Color(Renderer.color(255, 255, 0, 255), true);
+
+    @ColorProperty({
+		name: "Final Color",
+		category: "Blood Helper",
+        subcategory: "Colors"
+	})
+	bloodHelperFinalColor = new Color(Renderer.color(255, 0, 0, 255), true);
+    
 
     @SwitchProperty({
         name: "Blood Triggerbot",
@@ -584,11 +649,11 @@ class Settings {
 
     @TextProperty({
         name: 'Delay',
-        description: 'Time on timer to swing at. (0.1-0.5)',
+        description: 'Time on timer to swing at. (1-5)',
         category: 'Blood Helper',
         subcategory: 'Triggerbot'
     })
-    bloodSwingCheck = "0.5";
+    bloodSwingCheck = "3";
 
     @SwitchProperty({
         name: "Auto Rotate",
@@ -623,21 +688,21 @@ class Settings {
     secretHighlightText = "Clicked";
 
     @ColorProperty({
-		name: "Text Color",
+		name: "Secret Text Color",
 		category: "Secrets",
         subcategory: "Highlights"
 	})
 	secretHighlightTextColor = new Color(Renderer.color(0, 0, 0, 127), true);
 
     @ColorProperty({
-        name: "Overlay Color",
+        name: "Secret Overlay Color",
         category: "Secrets",
         subcategory: "Highlights"
     })
     secretHighlightColor = Color.BLUE;
 
     @TextProperty({
-        name: 'Delay',
+        name: 'Highlight Delay',
         description: 'Decides how long the overlay lasts.',
         category: 'Secrets',
         subcategory: 'Highlights'
@@ -680,14 +745,14 @@ class Settings {
     etherBlocks = "emerald_block, lapis_block";
 
     @ColorProperty({
-		name: "Text Color",
+		name: "Etherwarp Text Color",
 		category: "Secrets",
         subcategory: "Auto Etherwarp"
 	})
 	autoEtherTextColor = new Color(Renderer.color(0, 0, 0, 127), true);
 
     @ColorProperty({
-        name: "Overlay Color",
+        name: "Etherwarp Overlay Color",
         category: "Secrets",
         subcategory: "Auto Etherwarp"
     })
