@@ -18,12 +18,17 @@ let swinging = false
 const renderTrigger = register("renderWorld", () => {
 	for (let o of Object.entries(entities)) {
 		let [k, v] = o;
-		RenderLib.drawEspBox(v.final[0], v.final[1] + 1, v.final[2], 0.75, 0.75, config.bloodHelperColor.getRed()/255, config.bloodHelperColor.getGreen()/255, config.bloodHelperColor.getBlue()/255, config.bloodHelperColor.getAlpha()/255, true);
+		if (!config.bloodHelperDynamicColor) RenderLib.drawEspBox(v.final[0], v.final[1] + 1, v.final[2], 0.75, 0.75, config.bloodHelperColor.getRed()/255, config.bloodHelperColor.getGreen()/255, config.bloodHelperColor.getBlue()/255, config.bloodHelper0/255, true);
 		const vec1 = new Vector3(v.final[0], v.final[1], v.final[2]).subtract(new Vector3(v.entity.getRenderX(), v.entity.getRenderY(), v.entity.getRenderZ()));
 		const vec2 = new Vector3(v.final[0], v.final[1], v.final[2]).subtract(new Vector3(v.initial[0], v.initial[1], v.initial[2]));
 		const progress = vec1.getLength() / vec2.getLength();
-		Tessellator.drawString((progress * v.ticks / 20).toFixed(2) + "s", v.final[0], v.final[1] + 1.5, v.final[2]);
-        if ((progress * v.ticks / 20).toFixed(2) <= parseFloat(config.bloodSwingCheck) && (progress * v.ticks / 20).toFixed(2) >= (parseFloat(config.bloodSwingCheck) - 0.25)) {
+		if(config.bloodHelperDynamicColor) {
+			if ((progress * v.ticks / 20) > 0.6) RenderLib.drawEspBox(v.final[0], v.final[1] + 1, v.final[2], 0.75, 0.75, config.bloodHelperInitialColor.getRed()/255, config.bloodHelperInitialColor.getGreen()/255, config.bloodHelperInitialColor.getBlue()/255, config.bloodHelperInitialColor/255, true);
+			else if ((progress * v.ticks / 20) > 0.1) RenderLib.drawEspBox(v.final[0], v.final[1] + 1, v.final[2], 0.75, 0.75, config.bloodHelperSecondaryColor.getRed()/255, config.bloodHelperSecondaryColor.getGreen()/255, config.bloodHelperSecondaryColor.getBlue()/255, config.bloodHelperSecondaryColor/255, true);
+			else RenderLib.drawEspBox(v.final[0], v.final[1] + 1, v.final[2], 0.75, 0.75, config.bloodHelperFinalColor.getRed()/255, config.bloodHelperFinalColor.getGreen()/255, config.bloodHelperFinalColor.getBlue()/255, config.bloodHelperFinalColor/255, true);
+		}
+		Tessellator.drawString(((progress * v.ticks / 20)*10).toFixed(1), v.final[0], v.final[1] + 1.5, v.final[2]);
+        if ((progress * v.ticks / 20).toFixed(2) <= parseFloat(config.bloodSwingCheck)/10 && (progress * v.ticks / 20).toFixed(2) >= (parseFloat(config.bloodSwingCheck) - 2.5)/10) {
             if (config.cheatToggle && !swinging && config.bloodTriggerbot && watcherPhase == 1) {
                 swinging = true
                 setTimeout(() => {
