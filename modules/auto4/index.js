@@ -32,14 +32,17 @@ register('chat', () => {
 
 const handleRod = register("chat", () => {
     if (!bossFightActive) return;
-
-    swapItem('Rod');
+    let currItem = Player.getHeldItemIndex()
     setTimeout(() => {
-        rightClick()
+        chat('Swapping to &6Phoenix.')
+        swapItem('Rod');
         setTimeout(() => {
-            swapItem('Terminator')
-        }, 100); // Adjust delay as needed
-    }, 100); // 3000ms delay for 3 seconds
+            rightClick()
+            setTimeout(() => {
+                Player.setHeldItemIndex(currItem)
+            }, 100);
+        }, 100); 
+    }, 3000);
 }).setChatCriteria(/^Your (?:⚚ )?Bonzo's Mask saved your life!$/).unregister();
 
 
