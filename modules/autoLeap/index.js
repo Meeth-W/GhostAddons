@@ -50,7 +50,7 @@ const i4Trigger = register("chat", (message) => {
 const doorTrigger = register("chat", (user) => {
     if (user == Player.getName()) return
     leaptarget = user
-    openLeap()
+    openLeap()  
 }).setCriteria("${user} opened a WITHER door!").unregister()
 
 export function toggle() {
