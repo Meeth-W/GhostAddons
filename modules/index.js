@@ -12,12 +12,14 @@ import locationMessages from "./locationMessages";
 import lowballing from "./lowballing";
 import partyFinder from "./partyFinder";
 import ratProtection from "./ratProtection";
+import relicLook from "./relicLook";
 import secretHighlight from "./secretHighlight";
+import secretTriggerbot from "./secretTriggerbot";
 import slotBinding from "./slotBinding";
 import spawnTimers from "./spawnTimers";
 
 export const modules = [
-    slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4, spawnTimers, lowballing, bloodCamp, secretHighlight, autoEther, invincibilityTimers, fastLeap, dragPrio
+    slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4, spawnTimers, lowballing, bloodCamp, secretHighlight, autoEther, invincibilityTimers, fastLeap, dragPrio, secretTriggerbot, relicLook
 ]
 
 export default { modules };
