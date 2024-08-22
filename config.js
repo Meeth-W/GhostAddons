@@ -65,6 +65,9 @@ class Settings {
         this.addDependency('Secret Text Color', 'Secret Highlight')
         this.addDependency('Secret Overlay Color', 'Secret Highlight')
         this.addDependency('Highlight Delay', 'Secret Highlight')
+        this.addDependency('Toggle Stonking', 'Secret Triggerbot')
+        this.addDependency('Secret Click Delay', 'Secret Triggerbot')
+        this.addDependency('Opened Sound', 'Secret Triggerbot')
 
         // Location Messages
         this.setCategoryDescription('Location Messages', '&6Sends messages in party chat when you reach a certain set of coords in p3.')
@@ -106,6 +109,9 @@ class Settings {
         this.addDependency('Only Spray Split', '&dAuto Jump Spray')
         this.addDependency('Slot Swap', '&dAuto Jump Spray')
         this.addDependency('Jump Spray Delay', '&dAuto Jump Spray')
+
+        // Auto Relics
+        this.setCategoryDescription('Auto Relics', '&6Automatically picks up relics in p3')
     }
     
     // General
@@ -672,6 +678,41 @@ class Settings {
     secretsToggle = false;
 
     @SwitchProperty({
+        name: 'Secret Triggerbot',
+        description: 'Disables secret triggerbot',
+        category: 'Secrets',
+        subcategory: 'Triggerbot',
+    })
+    secretTriggerbot = false
+
+    @SwitchProperty({
+        name: 'Toggle Stonking',
+        description: 'Toggles if secrets clicked while left-clicking',
+        category: 'Secrets',
+        subcategory: 'Triggerbot',
+    })
+    stonkInteract = false
+
+    @SliderProperty({
+        name: 'Secret Click Delay',
+        description: 'Delay between each right-click',
+        category: 'Secrets',
+        subcategory: 'Triggerbot',
+        min: 50,
+        max: 500,
+        step: 10,
+    })
+    secretDelay = 50;
+
+    @TextProperty({
+        name: 'Opened Sound',
+        description: 'Plays a sound after clicking!',
+        category: 'Secrets',
+        subcategory: 'Triggerbot'
+    })
+    secretClickSound = "note.pling"
+
+    @SwitchProperty({
         name: "Secret Highlight",
         description: "Renders an outline over clicked secrets.",
         category: "Secrets",
@@ -975,6 +1016,15 @@ class Settings {
         options: ["Arch Team", "Bers Team"]
     })
     tankPurp = 0;
+
+    // Auto Relics
+    @SwitchProperty({
+        name: "&9Toggle Auto Relic",
+        description: "Decides wether all features in Auto Relic are &aenabled&7/&cdisabled&7.",
+        category: "Auto Relic"
+    })
+    relicToggle = false;
+
 }
 
 export default new Settings();
