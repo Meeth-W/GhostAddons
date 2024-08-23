@@ -2,15 +2,11 @@ import config from "../../config";
 import { chat, isInDungeon, rightClick } from "../../utils/utils";
 
 let alreadyClicked = []
-let attack = new KeyBind(Client.getMinecraft().field_71474_y.field_74312_F)
-let senduseitem = new KeyBind(Client.getMinecraft().field_71474_y.field_74313_G)
 
 let blackList = [[62, 135, 142], [62, 134, 142], [61, 136, 142], [61, 135, 142], [61, 134, 142], [61, 133, 142], [60, 136, 142], [60, 133, 142], [59, 136, 142], [59, 135, 142], [59, 134, 142], [59, 133, 142], [58, 135, 142], [58, 134, 142] ]
 
 const trigger = register("tick", () => {
     if (!isInDungeon()) return;
-    if (senduseitem.isKeyDown()) return;
-    if (attack.isKeyDown() && !config.stonkInteract) return;
 
     let delay = config.secretDelay && !isNaN(parseInt(config.secretDelay)) ? parseInt(config.secretDelay) : 50;
     let click = false

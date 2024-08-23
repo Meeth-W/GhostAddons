@@ -16,7 +16,7 @@ import {
 
 @Vigilant('GhostAddons', 'Ghost Addons', {
     getCategoryComparator: () => (a, b) => {
-        const categories = ['General', 'Slot Binding', 'Party Finder', 'Blood Helper', 'Drag Prio', 'Timers', 'Auto Leap', 'Fast Leap', 'Secrets', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four', 'Lowballing'];
+        const categories = ['General', 'Slot Binding', 'Party Finder', 'Blood Helper', 'Drag Prio', 'Timers', 'Auto Leap', 'Fast Leap', 'Secrets', 'Door Skip', 'Alerts', 'Location Messages', 'Rat Protection', 'Auto Four', 'Auto Relic', 'Lowballing'];
         return categories.indexOf(a.name) - categories.indexOf(b.name);
     }
 })
@@ -684,15 +684,7 @@ class Settings {
         subcategory: 'Triggerbot',
     })
     secretTriggerbot = false
-
-    @SwitchProperty({
-        name: 'Toggle Stonking',
-        description: 'Toggles if secrets clicked while left-clicking',
-        category: 'Secrets',
-        subcategory: 'Triggerbot',
-    })
-    stonkInteract = false
-
+    
     @SliderProperty({
         name: 'Secret Click Delay',
         description: 'Delay between each right-click',
