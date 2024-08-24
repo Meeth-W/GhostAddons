@@ -130,7 +130,7 @@ export default class playerData {
             
             // PB 
             let pb = this.getSelectPB()[1]['rawS+']
-            switch ( config.partyFinderminPB ) {
+            switch ( config().partyFinderminPB ) {
                 case 0: // 4:40 = 280000
                     if ( parseInt(pb) > 280000) { return this.toKick = [true, `Slow PB: [${this.getSelectPB()[1]['S+']} > 4:40]`] } break;
                 case 1: // 5:00 = 300000
@@ -140,34 +140,34 @@ export default class playerData {
                 case 3: // 6:00 = 360000
                     if ( parseInt(pb) > 360000) { return this.toKick = [true, `Slow PB: [${this.getSelectPB()[1]['S+']} > 6:00]`] } break;
                 case 4: // Custom PB
-                    if ( parseInt(pb) > parseInt(config.partyFindercustomMinPB)) { return this.toKick = [true, `Slow PB: [${convertToPBTime(pb)} > ${convertToPBTime(parseInt(config.partyFindercustomMinPB))}]`] } break;
+                    if ( parseInt(pb) > parseInt(config().partyFindercustomMinPB)) { return this.toKick = [true, `Slow PB: [${convertToPBTime(pb)} > ${convertToPBTime(parseInt(config().partyFindercustomMinPB))}]`] } break;
             }
 
             // Cata Level
-            if ( parseFloat(this.stats.experience.catacombs) < config.partyFinderminCata ) return this.toKick = [true, `Low Cata: [${this.stats.experience.catacombs} < ${config.partyFinderminCata}]`]
+            if ( parseFloat(this.stats.experience.catacombs) < config().partyFinderminCata ) return this.toKick = [true, `Low Cata: [${this.stats.experience.catacombs} < ${config().partyFinderminCata}]`]
 
             // Secrets 
-            if (parseInt(this.stats.dungeons.secrets) < parseInt(config.partyFinderminSecrets)) return this.toKick = [true, `Low Secret Count: [${this.stats.dungeons.secrets} < ${config.partyFinderminSecrets}]`]
+            if (parseInt(this.stats.dungeons.secrets) < parseInt(config().partyFinderminSecrets)) return this.toKick = [true, `Low Secret Count: [${this.stats.dungeons.secrets} < ${config().partyFinderminSecrets}]`]
 
             // Class XP
-            if (parseInt(this.classLevel) < config.partyFinderminClass) return this.toKick = [true, `Low Class Level: [${this.classLevel} < ${config.partyFinderminClass}]`]
+            if (parseInt(this.classLevel) < config().partyFinderminClass) return this.toKick = [true, `Low Class Level: [${this.classLevel} < ${config().partyFinderminClass}]`]
 
         } if (this.updated.rest && !this.kicked) { // SB Level, MP
             if ( data.partyFinder.blacklist[this.uuid] ) return this.toKick = [true, `Blacklisted Player. Reason: ${data.partyFinder.blacklist[this.uuid].reason}`] // Second ouccurance just incase.
             if ( data.partyFinder.whitelist[this.uuid] ) return this.toKick = [false, `Whitelisted Player`]
             
             // Magical Power
-            if (parseInt(this.stats.magical_power.mp) < parseInt(config.partyFinderminMP)) return this.toKick = [true, `Low Magical Power: [${this.stats.magical_power.mp} < ${config.partyFinderminMP}]`]
+            if (parseInt(this.stats.magical_power.mp) < parseInt(config().partyFinderminMP)) return this.toKick = [true, `Low Magical Power: [${this.stats.magical_power.mp} < ${config().partyFinderminMP}]`]
 
             // SB Level
-            if (parseInt(this.stats.sb_level_raw) < parseInt(config.partyFinderminLvl)) return this.toKick = [true, `Low Skyblock Level: [${this.stats.sb_level_raw} < ${config.partyFinderminLvl}]`]
+            if (parseInt(this.stats.sb_level_raw) < parseInt(config().partyFinderminLvl)) return this.toKick = [true, `Low Skyblock Level: [${this.stats.sb_level_raw} < ${config().partyFinderminLvl}]`]
         }
     }
     
     getSelectPB() {
         if (!this.updated.dungeons) return chat(`&cError: No player data.`)
-        if (config.partyFinderDungeonType == 0) {
-            switch (config.partyFinderDungeonFloor) {
+        if (config().partyFinderDungeonType == 0) {
+            switch (config().partyFinderDungeonFloor) {
                 case 0: return ['F1', this.stats.dungeons.pb.catacombs['1']]
                 case 1: return ['F2', this.stats.dungeons.pb.catacombs['2']]
                 case 2: return ['F3', this.stats.dungeons.pb.catacombs['3']]
@@ -177,7 +177,7 @@ export default class playerData {
                 case 6: return ['F7', this.stats.dungeons.pb.catacombs['7']]
             }
         } else {
-            switch (config.partyFinderDungeonFloor) {
+            switch (config().partyFinderDungeonFloor) {
                 case 0: return ['M1', this.stats.dungeons.pb.master_catacombs['1']]
                 case 1: return ['M2', this.stats.dungeons.pb.master_catacombs['2']]
                 case 2: return ['M3', this.stats.dungeons.pb.master_catacombs['3']]
@@ -192,8 +192,8 @@ export default class playerData {
 
     getSelectComps() {
         if (!this.updated.rest) return chat(`&cError: No player data.`)
-            if (config.partyFinderDungeonType == 0) {
-                switch (config.partyFinderDungeonFloor) {
+            if (config().partyFinderDungeonType == 0) {
+                switch (config().partyFinderDungeonFloor) {
                     case 0: return ['F1', this.stats.completions.catacombs.f1]
                     case 1: return ['F2', this.stats.completions.catacombs.f2]
                     case 2: return ['F3', this.stats.completions.catacombs.f3]
@@ -203,7 +203,7 @@ export default class playerData {
                     case 6: return ['F7', this.stats.completions.catacombs.f7]
                 }
             } else {
-                switch (config.partyFinderDungeonFloor) {
+                switch (config().partyFinderDungeonFloor) {
                     case 0: return ['M1', this.stats.completions.master_catacombs.m1]
                     case 1: return ['M2', this.stats.completions.master_catacombs.m2]
                     case 2: return ['M3', this.stats.completions.master_catacombs.m3]

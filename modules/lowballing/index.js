@@ -5,10 +5,10 @@ var index = 0;
 let timeSent 
 
 const lowballMessages = [
-    `Lowballing with ${Config.purse} purse`,
-    `Lowballing w/ ${Config.purse} purse! 25m+ items`,
-    `Lowballing w/ ${Config.purse} purse! visit me! 25m+ items`,
-    `Lowballing w/ ${Config.purse} purse! 25m+ items, visit me!`
+    `Lowballing with ${config().purse} purse`,
+    `Lowballing w/ ${config().purse} purse! 25m+ items`,
+    `Lowballing w/ ${config().purse} purse! visit me! 25m+ items`,
+    `Lowballing w/ ${config().purse} purse! 25m+ items, visit me!`
 ];
 
 function convertExpression(expression) {

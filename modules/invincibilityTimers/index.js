@@ -36,7 +36,7 @@ const procCatch = register("packetReceived", (packet, event) => {
 }).setFilteredClass(S02PacketChat).unregister();
 
 const renderTrigger = register('renderOverlay', () => {
-    if (!config.invincibilityToggle || !config.toggle) return
+    if (!config().invincibilityToggle || !config().toggle) return
     timerText.setString(getString())
     timerText.setScale(data.invincibilityTimerGui.scale)
     timerText.setShadow(true)
@@ -50,7 +50,7 @@ register('worldUnload', () => {
 
 // Config Triggers.
 register("renderOverlay", () => {
-    if (config.invincibilityTimerGui.isOpen() && !config.invincibilityToggle) {
+    if (config().invincibilityTimerGui.isOpen() && !config().invincibilityToggle) {
         timerText.setString([`&9Bonzo Mask: &aREADY`, `&fSpirit Mask: &aREADY`, `&6Phoenix Pet: &aREADY`, ``, `&bInvincible: ✖`].join('\n'))
         timerText.setScale(data.invincibilityTimerGui.scale)
         timerText.draw(data.invincibilityTimerGui.x, data.invincibilityTimerGui.y)
@@ -58,7 +58,7 @@ register("renderOverlay", () => {
 })
 
 register("dragged", (dx, dy, x, y, bn) => {
-    if (config.invincibilityTimerGui.isOpen() && (bn != 2)) {
+    if (config().invincibilityTimerGui.isOpen() && (bn != 2)) {
         data.invincibilityTimerGui.x = x
         data.invincibilityTimerGui.y = y
         data.save()
@@ -66,7 +66,7 @@ register("dragged", (dx, dy, x, y, bn) => {
 })
 
 register("scrolled", (x, y, dir) => {
-    if (config.invincibilityTimerGui.isOpen()) {
+    if (config().invincibilityTimerGui.isOpen()) {
         if (dir == 1) data.invincibilityTimerGui.scale += 0.05
         else data.invincibilityTimerGui.scale -= 0.05
         data.save()
@@ -74,7 +74,7 @@ register("scrolled", (x, y, dir) => {
 })
 
 register("guiMouseClick", (x, y, bn) => {
-    if (config.invincibilityTimerGui.isOpen() && (bn == 2)) {
+    if (config().invincibilityTimerGui.isOpen() && (bn == 2)) {
         data.invincibilityTimerGui.x = Renderer.screen.getWidth() / 2
         data.invincibilityTimerGui.y = Renderer.screen.getHeight() / 2 + 10
         data.invincibilityTimerGui.scale = 1
@@ -83,14 +83,14 @@ register("guiMouseClick", (x, y, bn) => {
 })
 
 export function toggle() {
-    if (config.timersToggle && config.toggle && config.invincibilityToggle) {
-        if (config.debug) chat("&aStarting the &6Invincibility Timers &amodule.")
+    if (config().timersToggle && config().toggle && config().invincibilityToggle) {
+        if (config().debug) chat("&aStarting the &6Invincibility Timers &amodule.")
         renderTrigger.register();
         procCatch.register();
         return
     }
-    if (config.debug) chat("&cStopping the &6Invincibility Timers &cmodule.")
-    if (!config.invincibilityToggle) {
+    if (config().debug) chat("&cStopping the &6Invincibility Timers &cmodule.")
+    if (!config().invincibilityToggle) {
         renderTrigger.unregister();
         procCatch.unregister();
     }

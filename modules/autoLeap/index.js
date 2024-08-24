@@ -31,7 +31,7 @@ const openMenuTrigger = register("packetReceived", (packet) => {
             if (leaptarget && item == leaptarget.toLowerCase()) {
                 Player.getContainer().click(i)
                 leaptarget = null
-            } else if (item == (getClasses()[classes[config.autoLeapTarget]])) {
+            } else if (item == (getClasses()[classes[config().autoLeapTarget]])) {
                 Player.getContainer().click(i)
             }
         }
@@ -54,17 +54,17 @@ const doorTrigger = register("chat", (user) => {
 }).setCriteria("${user} opened a WITHER door!").unregister()
 
 export function toggle() {
-    if (config.autoLeapToggle && config.toggle && config.cheatToggle) {
-        if (config.debug) chat("&aStarting the &6Auto Leap &amodule.")
+    if (config().autoLeapToggle && config().toggle && config().cheatToggle) {
+        if (config().debug) chat("&aStarting the &6Auto Leap &amodule.")
         openMenuTrigger.register()
-        if (config.autoLeapi4) i4Trigger.register()
-        if (config.autoLeapWitherDoor) doorTrigger.register()
+        if (config().autoLeapi4) i4Trigger.register()
+        if (config().autoLeapWitherDoor) doorTrigger.register()
         return
     }
-    if (config.debug) chat("&cStopping the &6Auto Leap &cmodule.")
+    if (config().debug) chat("&cStopping the &6Auto Leap &cmodule.")
     openMenuTrigger.unregister()
-    if (config.autoLeapi4) i4Trigger.unregister()
-    if (config.autoLeapWitherDoor) doorTrigger.unregister()
+    if (config().autoLeapi4) i4Trigger.unregister()
+    if (config().autoLeapWitherDoor) doorTrigger.unregister()
     return
 }
 export default { toggle };

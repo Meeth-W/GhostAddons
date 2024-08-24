@@ -101,20 +101,20 @@ function assignDrag(drag) {
         currDragons[1] = drag
         determinePrio()
     }
-    else if (config.showSingleDragons) {
+    else if (config().showSingleDragons) {
         displayText = `${drag.dragString} dragon`
 
-        if (config.autoSpray && !config.autoSpraySplit && config.cheatToggle) { jumpSpray(drag) }
-        if (config.autoDBToggle && !config.autoLBsplit && config.cheatToggle) { autoLB(drag) }
+        if (config().autoSpray && !config().autoSpraySplit && config().cheatToggle) { jumpSpray(drag) }
+        if (config().autoDBToggle && !config().autoLBsplit && config().cheatToggle) { autoLB(drag) }
     }
 }
 function determinePrio() {
     let normalDrag = (currDragons[0].prio[0] < currDragons[1].prio[0] ? currDragons[0] : currDragons[1])
     let truePower = getTruePower()
     let split = 0
-    if (truePower >= config.splitPower) {
+    if (truePower >= config().splitPower) {
         split = 1
-    } else if (isEasySplit() && truePower >= config.easyPower) {
+    } else if (isEasySplit() && truePower >= config().easyPower) {
         split = 1
     }
     if (currDragons[0].prio[split] < currDragons[1].prio[split]) {
@@ -128,19 +128,19 @@ function determinePrio() {
 }
 function displayDragon(bersDrag, archDrag, normalDrag, split) {
     if (split) {
-        if ((mageTeam) || (soulSpawn && ((healer && config.healerPurp == 1) || (tank && config.tankPurp == 1)))) {
+        if ((mageTeam) || (soulSpawn && ((healer && config().healerPurp == 1) || (tank && config().tankPurp == 1)))) {
             displayText = `${bersDrag.dragString}!`
-            if (config.autoSpray && config.cheatToggle) { jumpSpray(bersDrag) }
-            if (config.autoDBToggle && config.cheatToggle) { autoLB(bersDrag) }
+            if (config().autoSpray && config().cheatToggle) { jumpSpray(bersDrag) }
+            if (config().autoDBToggle && config().cheatToggle) { autoLB(bersDrag) }
         } else {
             displayText = `${archDrag.dragString}!`
-            if (config.autoSpray && config.cheatToggle) { jumpSpray(archDrag) }
-            if (config.autoDBToggle && config.cheatToggle) { autoLB(archDrag) }
+            if (config().autoSpray && config().cheatToggle) { jumpSpray(archDrag) }
+            if (config().autoDBToggle && config().cheatToggle) { autoLB(archDrag) }
         }
     } else {
         displayText = `${normalDrag.dragString}!`
-        if (config.autoSpray && config.cheatToggle) { jumpSpray(normalDrag) }
-        if (config.autoDBToggle && config.cheatToggle) { autoLB(normalDrag) }
+        if (config().autoSpray && config().cheatToggle) { jumpSpray(normalDrag) }
+        if (config().autoDBToggle && config().cheatToggle) { autoLB(normalDrag) }
     }
 }
 function inDebuffPosition() { return (Player.getPitch() < -70) }
@@ -170,10 +170,10 @@ function jumpSpray(drag) {
             setTimeout(() => {
                 keyState.rightclick = false
                 updateKeys()
-                setTimeout(() => { Player.setHeldItemIndex(config.swapSlot) }, randomize(25, 5))
+                setTimeout(() => { Player.setHeldItemIndex(config().swapSlot) }, randomize(25, 5))
             }, randomize(100, 25))
         }, randomize(300, 25))
-    }, randomize(parseInt(config.jumpSprayDelay), parseInt(config.randomFlux)))
+    }, randomize(parseInt(config().jumpSprayDelay), parseInt(config().randomFlux)))
 }
 function spamDebuff() {
     if (!inDebuffPosition()) return
@@ -186,15 +186,15 @@ function spamDebuff() {
         keyState.rightclick = false
         updateKeys()
         spamDebuff()
-    }, randomize(parseInt(config.spamLBdelay), parseInt(config.randomFlux)))
+    }, randomize(parseInt(config().spamLBdelay), parseInt(config().randomFlux)))
 }
 function spamLB() {
     if (dragAlive) return
     if (!inDebuffPosition) {
-        if (config.debug) chat('Not in position. Trying Again.')
+        if (config().debug) chat('Not in position. Trying Again.')
         setTimeout(() => { spamLB() }, 100);
     } else {
-        if (config.debug) chat(`Starting Spam Debuff. In postion.`)
+        if (config().debug) chat(`Starting Spam Debuff. In postion.`)
         spamDebuff();
     }
 }
@@ -205,7 +205,7 @@ function autoLB(drag) {
         setTimeout(() => {
             spamLB();
         }, randomize(25, 5));
-    }, randomize(2500, parseInt(config.randomFlux)));
+    }, randomize(2500, parseInt(config().randomFlux)));
 }
 
 // Registers
@@ -227,10 +227,10 @@ const handleStart = register('chat', () => {
         mageTeam = true
     } else if (selectedClass[0] == 'H') {
         healer = true
-        if (config.healerNormal == 1) { mageTeam = true }
+        if (config().healerNormal == 1) { mageTeam = true }
     } else if (selectedClass[0] == 'T') {
         tank = true
-        if (config.tankNormal == 1) { mageTeam = true }
+        if (config().tankNormal == 1) { mageTeam = true }
     } else { mageTeam = false }
 
     scanParticles = true;
@@ -273,15 +273,15 @@ register("command", () => {
 }).setName("debuff")
 
 export function toggle() {
-    if (config.dragPrioToggle && config.toggle) {
-        if (config.debug) chat("&aStarting the &6Drag Prio &amodule.")
+    if (config().dragPrioToggle && config().toggle) {
+        if (config().debug) chat("&aStarting the &6Drag Prio &amodule.")
         handleStart.register()
         handleParticles.register()
         handleRender.register()
         dragSpawnChecker.register()
         return
     }
-    if (config.debug) chat("&cStopping the &6Drag Prio &cmodule.")
+    if (config().debug) chat("&cStopping the &6Drag Prio &cmodule.")
     handleStart.unregister()
     handleParticles.unregister()
     handleRender.unregister()

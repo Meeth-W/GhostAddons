@@ -113,7 +113,7 @@ const renderTrigger = register('renderOverlay', () => {
 
     Tessellator.pushMatrix();
 	Renderer.scale(2);
-	Renderer.drawRect(config.m7StatsBackgroundColor.getRGB(), offsetX - 2, offsetY - 2, width + 4, height + 4);
+	Renderer.drawRect(config().m7StatsBackgroundColor.getRGB(), offsetX - 2, offsetY - 2, width + 4, height + 4);
 	Renderer.scale(2);
 	Renderer.drawStringWithShadow(title, offsetX, offsetY);
 

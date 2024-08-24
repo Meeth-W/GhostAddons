@@ -10,6 +10,10 @@ export function chat(message, id = null, hoverElement) {
     return new Message(message).setChatLineId(id).chat()
 }
 
+export function mod_chat(message) {
+    return ChatLib.chat(prefix + `&9Config Update&f: &7` + message.toString())
+}
+
 export const isBetween = (number, [a, b]) => number >= a && number <= b
 export const getSbLevelPrefix = (number) => Object.keys(sbLevelsPrefix).filter(pref => isBetween(number, sbLevelsPrefix[pref]))
 export const sbLevelsPrefix = {
@@ -73,8 +77,8 @@ export function getClass() {
 }
 
 export function getPreset() {
-    if (!config.slotBindingautoSelect) return config.slotBindingPreset
-    if (!isInDungeon()) return config.slotBindingPreset
+    if (!config().slotBindingautoSelect) return config().slotBindingPreset
+    if (!isInDungeon()) return config().slotBindingPreset
 
     let selectedClass = getClass()
     if (selectedClass == "Mage") return 0
@@ -82,11 +86,11 @@ export function getPreset() {
     else if (selectedClass == "Berserk") return 2
     else if (selectedClass == "Healer") return 3
     else if (selectedClass == "Tank") return 4
-    else return config.slotBindingPreset
+    else return config().slotBindingPreset
 }
 
 export function getDynamicColor() {
-    if (!config.slotBindingdynamicColoring) return config.slotBindingdefaultColor.getRGB()
+    if (!config().slotBindingdynamicColoring) return config().slotBindingdefaultColor.getRGB()
 
     let preset = getPreset()
     if (preset == 0) return Renderer.AQUA
@@ -94,7 +98,7 @@ export function getDynamicColor() {
     else if (preset == 2) return Renderer.RED
     else if (preset == 3) return Renderer.LIGHT_PURPLE
     else if (preset == 4) return Renderer.DARK_GREEN
-    else return config.slotBindingdefaultColor.getRGB()
+    else return config().slotBindingdefaultColor.getRGB()
 }
 
 export function getSlotCoords(i) {

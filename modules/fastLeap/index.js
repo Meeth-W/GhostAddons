@@ -26,7 +26,7 @@ const openMenuTrigger = register("packetReceived", (packet) => {
             item = (items[i]?.getName())?.substring(2)?.toLowerCase()
             if (leaptarget && item == leaptarget.toLowerCase()) {
                 Player.getContainer().click(i)
-                if (config.leappchatToggle) ChatLib.command(`pc Leaping to ${leaplocation}`)
+                if (config().leappchatToggle) ChatLib.command(`pc Leaping to ${leaplocation}`)
                 else chat(`&aLeaping to &6${leaplocation}`)
                 leaptarget = null
                 leaplocation = null
@@ -43,29 +43,29 @@ const p3Locations = register("chat", (n, a, p) => {
 }).setCriteria(/Party > .+ (\w+): (At|Inside) (.+)(!)?/).unregister();
 
 const maxorEnd = register("chat", () => {
-    leaptarget = (getClasses()[classes[config.maxorEnd]])
-    leaplocation = `Storm Phase. [${classes[config.maxorEnd]}]`
+    leaptarget = (getClasses()[classes[config().maxorEnd]])
+    leaplocation = `Storm Phase. [${classes[config().maxorEnd]}]`
 }).setCriteria(`[BOSS] Maxor: YOU TRICKED ME!`).unregister();
 
 const stormEnd = register("chat", () => {
-    leaptarget = (getClasses()[classes[config.stormEnd]])
-    leaplocation = `Goldor Phase. [${classes[config.stormEnd]}]`
+    leaptarget = (getClasses()[classes[config().stormEnd]])
+    leaplocation = `Goldor Phase. [${classes[config().stormEnd]}]`
 }).setCriteria(`[BOSS] Storm: I should have known that I stood no chance.`).unregister();
 
 const goldorEnd = register("chat", () => {
-    leaptarget = (getClasses()[classes[config.goldorEnd]])
-    leaplocation = `Necron Phase. [${classes[config.goldorEnd]}]`
+    leaptarget = (getClasses()[classes[config().goldorEnd]])
+    leaplocation = `Necron Phase. [${classes[config().goldorEnd]}]`
 }).setCriteria(`[BOSS] Necron: I'm afraid, your journey ends now.`).unregister();
 
 const necronEnd = register("chat", () => {
-    leaptarget = (getClasses()[classes[config.necronEnd]])
-    leaplocation = `Dragons Phase. [${classes[config.necronEnd]}]`
+    leaptarget = (getClasses()[classes[config().necronEnd]])
+    leaplocation = `Dragons Phase. [${classes[config().necronEnd]}]`
 }).setCriteria(`[BOSS] Necron: ARGH!`).unregister();
 
 const relicPickup = register("chat", (username, relic) => {
     if ((relic == 'Red' || relic == 'Orange') || username != Player.getName()) return
-    leaptarget = (getClasses()[classes[config.relicPickup]])
-    leaplocation = `${classes[config.relicPickup]} Class.`
+    leaptarget = (getClasses()[classes[config().relicPickup]])
+    leaplocation = `${classes[config().relicPickup]} Class.`
 }).setCriteria('${username} picked the Corrupted ${relic} Relic!').unregister();
 
 const doorTrigger = register("chat", (user) => {
@@ -76,7 +76,7 @@ const doorTrigger = register("chat", (user) => {
 
 // Render Handling
 const renderTrigger = register('renderOverlay', () => {
-    if (!config.leapGuiToggle || !config.cheatToggle || !config.fastLeapToggle) return
+    if (!config().leapGuiToggle || !config().cheatToggle || !config().fastLeapToggle) return
     text.setString(getString())
     text.setScale(data.fastLeapGui.scale)
     text.setShadow(true)
@@ -101,7 +101,7 @@ register("worldUnload", () => {
 
 // Config Triggers.
 register("renderOverlay", () => {
-    if (config.fastLeapGui.isOpen() && !config.fastLeapGui) {
+    if (config().fastLeapGui.isOpen() && !config().fastLeapGui) {
         text.setString(`&6Leap Target: &a${Player.getName()} &7| &dCore!`)
         text.setScale(data.fastLeapGui.scale)
         text.setShadow(true)
@@ -110,7 +110,7 @@ register("renderOverlay", () => {
 })
 
 register("dragged", (dx, dy, x, y, bn) => {
-    if (config.fastLeapGui.isOpen() && (bn != 2)) {
+    if (config().fastLeapGui.isOpen() && (bn != 2)) {
         data.fastLeapGui.x = x
         data.fastLeapGui.y = y
         data.save()
@@ -118,7 +118,7 @@ register("dragged", (dx, dy, x, y, bn) => {
 })
 
 register("scrolled", (x, y, dir) => {
-    if (config.fastLeapGui.isOpen()) {
+    if (config().fastLeapGui.isOpen()) {
         if (dir == 1) data.fastLeapGui.scale += 0.05
         else data.fastLeapGui.scale -= 0.05
         data.save()
@@ -126,7 +126,7 @@ register("scrolled", (x, y, dir) => {
 })
 
 register("guiMouseClick", (x, y, bn) => {
-    if (config.fastLeapGui.isOpen() && (bn == 2)) {
+    if (config().fastLeapGui.isOpen() && (bn == 2)) {
         data.fastLeapGui.x = Renderer.screen.getWidth() / 2
         data.fastLeapGui.y = Renderer.screen.getHeight() / 2 + 10
         data.fastLeapGui.scale = 1
@@ -135,9 +135,9 @@ register("guiMouseClick", (x, y, bn) => {
 })
 
 export function toggle() {
-    if (config.fastLeapToggle && config.toggle && config.cheatToggle) {
-        if (config.debug) chat("&aStarting the &6Fast Leap &amodule.")
-        if (config.leapGuiToggle) renderTrigger.register()
+    if (config().fastLeapToggle && config().toggle && config().cheatToggle) {
+        if (config().debug) chat("&aStarting the &6Fast Leap &amodule.")
+        if (config().leapGuiToggle) renderTrigger.register()
         p3Locations.register()
         handleClick.register()
         openMenuTrigger.register()
@@ -149,8 +149,8 @@ export function toggle() {
         doorTrigger.register()
         return
     } 
-    if (config.debug) chat("&cStopping the &6Fast Leap &cmodule.")
-    if (!config.leapGuiToggle) renderTrigger.unregister()
+    if (config().debug) chat("&cStopping the &6Fast Leap &cmodule.")
+    if (!config().leapGuiToggle) renderTrigger.unregister()
     p3Locations.unregister()
     handleClick.unregister()
     openMenuTrigger.unregister()

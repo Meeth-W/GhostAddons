@@ -25,13 +25,13 @@ const locationNotifTrigger = register("chat", (n, a, p) => {
 }).setCriteria(/Party > .+ (\w+): (At|Inside) (.+)(!)?/).unregister()
 
 const locationNotifRender = register("renderOverlay", () => {
-    if (!(config.locationNotif && startTime && name != Player.getName())) return
+    if (!(config().locationNotif && startTime && name != Player.getName())) return
     const remaining = (1500 - (Date.now() - startTime ?? 0))
     if (remaining < 0) return
 
     text.setString(`${name} is ${action} ${place}!`)
     text.draw(Renderer.screen.getWidth() / 2, Renderer.screen.getHeight() / 2 - 50)
-    World.playSound(config.locationSound, 2, 2)
+    World.playSound(config().locationSound, 2, 2)
 }).unregister()
 
 const stormEnd = register('chat', () => {
@@ -60,43 +60,43 @@ const goldorEnd = register('chat', () => {
 }).setCriteria("The Core entrance is opening!").unregister()
 
 const mainTrigger = register('tick', () => {
-    if (!messagesSent.ssMessage[0] && config.ssCoord && inRange(messagesSent.ssMessage)) {
+    if (!messagesSent.ssMessage[0] && config().ssCoord && inRange(messagesSent.ssMessage)) {
         ChatLib.command('pc At SS!')
         messagesSent.ssMessage[0] = true
         return
     }
 
-    if (!messagesSent.pre2[0] && config.pre2Coord && inRange(messagesSent.pre2)) {
+    if (!messagesSent.pre2[0] && config().pre2Coord && inRange(messagesSent.pre2)) {
         ChatLib.command('pc At Pre Enter 2!')
         messagesSent.pre2[0] = true
         return
     }
 
-    if (!messagesSent.i3[0] && config.i3Coord && inRange(messagesSent.i3)) {
+    if (!messagesSent.i3[0] && config().i3Coord && inRange(messagesSent.i3)) {
         ChatLib.command('pc At Insta 3!')
         messagesSent.i3[0] = true
         return
     }
 
-    if (!messagesSent.pre3[0] && config.pre3Coord && inRange(messagesSent.pre3)) {
+    if (!messagesSent.pre3[0] && config().pre3Coord && inRange(messagesSent.pre3)) {
         ChatLib.command('pc At Pre Enter 3!')
         messagesSent.pre3[0] = true
         return
     }
 
-    if (!messagesSent.pre4[0] && config.pre4Coord && inRange(messagesSent.pre4)) {
+    if (!messagesSent.pre4[0] && config().pre4Coord && inRange(messagesSent.pre4)) {
         ChatLib.command('pc At Pre Enter 4!')
         messagesSent.pre4[0] = true
         return
     }
 
-    if (!messagesSent.slingshot[0] && config.slingshotCoord && inRange(messagesSent.slingshot)) {
+    if (!messagesSent.slingshot[0] && config().slingshotCoord && inRange(messagesSent.slingshot)) {
         ChatLib.command('pc At Core!')
         messagesSent.slingshot[0] = true
         return
     }
 
-    if (!messagesSent.tunnel[0] && config.tunnelCoord && inRange(messagesSent.tunnel)) {
+    if (!messagesSent.tunnel[0] && config().tunnelCoord && inRange(messagesSent.tunnel)) {
         ChatLib.command('pc Inside Goldor Tunnel!')
         messagesSent.tunnel[0] = true
         return
@@ -117,10 +117,10 @@ const messageReset = register('worldLoad', () => {
 
 
 export function toggle() {
-    if (config.locationMessagesToggle && config.toggle) {
-        if (config.debug) chat("&aStarting the &6Location Messages &amodule.")
+    if (config().locationMessagesToggle && config().toggle) {
+        if (config().debug) chat("&aStarting the &6Location Messages &amodule.")
         messageReset.register()
-        if (config.locationNotif) {
+        if (config().locationNotif) {
             locationNotifTrigger.register()
             locationNotifRender.register()
         }
@@ -131,9 +131,9 @@ export function toggle() {
         mainTrigger.register()
         return
     }
-    if (config.debug) chat("&cStopping the &6Location Messages &cmodule.")
+    if (config().debug) chat("&cStopping the &6Location Messages &cmodule.")
     messageReset.unregister()
-    if (config.locationNotif) {
+    if (config().locationNotif) {
         locationNotifTrigger.unregister()
         locationNotifRender.register()
     }

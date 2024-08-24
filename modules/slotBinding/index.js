@@ -13,7 +13,7 @@ const onShiftClick = (slot) => {
         const hotbarSlot = data.slotBinding.presets[getPreset()][slot] % 36
         if (hotbarSlot == null || hotbarSlot >= 9) return
 
-        World.playSound(config.slotBindingswapSound, 1, 2);
+        World.playSound(config().slotBindingswapSound, 1, 2);
         getPlayerController().func_78753_a(
             container.getWindowId(), 
             slot, 
@@ -27,7 +27,7 @@ const onShiftClick = (slot) => {
         return
     }
     if (data.slotBinding.history[getPreset()][slot]) {
-        World.playSound(config.slotBindingswapSound, 1, 2);
+        World.playSound(config().slotBindingswapSound, 1, 2);
         getPlayerController().func_78753_a(
             container.getWindowId(), 
             data.slotBinding.history[getPreset()][slot], 
@@ -153,13 +153,13 @@ const guiTrigger = register('guiRender', (x, y, gui) => {
 }).unregister();
 
 export function toggle() {
-    if (config.slotBindingToggle && config.toggle) {
-        if (config.debug) chat("&aStarting the &6Slot Binding &amodule.")
+    if (config().slotBindingToggle && config().toggle) {
+        if (config().debug) chat("&aStarting the &6Slot Binding &amodule.")
         mainTrigger.register()
         guiTrigger.register()
         return
     }
-    if (config.debug) chat("&cStopping the &6Slot Binding &cmodule.")
+    if (config().debug) chat("&cStopping the &6Slot Binding &cmodule.")
     mainTrigger.unregister()
     guiTrigger.unregister()
     return

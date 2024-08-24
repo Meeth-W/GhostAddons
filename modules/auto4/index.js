@@ -194,7 +194,7 @@ const getBowShootSpeed = () => {
 // Main Functionality
 let pre4 = false
 const handlei4 = register("tick", () => {
-    if (!config.pre4Toggle) return;
+    if (!config().pre4Toggle) return;
     if (pre4)return;
     if (Player.getHeldItem()?.getID() !== 261) return;
     if (Date.now() - lastShot < getBowShootSpeed()) return;
@@ -223,7 +223,7 @@ const handlei4 = register("tick", () => {
         [playerPos.x, playerPos.y, playerPos.z],
         [targetPos.x, targetPos.y+2, targetPos.z],
         0, 
-        config.smoothLookSteps, 
+        config().smoothLookSteps, 
         () => {
             rightClick();
             pre4=false
@@ -238,25 +238,25 @@ register("worldUnload", () => {
 });
 
 const commandTrigger = register("command", () => {
-    if (config.pre4Toggle) {
+    if (config().pre4Toggle) {
         chat("&c Disabling Auto 4");
-        config.pre4Toggle = false;
+        config().pre4Toggle = false;
     } else {
         chat("&a Enabling Auto 4");
         doneCoords.clear()
-        config.pre4Toggle = true;
+        config().pre4Toggle = true;
     }
 }).setName("/auto4").unregister()
 
 export function toggle() {
-    if (config.pre4Toggle && config.toggle && config.cheatToggle) {
-        if (config.debug) chat("&aStarting the &6Auto Four &amodule.")
+    if (config().pre4Toggle && config().toggle && config().cheatToggle) {
+        if (config().debug) chat("&aStarting the &6Auto Four &amodule.")
         handlei4.register()
         commandTrigger.register()
         handleRod.register()
         return
     }
-    if (config.debug) chat("&cStopping the &6Auto Four &cmodule.")
+    if (config().debug) chat("&cStopping the &6Auto Four &cmodule.")
     handlei4.unregister()
     commandTrigger.unregister()
     handleRod.unregister()

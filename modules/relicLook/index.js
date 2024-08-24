@@ -23,12 +23,12 @@ const trigger = register("chat", (message) => {
 }).setCriteria("picked the Corrupted").setContains().unregister();
 
 export function toggle() {
-    if (config.relicToggle && config.toggle && config.cheatToggle) {
-        if (config.debug) chat("&aStarting the &6Auto Relic &amodule.")
+    if (config().relicToggle && config().toggle && config().cheatToggle) {
+        if (config().debug) chat("&aStarting the &6Auto Relic &amodule.")
         trigger.register()
         return
     }
-    if (config.debug) chat("&cStopping the &6Auto Relic &cmodule.")
+    if (config().debug) chat("&cStopping the &6Auto Relic &cmodule.")
     trigger.unregister()
     return
 }

@@ -32,18 +32,18 @@ const trigger = register('playerInteract', (action, pos, event) => {
         const TargetSkull = World.getWorld().func_175625_s(CheckBlockPos);
         if ((TargetSkull?.func_152108_a()?.id?.toString() === witheressence)) {
             pushInteract = true
-            clickString = `${config.secretHighlightText} Essence!`
+            clickString = `${config().secretHighlightText} Essence!`
 
         } else if (TargetSkull?.func_152108_a()?.id?.toString() === redstonekey) {
             pushInteract = true
-             clickString = `${config.secretHighlightText} Key!`
+             clickString = `${config().secretHighlightText} Key!`
         } else {
             pushInteract = false
         }
     } else if (blockID === 54){
-         clickString = `${config.secretHighlightText} Chest!`
+         clickString = `${config().secretHighlightText} Chest!`
     } else if (blockID === 69) {
-         clickString = `${config.secretHighlightText} Lever!`
+         clickString = `${config().secretHighlightText} Lever!`
     }
 
     if (!pushInteract) return
@@ -52,7 +52,7 @@ const trigger = register('playerInteract', (action, pos, event) => {
     if (isInArray(coords, recentInteractions)) return;
     recentInteractions.push(coords);
 
-    setTimeout(() => { recentInteractions.shift() }, parseInt(config.secretHighlightDelay))
+    setTimeout(() => { recentInteractions.shift() }, parseInt(config().secretHighlightDelay))
 
 }).unregister();
 
@@ -63,21 +63,21 @@ const renderTrigger = register('renderWorld', () => {
         const [x, y, z, blockID, clickString] = coords;
         const block = World.getBlockAt(x, y, z)
 
-        renderBlockHighlight(block, config.secretHighlightColor.getRed()/255, config.secretHighlightColor.getGreen()/255, config.secretHighlightColor.getBlue()/255)
-        Tessellator.drawString(clickString, x+0.5, y+0.5, z+0.5, config.secretHighlightTextColor.getRGB(), true, 0.025, false)
+        renderBlockHighlight(block, config().secretHighlightColor.getRed()/255, config().secretHighlightColor.getGreen()/255, config().secretHighlightColor.getBlue()/255)
+        Tessellator.drawString(clickString, x+0.5, y+0.5, z+0.5, config().secretHighlightTextColor.getRGB(), true, 0.025, false)
 
     })
 }).unregister();
 
 export function toggle() {
-    if (config.secretsToggle && config.toggle && config.secretHighlightToggle) {
-        if (config.debug) chat("&aStarting the &6Secret Highlight &amodule.")
+    if (config().secretsToggle && config().toggle && config().secretHighlightToggle) {
+        if (config().debug) chat("&aStarting the &6Secret Highlight &amodule.")
         trigger.register()
         renderTrigger.register()
         return
     }
-    if (config.debug) chat("&cStopping the &6Secret Highlight &cmodule.")
-    if (!config.secretHighlightToggle) {
+    if (config().debug) chat("&cStopping the &6Secret Highlight &cmodule.")
+    if (!config().secretHighlightToggle) {
         trigger.unregister()
         renderTrigger.unregister()
     }

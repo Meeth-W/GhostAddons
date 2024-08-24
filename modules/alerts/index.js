@@ -6,7 +6,7 @@ let text = new Text("")
 
 // AutoPet
 const autoPet = register("chat", (lvl, pet) => {
-    World.playSound(config.alertSound, 100.0, 1.0)
+    World.playSound(config().alertSound, 100.0, 1.0)
     text = new Text(`${pet}`).setShadow(true).setScale(4).setColor(Renderer.LIGHT_PURPLE);
     showText = true;
     setTimeout(() => {
@@ -17,7 +17,7 @@ const autoPet = register("chat", (lvl, pet) => {
 // Blood Camp
 const bloodCamp = register("chat", () => {
     if (getClass() != "Mage") return
-    World.playSound(config.alertSound, 100.0, 2.0)
+    World.playSound(config().alertSound, 100.0, 2.0)
     text = new Text(`BLOOD READY!`).setShadow(true).setScale(4).setColor(Renderer.GOLD);
     showText = true;
     setTimeout(() => {
@@ -27,7 +27,7 @@ const bloodCamp = register("chat", () => {
 
 // P5 Rag Axe
 const ragAxe = register("chat", () => {
-    World.playSound(config.alertSound, 100.0, 2.0)
+    World.playSound(config().alertSound, 100.0, 2.0)
     text = new Text(`RAG AXE!`).setShadow(true).setScale(4).setColor(Renderer.RED);
     showText = true;
     setTimeout(() => {
@@ -37,7 +37,7 @@ const ragAxe = register("chat", () => {
 
 // Tact
 const tactInsert = register("chat", () => {
-    World.playSound(config.alertSound, 100.0, 2.0)
+    World.playSound(config().alertSound, 100.0, 2.0)
     text = new Text(`TACT!`).setShadow(true).setScale(4).setColor(Renderer.DARK_PURPLE);
     showText = true;
     setTimeout(() => {
@@ -52,18 +52,18 @@ const renderTrigger = register("renderOverlay", () => {
 }).unregister();
 
 export function toggle() {
-    if (config.alertToggle && config.toggle) {
-        if (config.debug) chat("&aStarting the &6Alerts &amodule.")
+    if (config().alertToggle && config().toggle) {
+        if (config().debug) chat("&aStarting the &6Alerts &amodule.")
         renderTrigger.register()
 
-        if (config.alertAutoPet) autoPet.register()
-        if (config.bloodCamp) bloodCamp.register()
-        if (config.alertRag) ragAxe.register()
-        if (config.tactInsert) tactInsert.register()
+        if (config().alertAutoPet) autoPet.register()
+        if (config().bloodCamp) bloodCamp.register()
+        if (config().alertRag) ragAxe.register()
+        if (config().tactInsert) tactInsert.register()
         
         return
     }
-    if (config.debug) chat("&cStopping the &6Alerts &cmodule.")
+    if (config().debug) chat("&cStopping the &6Alerts &cmodule.")
     renderTrigger.unregister()
 
     autoPet.unregister()

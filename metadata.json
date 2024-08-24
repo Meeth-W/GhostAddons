@@ -5,7 +5,7 @@
     "description": "Dungeons QOL.",
     "entry": "index.js",
     "requires": [
-      "Vigilance", 
+      "Amaterasu", 
       "requestV2",
       "BloomCore",
       "RenderLib"

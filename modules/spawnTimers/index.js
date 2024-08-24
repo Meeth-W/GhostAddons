@@ -16,7 +16,7 @@ const tickCounter = register("packetReceived", () => {
 
 // Relic Timers
 const relicTrigger = register("chat", () => {
-    relicTicks = parseInt(config.relicSpawnTimerAmt)
+    relicTicks = parseInt(config().relicSpawnTimerAmt)
     tickCounter.register()
 }).setCriteria("[BOSS] Necron: All this, for nothing...")
 
@@ -26,7 +26,7 @@ registerWhen(register("renderOverlay", () => {
     relicTimer.setString(timeLeft)
     relicTimer.setScale(data.relicSpawnTimer.scale)
     relicTimer.draw(data.relicSpawnTimer.x, data.relicSpawnTimer.y)
-}), () => config.relicToggle && relicTicks > 0)
+}), () => config().relicToggle && relicTicks > 0)
 
 // Crystal Timers
 const crystalTriggerOne = register("chat", () => {
@@ -45,16 +45,16 @@ registerWhen(register("renderOverlay", () => {
     crystalTimer.setString(timeLeft)
     crystalTimer.setScale(data.crystalSpawnTimer.scale)
     crystalTimer.draw(data.crystalSpawnTimer.x, data.crystalSpawnTimer.y)
-}), () => config.crystalToggle && crystalTicks > 0)
+}), () => config().crystalToggle && crystalTicks > 0)
 
 // Config Triggers.
 register("renderOverlay", () => {
-    if (config.relicSpawnTimerGui.isOpen()) {
+    if (config().relicSpawnTimerGui.isOpen()) {
         relicTimer.setString("2.00")
         relicTimer.setScale(data.relicSpawnTimer.scale)
         relicTimer.draw(data.relicSpawnTimer.x, data.relicSpawnTimer.y)
     }
-    if (config.crystalSpawnTimerGui.isOpen()) {
+    if (config().crystalSpawnTimerGui.isOpen()) {
         crystalTimer.setString("2.00")
         crystalTimer.setScale(data.crystalSpawnTimer.scale)
         crystalTimer.draw(data.crystalSpawnTimer.x, data.crystalSpawnTimer.y)
@@ -62,12 +62,12 @@ register("renderOverlay", () => {
 })
 
 register("dragged", (dx, dy, x, y, bn) => {
-    if (config.relicSpawnTimerGui.isOpen() && (bn != 2)) {
+    if (config().relicSpawnTimerGui.isOpen() && (bn != 2)) {
         data.relicSpawnTimer.x = x
         data.relicSpawnTimer.y = y
         data.save()
     }
-    if (config.crystalSpawnTimerGui.isOpen() && (bn != 2)) {
+    if (config().crystalSpawnTimerGui.isOpen() && (bn != 2)) {
         data.crystalSpawnTimer.x = x
         data.crystalSpawnTimer.y = y
         data.save()
@@ -75,12 +75,12 @@ register("dragged", (dx, dy, x, y, bn) => {
 })
 
 register("scrolled", (x, y, dir) => {
-    if (config.relicSpawnTimerGui.isOpen()) {
+    if (config().relicSpawnTimerGui.isOpen()) {
         if (dir == 1) data.relicSpawnTimer.scale += 0.05
         else data.relicSpawnTimer.scale -= 0.05
         data.save()
     }
-    if (config.crystalSpawnTimerGui.isOpen()) {
+    if (config().crystalSpawnTimerGui.isOpen()) {
         if (dir == 1) data.crystalSpawnTimer.scale += 0.05
         else data.crystalSpawnTimer.scale -= 0.05
         data.save()
@@ -88,13 +88,13 @@ register("scrolled", (x, y, dir) => {
 })
 
 register("guiMouseClick", (x, y, bn) => {
-    if (config.relicSpawnTimerGui.isOpen() && (bn == 2)) {
+    if (config().relicSpawnTimerGui.isOpen() && (bn == 2)) {
         data.relicSpawnTimer.x = Renderer.screen.getWidth() / 2
         data.relicSpawnTimer.y = Renderer.screen.getHeight() / 2 + 10
         data.relicSpawnTimer.scale = 1
         data.save()
     }
-    if (config.crystalSpawnTimerGui.isOpen() && (bn == 2)) {
+    if (config().crystalSpawnTimerGui.isOpen() && (bn == 2)) {
         data.crystalSpawnTimer.x = Renderer.screen.getWidth() / 2
         data.crystalSpawnTimer.y = Renderer.screen.getHeight() / 2 + 10
         data.crystalSpawnTimer.scale = 1
@@ -103,16 +103,16 @@ register("guiMouseClick", (x, y, bn) => {
 })
 
 export function toggle() {
-    if (config.timersToggle && config.toggle) {
-        if (config.debug) chat("&aStarting the &6Spawn Timers &amodule.")
-        if (config.crystalToggle) {
+    if (config().timersToggle && config().toggle) {
+        if (config().debug) chat("&aStarting the &6Spawn Timers &amodule.")
+        if (config().crystalToggle) {
             crystalTriggerOne.register()
             crystalTriggerTwo.register()
         }
-        if (config.relicToggle) relicTrigger.register()
+        if (config().relicToggle) relicTrigger.register()
         return
     }
-    if (config.debug) chat("&cStopping the &6Spawn Timers &cmodule.")
+    if (config().debug) chat("&cStopping the &6Spawn Timers &cmodule.")
     crystalTriggerOne.unregister()
     crystalTriggerTwo.unregister()
     relicTrigger.unregister()

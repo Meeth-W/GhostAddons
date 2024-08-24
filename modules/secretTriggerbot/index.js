@@ -8,7 +8,7 @@ let blackList = [[62, 135, 142], [62, 134, 142], [61, 136, 142], [61, 135, 142],
 const trigger = register("tick", () => {
     if (!isInDungeon()) return;
 
-    let delay = config.secretDelay && !isNaN(parseInt(config.secretDelay)) ? parseInt(config.secretDelay) : 50;
+    let delay = config().secretDelay && !isNaN(parseInt(config().secretDelay)) ? parseInt(config().secretDelay) : 50;
     let click = false
 
     let blockID = Player.lookingAt()?.getType()?.getID();
@@ -41,19 +41,19 @@ const trigger = register("tick", () => {
         alreadyClicked.push([x, y, z])
         setTimeout(() => {
             rightClick()
-            World.playSound(config.secretClickSound, 1, 1)
+            World.playSound(config().secretClickSound, 1, 1)
         }, delay)
     }
 }).unregister();
 
 export function toggle() {
-    if (config.secretsToggle && config.toggle && config.cheatToggle && config.secretTriggerbot) {
-        if (config.debug) chat("&aStarting the &6Secret Triggerbot &amodule.")
+    if (config().secretsToggle && config().toggle && config().cheatToggle && config().secretTriggerbot) {
+        if (config().debug) chat("&aStarting the &6Secret Triggerbot &amodule.")
         trigger.register()
         return
     }
-    if (config.debug) chat("&cStopping the &6Secret Triggerbot &cmodule.")
-    if (!config.secretTriggerbot) {
+    if (config().debug) chat("&cStopping the &6Secret Triggerbot &cmodule.")
+    if (!config().secretTriggerbot) {
         trigger.unregister()
     }
     return
