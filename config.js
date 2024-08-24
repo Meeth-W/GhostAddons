@@ -65,7 +65,6 @@ class Settings {
         this.addDependency('Secret Text Color', 'Secret Highlight')
         this.addDependency('Secret Overlay Color', 'Secret Highlight')
         this.addDependency('Highlight Delay', 'Secret Highlight')
-        this.addDependency('Toggle Stonking', 'Secret Triggerbot')
         this.addDependency('Secret Click Delay', 'Secret Triggerbot')
         this.addDependency('Opened Sound', 'Secret Triggerbot')
 

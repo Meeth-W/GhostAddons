@@ -47,11 +47,9 @@ const trigger = register("tick", () => {
 }).unregister();
 
 export function toggle() {
-    if (config.secretsToggle && config.toggle && config.cheatToggle) {
+    if (config.secretsToggle && config.toggle && config.cheatToggle && config.secretTriggerbot) {
         if (config.debug) chat("&aStarting the &6Secret Triggerbot &amodule.")
-        if (config.secretTriggerbot) {
-            trigger.register()
-        }
+        trigger.register()
         return
     }
     if (config.debug) chat("&cStopping the &6Secret Triggerbot &cmodule.")

@@ -70,12 +70,10 @@ const renderTrigger = register('renderWorld', () => {
 }).unregister();
 
 export function toggle() {
-    if (config.secretsToggle && config.toggle) {
+    if (config.secretsToggle && config.toggle && config.secretHighlightToggle) {
         if (config.debug) chat("&aStarting the &6Secret Highlight &amodule.")
-        if (config.secretHighlightToggle) {
-            trigger.register()
-            renderTrigger.register()
-        }
+        trigger.register()
+        renderTrigger.register()
         return
     }
     if (config.debug) chat("&cStopping the &6Secret Highlight &cmodule.")

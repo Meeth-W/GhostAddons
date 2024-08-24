@@ -83,12 +83,10 @@ register("guiMouseClick", (x, y, bn) => {
 })
 
 export function toggle() {
-    if (config.timersToggle && config.toggle) {
+    if (config.timersToggle && config.toggle && config.invincibilityToggle) {
         if (config.debug) chat("&aStarting the &6Invincibility Timers &amodule.")
-        if (config.invincibilityToggle) {
-            renderTrigger.register();
-            procCatch.register();
-        }
+        renderTrigger.register();
+        procCatch.register();
         return
     }
     if (config.debug) chat("&cStopping the &6Invincibility Timers &cmodule.")
