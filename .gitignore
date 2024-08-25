@@ -1,2 +1,3 @@
 /config.toml
-/data
+/data/mainData.json
+/data/settings.json

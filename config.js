@@ -116,7 +116,7 @@ defConfig
     configName: "partyFinderminCata",
     title: "Cata Level",
     description: "Minimum Catacombs Level",
-    options: [1, 100],
+    options: [1, 55],
     value: 1,
     subcategory: "Requirements"
 })
@@ -962,7 +962,6 @@ const config = new Settings("GhostAddons", defConfig, "data/ColorScheme.json", "
 .apply()
 .setCommand("gh", ["ghost", "ghostaddons"])
 .onCloseGui(() => {
-    chat('Closing GUI.')
     data.recently_closed = true
     data.save()
 })
