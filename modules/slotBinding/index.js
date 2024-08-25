@@ -1,6 +1,31 @@
 import config from "../../config"
 import { data } from "../../utils/data"
-import { chat, getDynamicColor, getPreset, getSlotCoords } from "../../utils/utils"
+import { chat, getColor, getSlotCoords } from "../../utils/utils"
+
+export function getPreset() {
+    if (!config().slotBindingautoSelect) return config().slotBindingPreset
+    if (!isInDungeon()) return config().slotBindingPreset
+
+    let selectedClass = getClass()
+    if (selectedClass == "Mage") return 0
+    else if (selectedClass == "Archer") return 1
+    else if (selectedClass == "Berserk") return 2
+    else if (selectedClass == "Healer") return 3
+    else if (selectedClass == "Tank") return 4
+    else return config().slotBindingPreset
+}
+
+export function getDynamicColor() {
+    if (!config().slotBindingdynamicColoring) return getColor(config().slotBindingdefaultColor).getRGB()
+    
+    let preset = getPreset()
+    if (preset == 0) return Renderer.AQUA
+    else if (preset == 1) return Renderer.GOLD
+    else if (preset == 2) return Renderer.RED
+    else if (preset == 3) return Renderer.LIGHT_PURPLE
+    else if (preset == 4) return Renderer.DARK_GREEN
+    else return getColor(config().slotBindingdefaultColor).getRGB()
+}
 
 const bindKey = new KeyBind("Bind Slots", Keyboard.KEY_NONE, "GhostAddons")
 

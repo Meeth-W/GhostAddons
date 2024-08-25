@@ -1,4 +1,5 @@
 import config from "../../config";
+import gui_config from "../../gui_config";
 import { data } from "../../utils/data";
 import { chat, getClasses, isHoldingLeapItem, isInDungeon, rightClick } from "../../utils/utils";
 
@@ -101,7 +102,7 @@ register("worldUnload", () => {
 
 // Config Triggers.
 register("renderOverlay", () => {
-    if (config().fastLeapGui.isOpen() && !config().fastLeapGui) {
+    if (gui_config.fastLeapGui.isOpen() && !gui_config.fastLeapGui) {
         text.setString(`&6Leap Target: &a${Player.getName()} &7| &dCore!`)
         text.setScale(data.fastLeapGui.scale)
         text.setShadow(true)
@@ -110,7 +111,7 @@ register("renderOverlay", () => {
 })
 
 register("dragged", (dx, dy, x, y, bn) => {
-    if (config().fastLeapGui.isOpen() && (bn != 2)) {
+    if (gui_config.fastLeapGui.isOpen() && (bn != 2)) {
         data.fastLeapGui.x = x
         data.fastLeapGui.y = y
         data.save()
@@ -118,7 +119,7 @@ register("dragged", (dx, dy, x, y, bn) => {
 })
 
 register("scrolled", (x, y, dir) => {
-    if (config().fastLeapGui.isOpen()) {
+    if (gui_config.fastLeapGui.isOpen()) {
         if (dir == 1) data.fastLeapGui.scale += 0.05
         else data.fastLeapGui.scale -= 0.05
         data.save()
@@ -126,7 +127,7 @@ register("scrolled", (x, y, dir) => {
 })
 
 register("guiMouseClick", (x, y, bn) => {
-    if (config().fastLeapGui.isOpen() && (bn == 2)) {
+    if (gui_config.fastLeapGui.isOpen() && (bn == 2)) {
         data.fastLeapGui.x = Renderer.screen.getWidth() / 2
         data.fastLeapGui.y = Renderer.screen.getHeight() / 2 + 10
         data.fastLeapGui.scale = 1

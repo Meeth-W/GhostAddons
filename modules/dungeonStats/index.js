@@ -1,6 +1,6 @@
 import config from "../../config";
 import playerData from "../../utils/player";
-import { chat } from "../../utils/utils";
+import { chat, getColor } from "../../utils/utils";
 
 let showGUI = false
 let player = null
@@ -113,14 +113,14 @@ const renderTrigger = register('renderOverlay', () => {
 
     Tessellator.pushMatrix();
 	Renderer.scale(2);
-	Renderer.drawRect(config().m7StatsBackgroundColor.getRGB(), offsetX - 2, offsetY - 2, width + 4, height + 4);
+	Renderer.drawRect(getColor(config().m7StatsBackgroundColor).getRGB(), offsetX - 2, offsetY - 2, width + 4, height + 4);
 	Renderer.scale(2);
 	Renderer.drawStringWithShadow(title, offsetX, offsetY);
 
     Renderer.drawStringWithShadow(getcol1().join('\n'), offsetX*2, offsetY*2 + 30)
     Renderer.drawStringWithShadow(getcol2().join('\n'), offsetX*3.1, offsetY*2 + 30)
     Renderer.drawStringWithShadow(getcol3().join('\n'), offsetX*4.2, offsetY*2 + 30)
-
+    
     Tessellator.popMatrix();
 })
 

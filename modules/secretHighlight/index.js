@@ -1,5 +1,5 @@
 import config from "../../config";
-import { chat, isInArray } from "../../utils/utils";
+import { chat, getColor, isInArray } from "../../utils/utils";
 
 import { renderBlockHitbox } from "../../../BloomCore/RenderUtils";
 
@@ -62,9 +62,9 @@ const renderTrigger = register('renderWorld', () => {
     recentInteractions.forEach(coords => {
         const [x, y, z, blockID, clickString] = coords;
         const block = World.getBlockAt(x, y, z)
-
-        renderBlockHighlight(block, config().secretHighlightColor.getRed()/255, config().secretHighlightColor.getGreen()/255, config().secretHighlightColor.getBlue()/255)
-        Tessellator.drawString(clickString, x+0.5, y+0.5, z+0.5, config().secretHighlightTextColor.getRGB(), true, 0.025, false)
+        
+        renderBlockHighlight(block, getColor(config().secretHighlightColor).getRed()/255, getColor(config().secretHighlightColor).getGreen()/255, getColor(config().secretHighlightColor).getBlue()/255)
+        Tessellator.drawString(clickString, x+0.5, y+0.5, z+0.5, getColor(config().secretHighlightTextColor).getRGB(), true, 0.025, false)
 
     })
 }).unregister();

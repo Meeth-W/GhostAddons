@@ -1,4 +1,5 @@
 import config from "../../config";
+import gui_config from "../../gui_config";
 import { data } from "../../utils/data";
 import { chat } from "../../utils/utils";
 
@@ -36,7 +37,7 @@ const procCatch = register("packetReceived", (packet, event) => {
 }).setFilteredClass(S02PacketChat).unregister();
 
 const renderTrigger = register('renderOverlay', () => {
-    if (!config().invincibilityToggle || !config().toggle) return
+    if (!config().invincibilityToggle || !config().toggle || !config().timersToggle) return
     timerText.setString(getString())
     timerText.setScale(data.invincibilityTimerGui.scale)
     timerText.setShadow(true)
@@ -50,7 +51,7 @@ register('worldUnload', () => {
 
 // Config Triggers.
 register("renderOverlay", () => {
-    if (config().invincibilityTimerGui.isOpen() && !config().invincibilityToggle) {
+    if (gui_config.invincibilityTimerGui.isOpen() && !config().invincibilityToggle) {
         timerText.setString([`&9Bonzo Mask: &aREADY`, `&fSpirit Mask: &aREADY`, `&6Phoenix Pet: &aREADY`, ``, `&bInvincible: ✖`].join('\n'))
         timerText.setScale(data.invincibilityTimerGui.scale)
         timerText.draw(data.invincibilityTimerGui.x, data.invincibilityTimerGui.y)
@@ -58,7 +59,7 @@ register("renderOverlay", () => {
 })
 
 register("dragged", (dx, dy, x, y, bn) => {
-    if (config().invincibilityTimerGui.isOpen() && (bn != 2)) {
+    if (gui_config.invincibilityTimerGui.isOpen() && (bn != 2)) {
         data.invincibilityTimerGui.x = x
         data.invincibilityTimerGui.y = y
         data.save()
@@ -66,7 +67,7 @@ register("dragged", (dx, dy, x, y, bn) => {
 })
 
 register("scrolled", (x, y, dir) => {
-    if (config().invincibilityTimerGui.isOpen()) {
+    if (gui_config.invincibilityTimerGui.isOpen()) {
         if (dir == 1) data.invincibilityTimerGui.scale += 0.05
         else data.invincibilityTimerGui.scale -= 0.05
         data.save()
@@ -74,7 +75,7 @@ register("scrolled", (x, y, dir) => {
 })
 
 register("guiMouseClick", (x, y, bn) => {
-    if (config().invincibilityTimerGui.isOpen() && (bn == 2)) {
+    if (gui_config.invincibilityTimerGui.isOpen() && (bn == 2)) {
         data.invincibilityTimerGui.x = Renderer.screen.getWidth() / 2
         data.invincibilityTimerGui.y = Renderer.screen.getHeight() / 2 + 10
         data.invincibilityTimerGui.scale = 1

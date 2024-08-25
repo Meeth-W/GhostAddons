@@ -22,4 +22,9 @@ export const modules = [
     slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4, spawnTimers, lowballing, bloodCamp, secretHighlight, autoEther, invincibilityTimers, fastLeap, dragPrio, secretTriggerbot, relicLook
 ]
 
-export default { modules };
+export function refresh_modules() {
+    modules.forEach(name => {
+        name.toggle() 
+    })
+}
+export default { refresh_modules };

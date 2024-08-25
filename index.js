@@ -1,15 +1,13 @@
-import config from "./config";
-import modules from "./modules";
+import { refresh_modules } from "./modules";
+import { data } from "./utils/data";
 import { chat } from "./utils/utils";
 
-const SettingsGui = Java.type("gg.essential.vigilance.gui.SettingsGui");
-register("guiClosed", gui => {
-	if (!(gui instanceof SettingsGui)) return;
-    modules.modules.forEach(name => {
-        name.toggle()
-    })
-});
+register('step', () => {
+    if (!data.recently_closed) return;
+    data.recently_closed = false;
+    chat('GUI Closed. Refreshing Modules!')
+    refresh_modules();
+    data.save()
+}).setFps(5)
 
-modules.modules.forEach(name => {
-    name.toggle() 
-})
+refresh_modules()

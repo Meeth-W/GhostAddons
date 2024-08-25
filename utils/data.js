@@ -1,6 +1,7 @@
 import PogObject from "../../PogData";
 
 export const data = new PogObject("GhostAddons", {
+    recently_closed: false,
     slotBinding: {
         presets: [ // {Inventory Slot: Hotbar Slot}
             {}, {}, {}, {}, {}, {}

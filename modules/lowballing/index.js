@@ -1,4 +1,4 @@
-import Config from "../../config"
+import config from "../../config";
 import { chat, prefix } from "../../utils/utils";
 
 var index = 0;

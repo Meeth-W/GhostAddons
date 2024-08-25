@@ -1,7 +1,7 @@
 import { renderBlockHitbox } from "../../../BloomCore/RenderUtils";
 import { getEtherwarpBlock, holdingAOTV } from "../../../BloomCore/utils/Utils";
 import config from "../../config";
-import { chat, isInArray, rightClick } from "../../utils/utils";
+import { chat, getColor, isInArray, rightClick } from "../../utils/utils";
 
 let lastTP = null
 let recentTPs = []
@@ -28,8 +28,8 @@ const renderTrigger = register('renderWorld', () => {
         const [x, y, z] = coords;
         const block = World.getBlockAt(x, y, z)
         
-        renderBlockHitbox(block, config().autoEtherColor.getRed()/255, config().autoEtherColor.getGreen()/255, config().autoEtherColor.getBlue()/255, config().autoEtherColor.getAlpha()/255, true, 2, true)
-        Tessellator.drawString('Teleported!', x+0.5, y+0.5, z+0.5, config().autoEtherTextColor.getRGB(), true, 0.025, false)
+        renderBlockHitbox(block, getColor(config().autoEtherColor).getRed()/255, getColor(config().autoEtherColor).getGreen()/255, getColor(config().autoEtherColor).getBlue()/255, getColor(config().autoEtherColor).getAlpha()/255, true, 2, true)
+        Tessellator.drawString('Teleported!', x+0.5, y+0.5, z+0.5, getColor(config().autoEtherTextColor).getRGB(), true, 0.025, false)
 
     })
 }).unregister();
