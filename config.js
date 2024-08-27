@@ -956,7 +956,7 @@ defConfig
     subcategory: "Purple Teams"
 })
 
-const config = new Settings("GhostAddons", defConfig, "data/ColorScheme.json", "Ghost Addons") // make sure to set your command with [.setCommand("commandname")]
+const config = new Settings("GhostAddons", defConfig, "data/ColorScheme.json", "&5&lGhost Addons    &6By Ghostyy &7(.ghxstyy)") // make sure to set your command with [.setCommand("commandname")]
 .setPos(10, 10)
 .setSize(80, 80)
 .apply()
