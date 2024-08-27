@@ -5,7 +5,6 @@ import { chat } from "./utils/utils";
 register('step', () => {
     if (!data.recently_closed) return;
     data.recently_closed = false;
-    chat('Refreshing Modules!')
     refresh_modules();
     data.save()
 }).setFps(5)
