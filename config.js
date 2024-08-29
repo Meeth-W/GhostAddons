@@ -945,6 +945,7 @@ defConfig
         subcategory: "Purple Teams"
     })
 
+    
 const config = new Settings("GhostAddons", defConfig, "templates/colorScheme.json", "§5Ghost Addons §7by §6Ghostyy§7 and §6KingisBad")
 .setPos(10, 10)
 .setSize(80, 80)
