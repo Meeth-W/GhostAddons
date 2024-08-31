@@ -489,6 +489,16 @@ defConfig
             mod_chat(`Auto Relic ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         } 
     })
+    .addSwitch({
+        category: "Auto Relic",
+        configName: "relicSmoothRotate",
+        subcategory: "Settings",
+        title: "Smooth Rotate",
+        description: "Rotates smoothly towards target cauldron.",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto Relic Smooth Look ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        } 
+    })
     .addTextInput({
         category: "Timers",
         configName: "relicSpawnTimerAmt",
