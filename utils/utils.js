@@ -298,3 +298,8 @@ export function randomize(num, flux) {
     const randomizedNum = Math.round((Math.random() * 2 - 1) * flux * 100) / 100; // round to two decimal places
     return num + randomizedNum;
 }
+
+export function setBlockTo(x, y, z, block) {
+    const pos = new BlockPos(x * 1, y * 1, z * 1);
+    World.getWorld().func_175656_a(pos.toMCBlock(), new BlockType(block).getDefaultState());
+}
