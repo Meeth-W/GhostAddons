@@ -491,13 +491,62 @@ defConfig
     })
     .addSwitch({
         category: "Auto Relic",
-        configName: "relicSmoothRotate",
-        subcategory: "Settings",
+        configName: "relicTriggerbot",
+        subcategory: "Place",
+        title: "Triggerbot",
+        description: "Automatically clicks on the right cauldron.",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto Relic ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        } 
+    })
+    .addSwitch({
+        category: "Auto Relic",
+        configName: "relicLook",
+        title: "Toggle Relic Look",
+        subcategory: "Relic Look",
+        description: "Automatically rotates the player towards the right relic.\nDoesn't work for healer.\n\nFull auto for archer/bers.",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto Relic Look ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        } 
+    })
+    .addSwitch({
+        category: "Auto Relic",
+        configName: "smoothLookRelics",
+        subcategory: "Relic Look",
         title: "Smooth Rotate",
         description: "Rotates smoothly towards target cauldron.",
         registerListener(previousvalue, newvalue) {
             mod_chat(`Auto Relic Smooth Look ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         } 
+    })
+    .addSwitch({
+        category: "Auto Relic",
+        configName: "strafeMode",
+        title: "Toggle Strafe Mode",
+        subcategory: "Red/Orange",
+        description: "Strafes towards relic, rather than just sprinting.\n&7About 2.04% faster.",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto Relic Strafe ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        } 
+    })
+    .addSwitch({
+        category: "Auto Relic",
+        configName: "autoLeapRelics",
+        subcategory: "Purple/Blue/Green",
+        title: "Auto Leap",
+        description: "Automatically leaps to the target class after Relic is picked up.",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto Relic Leap ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        } 
+    })
+    .addDropDown({
+        category: "Auto Relic",
+        configName: "relicLeapTarget",
+        title: "Leap Target",
+        description: "The class to leap to after the relic is picked up.",
+        options: ["Mage","Archer","Berserk","Healer","Tank"],
+        value: 0,
+        subcategory: "Purple/Blue/Green"
     })
     .addTextInput({
         category: "Timers",
