@@ -5,6 +5,7 @@ import { chat } from "../../utils/utils";
 
 let timerText = new Text('').setScale(1).setShadow(true).setAlign('LEFT').setColor(Renderer.WHITE);
 let ticks = {bonzo: 0, spirit: 0, phoenix: 0, invincible: 0};
+let displayText = null
 
 function getString() {
     return `&9Bonzo Mask: &c${(ticks.bonzo==0)? "&aREADY!": (ticks.bonzo/20)}\n&fSpirit Mask: &c${(ticks.spirit==0)? "&aREADY!": (ticks.spirit/20)}\n&6Phoenix Pet: &c${(ticks.phoenix==0)? "&aREADY!": (ticks.phoenix/20)}\n\n&bInvincible: &a${(ticks.invincible==0)? "&c✖": (ticks.invincible/20)}`
@@ -24,14 +25,17 @@ const procCatch = register("packetReceived", (packet, event) => {
     if (["Your ⚚ Bonzo's Mask saved your life!", "Your Bonzo's Mask saved your life!"].includes(message)) {
         ticks.bonzo = 180*20;
         ticks.invincible = 3*20;
+        displayText = "&9&lBonzo Mask"
         tickCounter.register();
 	} else if (["Second Wind Activated! Your Spirit Mask saved your life!"].includes(message)) {
         ticks.spirit = 30*20;
         ticks.invincible = 3*20;
+        displayText = "&f&lSpirit Mask"
         tickCounter.register();
 	} else if (["Your Phoenix Pet saved you from certain death!"].includes(message)) {
         ticks.phoenix = 60*20;
         ticks.invincible = 3*20;
+        displayText = "&6&lPhoenix Pet"
         tickCounter.register();
 	}
 }).setFilteredClass(S02PacketChat).unregister();
@@ -48,6 +52,14 @@ register('worldUnload', () => {
     tickCounter.unregister();
     ticks = {bonzo: 0, spirit: 0, phoenix: 0, invincible: 0}
 });
+
+const handleRender = register('renderOverlay', () => {
+    if (ticks.invincible > 0 && config().invincibilityTimerAlert) {
+        const displayColor = (ticks.invincible > 40)? "&a" : (ticks.invincible > 20)? "&e": "&c";
+        if (ticks.invincible > 30) Client.Companion.showTitle((displayText)? displayText: " ", `&7Immune for: ${displayColor}${(ticks.invincible/20).toFixed(2)}`, 0, 2, 0)
+        else Client.Companion.showTitle(" ", `&7Immune for: ${displayColor}${(ticks.invincible/20).toFixed(2)}`, 0, 2, 0)
+    }
+})
 
 // Config Triggers.
 register("renderOverlay", () => {
@@ -88,12 +100,14 @@ export function toggle() {
         if (config().debug) chat("&aStarting the &6Invincibility Timers &amodule.")
         renderTrigger.register();
         procCatch.register();
+        if (config().invincibilityTimerAlert) handleRender.register();
         return
     }
     if (config().debug) chat("&cStopping the &6Invincibility Timers &cmodule.")
     if (!config().invincibilityToggle) {
         renderTrigger.unregister();
         procCatch.unregister();
+        handleRender.unregister();
     }
     return
 }

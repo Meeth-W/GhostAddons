@@ -496,7 +496,7 @@ defConfig
         title: "Triggerbot",
         description: "Automatically clicks on the right cauldron.",
         registerListener(previousvalue, newvalue) {
-            mod_chat(`Auto Relic ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+            mod_chat(`Auto Relic Triggerbot ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         } 
     })
     .addSwitch({
@@ -575,6 +575,16 @@ defConfig
         subcategory: "Invincibility Timer",
         registerListener(previousvalue, newvalue) {
             mod_chat(`Invincibility Timers ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        } 
+    })
+    .addSwitch({
+        category: "Timers",
+        configName: "invincibilityTimerAlert",
+        title: "On-Screen Alert & Timer",
+        description: "Displays a title on your screen when invincibility procs.",
+        subcategory: "Invincibility Timer",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Invincibility Timers Title ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         } 
     })
     .addTextInput({
