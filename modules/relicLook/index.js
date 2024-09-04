@@ -236,7 +236,7 @@ const triggerbot = register("RenderWorld", () => {
 }).unregister()
 
 register("chat", (name, relicColor) => {
-    if (!config().relicTriggerbot || name !== Player.getName()) return
+    if (!config().relicTriggerbot || name !== Player.getName() || !config().relicToggle) return
     pickedColor = relicColor
     triggerbot.register()
 }).setCriteria(/^(\w{3,16}) picked the Corrupted (\w{3,6}) Relic!$/) // I like regex
@@ -320,12 +320,11 @@ function normalizeYaw(yaw) {
 export function toggle() {
     if (config().relicToggle && config().toggle && config().cheatToggle) {
         if (config().debug) chat("&aStarting the &6Auto Relic &amodule.")
-        if (config().relicTriggerbot) triggerbot.register()
         if (config().autoLeapRelics) openMenuTrigger.register()
         return
     }
     if (config().debug) chat("&cStopping the &6Auto Relic &cmodule.")
-    triggerbot.unregister()
+    openMenuTrigger.unregister()
     return
 }
 export default { toggle };
