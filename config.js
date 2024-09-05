@@ -529,25 +529,6 @@ defConfig
             mod_chat(`Auto Relic Strafe ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         } 
     })
-    .addSwitch({
-        category: "Auto Relic",
-        configName: "autoLeapRelics",
-        subcategory: "Purple/Blue/Green",
-        title: "Auto Leap",
-        description: "Automatically leaps to the target class after Relic is picked up.",
-        registerListener(previousvalue, newvalue) {
-            mod_chat(`Auto Relic Leap ${newvalue ? "&aEnabled" : "&cDisabled"}`)
-        } 
-    })
-    .addDropDown({
-        category: "Auto Relic",
-        configName: "relicLeapTarget",
-        title: "Leap Target",
-        description: "The class to leap to after the relic is picked up.",
-        options: ["Mage","Archer","Berserk","Healer","Tank"],
-        value: 0,
-        subcategory: "Purple/Blue/Green"
-    })
     .addTextInput({
         category: "Timers",
         configName: "relicSpawnTimerAmt",

@@ -105,9 +105,6 @@ const pickupTrigger = register("packetSent", (packet) => {
                     })
                 }
             }
-        } else { // TODO: Add auto leap features
-            if (!config().autoLeapRelics) return // TODO: Add relicLook to config
-            openLeap();
         }
     } catch (error) { return }
 })
@@ -241,40 +238,6 @@ register("chat", (name, relicColor) => {
     triggerbot.register()
 }).setCriteria(/^(\w{3,16}) picked the Corrupted (\w{3,6}) Relic!$/) // I like regex
 
-
-let waitingLeap = false
-let item
-
-const openLeap = () => {
-    let leapSlot = parseInt(Player.getInventory().indexOf(Player.getInventory().getItems().find(a => a?.getName()?.removeFormatting() == "Infinileap")?.getID()))
-    if ( leapSlot > 7 || leapSlot < 0) return chat(`&4Leap Not Found in Hotbar`)
-    let heldItem = Player.getHeldItemIndex();
-    waitingLeap = true
-    Client.scheduleTask(0, () => { Player.setHeldItemIndex(leapSlot)})
-    Client.scheduleTask(1, () => {
-        chat(`&cAttempting to Leap...`)
-        rightClick()
-    })
-    Client.scheduleTask(3, () => { Player.setHeldItemIndex(heldItem) })
-}
-
-const S2DPacketOpenWindow = Java.type("net.minecraft.network.play.server.S2DPacketOpenWindow")
-const openMenuTrigger = register("packetReceived", (packet) => {
-    if (!waitingLeap) return
-    waitingLeap = false
-    let classes = ['Mage', 'Archer', 'Berserk', 'Healer', 'Tank'];
-    Client.scheduleTask(1, () => {
-        if (Player.getContainer().getName() !== "Spirit Leap") return
-        const items = Player.getContainer()?.getItems() 
-        for (let i = 0; i < items.length; i++) {
-            item = (items[i]?.getName())?.substring(2)?.toLowerCase()
-            if (item == (getClasses()[classes[config().relicLeapTarget]])) {
-                Player.getContainer().click(i)
-            }
-        }
-    })
-}).setFilteredClass(S2DPacketOpenWindow).unregister()
-
 export const smoothLook = (targetYaw, targetPitch, bonusSteps, done) => {
     const totalSteps = 0 + bonusSteps; // Reduced steps for faster head rotation
     let currentStep = 0;
@@ -320,11 +283,9 @@ function normalizeYaw(yaw) {
 export function toggle() {
     if (config().relicToggle && config().toggle && config().cheatToggle) {
         if (config().debug) chat("&aStarting the &6Auto Relic &amodule.")
-        if (config().autoLeapRelics) openMenuTrigger.register()
         return
     }
     if (config().debug) chat("&cStopping the &6Auto Relic &cmodule.")
-    openMenuTrigger.unregister()
     return
 }
 export default { toggle };
