@@ -2,6 +2,7 @@ import Dungeon from "../../BloomCore/dungeons/Dungeon"
 import { getSkyblockItemID } from "../../BloomCore/utils/Utils"
 const Color = Java.type("java.awt.Color");
 
+const MCBlock = Java.type("net.minecraft.block.Block");
 export const prefix = "§8[&6Ghost&8]§r "
 const defaultColor = "§7"
 
@@ -120,12 +121,6 @@ export const inRange = (arr) => {
 
 export function getBlockFloor(x, y, z) {
     return World.getBlockAt(Math.floor(x), Math.floor(y), Math.floor(z));
-}
-
-export function rotate(yaw, pitch) {
-    const player = Player.getPlayer();
-    player.field_70177_z = yaw;
-    player.field_70125_A = pitch;
 }
 
 export function formatNum(num) {
@@ -299,7 +294,17 @@ export function randomize(num, flux) {
     return num + randomizedNum;
 }
 
-export function setBlockTo(x, y, z, block) {
-    const pos = new BlockPos(x * 1, y * 1, z * 1);
-    World.getWorld().func_175656_a(pos.toMCBlock(), new BlockType(block).getDefaultState());
+export function setBlockAt(x, y, z, id) {
+	const world = World.getWorld();
+	const blockPos = getBlockPosFloor(x, y, z).toMCBlock();
+	world.func_175656_a(blockPos, MCBlock.func_176220_d(id));
+	world.func_175689_h(blockPos);
+}
+
+export function isWithinTolerence(n1, n2) {
+	return Math.abs(n1 - n2) < 1e-4;
+}
+
+export function getBlockPosFloor(x, y, z) {
+	return new BlockPos(Math.floor(x), Math.floor(y), Math.floor(z));
 }
