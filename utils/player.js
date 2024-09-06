@@ -66,10 +66,11 @@ export default class playerData {
     }
 
     updateSBE() {
-        return request({url: `https://api.icarusphantom.dev/v1/sbecommands/cata/${this.username}`, headers: {'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json'}, json: true}).then(data => {
+        return request({url: `https://api.icarusphantom.dev/v1/sbecommands/player/${this.username}`, headers: {'User-Agent': ' Mozilla/5.0', 'Content-Type': 'application/json'}, json: true}).then(data => {
             if (!data.status) return chat(`&cError: ${data.issue}`)
-                try { this.rank = (data?.data?.rank).replaceAll('Â', '') } catch (e) { this.rank = "&7" }
-            this.stats.experience.selectedClass = data?.data?.dungeons?.selected_class
+            this.stats.sb_level_raw = data?.data?.level?.xp
+            this.stats.sb_level = `${getSbLevelPrefix(data?.data?.level?.xp/100)}${parseInt(data?.data?.level?.xp/100)}`
+            try { this.rank = (data?.data?.rank).replaceAll('Â', '') } catch (e) { this.rank = "&7" }
             this.updated.rank = true
             return this.updateToKick()
         }).catch(e => chat(`&cSBE API Error: ${e.reason}`))
@@ -85,6 +86,8 @@ export default class playerData {
             this.stats.magical_power.mp = profile?.raw?.accessory_bag_storage?.highest_magical_power
             let reforge = profile?.raw?.accessory_bag_storage?.selected_power
             this.stats.magical_power.reforge = reforge[0].toUpperCase() + reforge.slice(1)
+            let selectedClass = profile?.raw?.dungeons?.selected_dungeon_class
+            this.stats.experience.selectedClass = selectedClass[0].toUpperCase() + selectedClass.slice(1)
             this.stats.sb_level = `${getSbLevelPrefix(profile?.raw?.leveling?.experience/100)}${parseInt(profile?.raw?.leveling?.experience/100)}`
             this.stats.sb_level_raw = profile?.raw?.leveling?.experience/100
 
@@ -125,8 +128,8 @@ export default class playerData {
 
     updateToKick() {
         if (this.updated.dungeons && !this.updated.rest && !this.kicked) { // PB, Cata Level, Secrets, Class XP
-            if ( data.partyFinder.blacklist[this.uuid] ) return this.toKick = [true, `Blacklisted Player. Reason: ${data.partyFinder.blacklist[this.uuid].reason}`]
-            if ( data.partyFinder.whitelist[this.uuid] ) return this.toKick = [false, `Whitelisted Player`]
+            if (config().whitelist && data.partyFinder.uuids.whitelist.includes(this.uuid)) return this.toKick = [false, `Whitelisted Player`];
+            if (config().blacklist && data.partyFinder.uuids.blacklist.includes(this.uuid)) return this.toKick = [true, `Blacklisted Player`];
             
             // PB 
             let pb = this.getSelectPB()[1]['rawS+']
@@ -153,8 +156,8 @@ export default class playerData {
             if (parseInt(this.classLevel) < config().partyFinderminClass) return this.toKick = [true, `Low Class Level: [${this.classLevel} < ${config().partyFinderminClass}]`]
 
         } if (this.updated.rest && !this.kicked) { // SB Level, MP
-            if ( data.partyFinder.blacklist[this.uuid] ) return this.toKick = [true, `Blacklisted Player. Reason: ${data.partyFinder.blacklist[this.uuid].reason}`] // Second ouccurance just incase.
-            if ( data.partyFinder.whitelist[this.uuid] ) return this.toKick = [false, `Whitelisted Player`]
+            if (config().whitelist && data.partyFinder.uuids.whitelist.includes(this.uuid)) return this.toKick = [false, `Whitelisted Player`];
+            if (config().blacklist && data.partyFinder.uuids.blacklist.includes(this.uuid)) return this.toKick = [true, `Blacklisted Player`] 
             
             // Magical Power
             if (parseInt(this.stats.magical_power.mp) < parseInt(config().partyFinderminMP)) return this.toKick = [true, `Low Magical Power: [${this.stats.magical_power.mp} < ${config().partyFinderminMP}]`]

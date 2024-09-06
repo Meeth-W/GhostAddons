@@ -19,6 +19,25 @@ export function getColor(values) {
     return new Color(Renderer.color(values[0], values[1], values[2], values[3]))
 }
 
+export function isInBoss() { return Dungeon.bossEntry }
+
+let inP3 = false;
+
+register('packetReceived', (packet) => {
+    if (packet.func_148916_d()) return
+    const message = packet.func_148915_c().func_150254_d().removeFormatting()
+    if (message == "[BOSS] Storm: I should have known that I stood no chance.") {
+        inP3 = true;
+    }
+    if (message == "The Core entrance is opening!")
+        inP3 = false;
+}).setFilteredClass(Java.type("net.minecraft.network.play.server.S02PacketChat"))
+
+export function isInP3() { return inP3 }
+
+export function getDistance(x1, z1, x2, z2) {
+    return Math.sqrt((x1 - x2) ** 2 + (z1 - z2) ** 2)
+}
 export const isBetween = (number, [a, b]) => number >= a && number <= b
 export const getSbLevelPrefix = (number) => Object.keys(sbLevelsPrefix).filter(pref => isBetween(number, sbLevelsPrefix[pref]))
 export const sbLevelsPrefix = {
@@ -307,4 +326,84 @@ export function isWithinTolerence(n1, n2) {
 
 export function getBlockPosFloor(x, y, z) {
 	return new BlockPos(Math.floor(x), Math.floor(y), Math.floor(z));
+}
+
+export function addWhitelist(username) {
+    chat(`${prefix} &fGetting &6${username} &fUUID Data...`, 1515)
+    Promise.resolve(makeRequest(`https://api.mojang.com/users/profiles/minecraft/${username}`)).then(response => {
+        ChatLib.clearChat(1515)
+        const uuid = response.id
+        if (data.partyFinder.uuids.whitelist.includes(uuid)) {
+            ChatLib.chat(`${prefix}&6${username} &cis already whitelisted.`)
+        } else {
+            data.partyFinder.uuids.whitelist.push(uuid);
+            data.partyFinder.igns.whitelist.push(username)
+            data.save()
+            ChatLib.chat(`${prefix}&6${username} &aadded to the whitelist!`)
+            return 0
+        }
+    }).catch(error => {
+        ChatLib.chat(error)
+    })
+}
+
+export function unWhitelist(username) {
+    chat(`${prefix} &fGetting &6${username} &fUUID Data...`, 1515)
+    Promise.resolve(makeRequest(`https://api.mojang.com/users/profiles/minecraft/${username}`)).then(response => {
+        ChatLib.clearChat(1515)
+        const uuid = response.id
+
+        const index = data.partyFinder.uuids.whitelist.indexOf(uuid)
+        if (index !== -1) {
+            data.partyFinder.uuids.whitelist.splice(index, 1)
+            data.partyFinder.igns.whitelist.splice(index, 1)
+            data.save()
+            ChatLib.chat(`${prefix}&6${username} &aremoved from the whitelist!`)
+            return 0
+        } else {
+            ChatLib.chat(`${prefix}&6${username} &cis not in the whitelist.`)
+        }
+    }).catch(error => {
+        ChatLib.chat(error)
+    })
+}
+
+export function addBlacklist(username) {
+    chat(`${prefix} &fGetting &6${username} &fUUID Data...`, 1515)
+    Promise.resolve(makeRequest(`https://api.mojang.com/users/profiles/minecraft/${username}`)).then(response => {
+        ChatLib.clearChat(1515)
+        const uuid = response.id
+
+        if (data.partyFinder.uuids.blacklist.includes(uuid)) {
+            ChatLib.chat(`${prefix}&6${username} &cis already blacklisted.`)
+        } else {
+            data.partyFinder.uuids.blacklist.push(uuid);
+            data.partyFinder.igns.blacklist.push(username)
+            data.save()
+            ChatLib.chat(`${prefix}&6${username} &aadded to the blacklist!`)
+            return 0
+        }
+    }).catch(error => {
+        ChatLib.chat(error)
+    })
+}
+export function unBlacklist(username) {
+    chat(`${prefix} &fGetting &6${username} &fUUID Data...`, 1515)
+    Promise.resolve(makeRequest(`https://api.mojang.com/users/profiles/minecraft/${username}`)).then(response => {
+        ChatLib.clearChat(1515)
+        const uuid = response.id
+
+        const index = data.partyFinder.uuids.blacklist.indexOf(uuid)
+        if (index !== -1) {
+            data.partyFinder.uuids.blacklist.splice(index, 1)
+            data.partyFinder.igns.blacklist.splice(index, 1)
+            data.save()
+            ChatLib.chat(`${prefix}&6${username} &aremoved from the blacklist!`)
+            return 0
+        } else {
+            ChatLib.chat(`${prefix}&6${username} &cis not in the blacklist.`)
+        }
+    }).catch(error => {
+        ChatLib.chat(error)
+    })
 }
