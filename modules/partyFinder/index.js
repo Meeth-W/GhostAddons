@@ -8,10 +8,14 @@ const leadCheck = register('chat', (rank, leader) => {
     else { isleader = false }
 }).setCriteria("Party Leader: ${rank} ${leader} ●").unregister()
 
-const leadChecktransfer = register('chat', (rank, name, _, __) => {
-    if ( name == Player.getName() ) isleader = true
-    else isleader = false
-}).setCriteria("The party was transferred to ${tank} {leader} by ${rank_2} ${name}").unregister()
+const leadChecktransfer = register('chat', (rank, name, username) => {
+    if (username == Player.getName() ) { isleader = false}
+    else isleader = true
+}).setCriteria("The party was transferred to ${rank} ${username} by ${rank} ${name}").unregister();
+
+const leadChecklost = register('chat', (rank, name, username) => {
+    if (username == Player.getName() ) { isleader = false}
+}).setCriteria("The party was transferred to ${rank} ${name} by ${rank} ${username}").unregister();
 
 const trigger = register("chat", (username, _, __) => {
     let player = new playerData(username)
@@ -20,20 +24,21 @@ const trigger = register("chat", (username, _, __) => {
     try { player.init().then(() => {
         ChatLib.clearChat(6969)
         chat(player.getString().join("\n"), 6969)
-
+        
         if ( config().partyFinderAutoKick && player.toKick[0]) {
             player.kicked = true
             queueChat.queueCommands([
-                () => {if (config().partyFinderPartyChat) ChatLib.command(`party chat [GH] Kicking Player: ${player.toKick[1]}`)},
+                () => {if (config().partyFinderPartyChat && isleader) ChatLib.command(`party chat Kicking Player: ${player.toKick[1]}`)},
                 () => {if (isleader) ChatLib.command(`party kick ${username}`)}
             ])
-            if (!isleader) chat("&cCancelling Auto-Kick, Not party leader.")
+        if (!isleader) chat("&cCancelling Auto-Kick, Not party leader.")
+
         }
 
         player.updateRest().then(() => {
             ChatLib.clearChat(6969)
             chat(player.getString().join("\n"), 6969)
-            ChatLib.command(`ct copy [GH] [${parseInt(player.stats.sb_level_raw)}] ${username} | Floor PB: ${player.getSelectPB()[1]['S+']} | Highest Magical Power: ${player.stats.magical_power.mp} | Secrets: ${player.stats.dungeons.secrets}`, true)
+            ChatLib.command(`ct copy  [${parseInt(player.stats.sb_level_raw)}] ${username} | Floor PB: ${player.getSelectPB()[1]['S+']} | Highest Magical Power: ${player.stats.magical_power.mp} | Secrets: ${player.stats.dungeons.secrets}`, true)
             new Message(new TextComponent(prefix + `&c&l[&r&cClick To Kick&c&l]`).setHover(
                 "show_text",
                 `&c/party kick ${username}`
@@ -42,15 +47,16 @@ const trigger = register("chat", (username, _, __) => {
             if ( config().partyFinderAutoKick && !player.kicked && player.toKick[0]) {
                 player.kicked = true
                 queueChat.queueCommands([
-                    () => {if (config().partyFinderPartyChat) ChatLib.command(`party chat [GH] Kicking Player: ${player.toKick[1]}`)},
+                    () => {if (config().partyFinderPartyChat && isleader) ChatLib.command(`party chat Kicking Player: ${player.toKick[1]}`)},
                     () => {if (isleader) ChatLib.command(`party kick ${username}`)}
                 ])
-                if (!isleader) chat("&cCancelling Auto-Kick, Not party leader.")
+            if (!isleader) chat("&cCancelling Auto-Kick, Not party leader.")
+
             }
 
             if (config().partyFinderPartyChat && !player.toKick[0] && !player.kicked && !config().partyFinderOnlyKickMessage) {
                 queueChat.queueCommands([
-                    () => {ChatLib.command(`party chat [GH] [${parseInt(player.stats.sb_level_raw)}] ${username} | Floor PB: ${player.getSelectPB()[1]['S+']} | Highest Magical Power: ${player.stats.magical_power.mp} | Secrets: ${player.stats.dungeons.secrets}`)}
+                    () => {ChatLib.command(`party chat [${parseInt(player.stats.sb_level_raw)}] ${username} | Floor PB: ${player.getSelectPB()[1]['S+']} | Highest Magical Power: ${player.stats.magical_power.mp} | Secrets: ${player.stats.dungeons.secrets}`)}
                 ])
             }
         })
@@ -60,15 +66,17 @@ const trigger = register("chat", (username, _, __) => {
 
 export function toggle() {
     if (config().partyFinderToggle && config().toggle) {
-        if (config().debug) chat("&aStarting the &6Party Finder &amodule.")
+        if (config().debug) chat("&aStarting the &6Autokick &amodule.")
         leadCheck.register()
         leadChecktransfer.register()
+        leadChecklost.register()
         trigger.register()
         return
     }
-    if (config().debug) chat("&cStopping the &6Party Finder &cmodule.")
+    if (config().debug) chat("&cStopping the &6Autokick &cmodule.")
     leadCheck.unregister()
     leadChecktransfer.unregister()
+    leadChecklost.unregister()
     trigger.unregister()
     return
 }
