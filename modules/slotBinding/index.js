@@ -131,7 +131,7 @@ const guiTrigger = register('guiRender', (x, y, gui) => {
         const [x1, y1] = getSlotCoords(hoverSlot);
         const [x2, y2] = getSlotCoords(hotbarBind);
 
-        Renderer.translate(0, 0, 3);
+        Renderer.translate(0, 0, 100);
         Renderer.drawLine(getDynamicColor(), x1 + 8, y1 + 8, x2 + 8, y2 + 8, 1);
 
         Renderer.translate(0, 0, 2);
@@ -163,7 +163,8 @@ const guiTrigger = register('guiRender', (x, y, gui) => {
     if (linkedSlot) {
         const [x1, y1] = getSlotCoords(linkedSlot);
         const [x2, y2] = getSlotCoords(parseInt(hoverSlot))
-        
+
+        Renderer.translate(0, 0, 100);
         Renderer.drawLine(getDynamicColor(), x1 + 8, y1 + 8, x2 + 8, y2 + 8, 1);
 
         Renderer.translate(0, 0, 2);
