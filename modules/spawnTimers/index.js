@@ -27,7 +27,7 @@ registerWhen(register("renderOverlay", () => {
     relicTimer.setString(timeLeft)
     relicTimer.setScale(data.relicSpawnTimer.scale)
     relicTimer.draw(data.relicSpawnTimer.x, data.relicSpawnTimer.y)
-}), () => config().relicToggle && relicTicks > 0)
+}), () => config().relicspawnToggle && relicTicks > 0)
 
 // Crystal Timers
 const crystalTriggerOne = register("chat", () => {
