@@ -180,20 +180,24 @@ const handleUnsprint = register("tick", () => {
         }
     } else if (pickedColor == "Blue" && Player.getZ() < 45) {
         if (!config().smoothLookRelics) {
+            keyW.setState(false)
             snapTo(65, 0);
             
             handleUnsprint.unregister();
         } else {
+            keyW.setState(false)
             smoothLook(65, 0, 5, () => {
                 handleUnsprint.unregister();
             })
         }
     } else if (pickedColor == "Green" && Player.getZ < 45.35) {
         if (!config().smoothLookRelics) {
+            keyW.setState(false)
             snapTo(-100, -20);
 
             handleUnsprint.unregister();
         } else {
+            keyW.setState(false)
             smoothLook(65, 0, 5, () => {
                 handleUnsprint.unregister();
             })
