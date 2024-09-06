@@ -247,7 +247,7 @@ defConfig
         category: "Auto Leap",
         configName: "autoLeapi4",
         title: "Auto Leap after i4",
-        description: "Leaps to specified ign after i4 is completed.\n&c[TODO: Command to change ign.]",
+        description: "Leaps to specified class after i4 is completed.",
         subcategory: "Settings",
         registerListener(previousvalue, newvalue) {
             mod_chat(`Auto Leap I4 Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
@@ -258,6 +258,25 @@ defConfig
         configName: "autoLeapTarget",
         title: "I4 AutoLeap Target Class",
         description: "The Class to Leap to after I4 is Complete",
+        options: ["Mage","Archer","Berserk","Healer","Tank"],
+        value: 0,
+        subcategory: "Settings"
+    })
+    .addSwitch({
+        category: "Auto Leap",
+        configName: "autoLeaprelic",
+        title: "Auto Leap after Relic",
+        description: "Leaps to specified class after relic is picked.",
+        subcategory: "Settings",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto Leap I4 Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        }
+    })
+    .addDropDown({
+        category: "Auto Leap",
+        configName: "autoLeapRelicTarget",
+        title: "Relic AutoLeap Target Class",
+        description: "The Class to Leap to after relic is picked is Complete",
         options: ["Mage","Archer","Berserk","Healer","Tank"],
         value: 0,
         subcategory: "Settings"
@@ -504,7 +523,7 @@ defConfig
         configName: "relicLook",
         title: "Toggle Relic Look",
         subcategory: "Relic Look",
-        description: "Automatically rotates the player towards the right relic.\nDoesn't work for healer.\n\nFull auto for archer/bers.",
+        description: "Automatically rotates the player towards the right relic.\nDoesn't work for healer.\n\nFull auto for archer/bers.\nSemi Auto for Mage/Tank | Hold W After Pickup.",
         registerListener(previousvalue, newvalue) {
             mod_chat(`Auto Relic Look ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         } 
