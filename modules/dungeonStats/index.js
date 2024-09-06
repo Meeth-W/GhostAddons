@@ -1,11 +1,11 @@
 import config from "../../config";
 import playerData from "../../utils/player";
-import { chat, getColor } from "../../utils/utils";
+import { chat } from "../../utils/utils";
+import { getColor } from "../../utils/utils";
 
 let showGUI = false
 let player = null
 let windowSize = 60
-let displaytime = null
 
 function getcol1() {
     return [
@@ -25,8 +25,8 @@ function getcol1() {
     ``,
     ``,
     ``,
-    `&cMenu Closing In:`,
-    `&d${displaytime? ((10000 - (Date.now() - displaytime))/1000).toFixed(2) : 'Loading Data...'}`,
+    ``,
+    ``,
     ``,
     `&6Click ${Keyboard.getKeyName(closeKey.getKeyCode())} to Close.`
 ]}
@@ -63,7 +63,7 @@ function getcol3() {
     ``,
     ``,
     `&cSecret Count: &6${player.updated.dungeons? player.stats.dungeons.secrets : "..."}`,
-    `&cSecrets/run: &6${player.updated.dungeons? (player.stats.dungeons.secrets/player.stats.dungeons.runs).toFixed(2) : '...'}`,
+    `&cSecrets/Run: &6${player.updated.dungeons? (player.stats.dungeons.secrets/player.stats.dungeons.runs).toFixed(2) : '...'}`,
     ``,
     ``,
     ``,
@@ -77,8 +77,10 @@ function getcol3() {
     `${player.toKick[0]? "&c":"&a"}${player.toKick[1]}`
 ]}
 const commandRegister = register("command", (username) => {
+    if (!config().toggle) return
+    if (!config().partyFinderToggle) return
     if (!username) username = Player.getName()
-    player = new playerData(username) // Defaulting to Mage 50 cuz this is dependant and updates later anyway.
+    player = new playerData(username)
     showGUI = true;
     displaytime = null
     try { player.init().then(() => {
@@ -87,14 +89,28 @@ const commandRegister = register("command", (username) => {
             setTimeout(() => {
                 showGUI = false
                 displaytime = null
-            }, 10000);
+            }, 100000);
             ChatLib.chat(player.getString().join('\n'))
-            ChatLib.command(`ct copy [GH] [${parseInt(player.stats.sb_level_raw)}] ${username} | Floor PB: ${player.getSelectPB()[1]['S+']} | Highest Magical Power: ${player.stats.magical_power.mp} | Secrets: ${player.stats.dungeons.secrets}`, true)
+            ChatLib.command(`ct copy [${parseInt(player.stats.sb_level_raw)}] ${username} | Floor PB: ${player.getSelectPB()[1]['S+']} | Highest Magical Power: ${player.stats.magical_power.mp} | Secrets: ${player.stats.dungeons.secrets}`, true)
         })
     }) } catch(e) {chat(`&cError: ${e.reason}`)}
 }).setName("nicepb").setAliases("m7stats");
 
+register("command", (username) => {
+    if (!config().toggle) return
+    if (!config().partyFinderToggle) return
+    if (!username) username = Player.getName()
+    player = new playerData(username)
+    try { player.init().then(() => {
+        player.updateRest().then(() => {
+            ChatLib.chat(player.getString().join('\n'))
+            ChatLib.command(`ct copy [${parseInt(player.stats.sb_level_raw)}] ${username} | Floor PB: ${player.getSelectPB()[1]['S+']} | Highest Magical Power: ${player.stats.magical_power.mp} | Secrets: ${player.stats.dungeons.secrets}`, true)
+        })
+    }) } catch(e) {chat(`&cError: ${e.reason}`)}
+}).setName("dv");
+
 const renderTrigger = register('renderOverlay', () => {
+    if (!config().statsOverlay) return
     if (!showGUI) return
 
     const screenWidth = Renderer.screen.getWidth() / 2;
@@ -124,7 +140,7 @@ const renderTrigger = register('renderOverlay', () => {
     Tessellator.popMatrix();
 })
 
-const closeKey = new KeyBind("Close GUI", Keyboard.KEY_ESCAPE, "GhostAddons");
+const closeKey = new KeyBind("Close GUI", Keyboard.KEY_LCONTROL, "GhostAddons");
 
 closeKey.registerKeyPress(() => {
     if (!showGUI) return

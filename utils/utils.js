@@ -1,7 +1,18 @@
 import Dungeon from "../../BloomCore/dungeons/Dungeon"
 import { getSkyblockItemID } from "../../BloomCore/utils/Utils"
-const Color = Java.type("java.awt.Color");
+import Promise from "../../PromiseV2";
+import request from "../../requestV2"
+import { data } from "./data"
 
+const Color = Java.type("java.awt.Color");
+const makeRequest = (address) => request({
+    url: address,
+    headers: {
+        'User-Agent': ' Mozilla/5.0',
+        'Content-Type': 'application/json'
+    },
+    json: true
+})
 const MCBlock = Java.type("net.minecraft.block.Block");
 export const prefix = "§8[&6Ghost&8]§r "
 const defaultColor = "§7"
