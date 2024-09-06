@@ -93,6 +93,20 @@ defConfig
             mod_chat(`Party Finder Only Kick Message ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         }
     })
+    .addSwitch({
+        category: "Party Finder",
+        configName: "blacklist",
+        title: "&cAutokick Blacklist",
+        description: "Automatically Kicks Blacklisted Players.",
+        subcategory: ""
+    })
+    .addSwitch({
+        category: "Party Finder",
+        configName: "whitelist",
+        title: "&2Autokick Whitelist",
+        description: "Doesnt Kick Whitelisted Players.",
+        subcategory: ""
+    })
     .addDropDown({
         category: "Party Finder",
         configName: "partyFinderDungeonType",
@@ -184,7 +198,7 @@ defConfig
         configName: "slotBindingPreset",
         title: "Preset",
         description: "The current preset in use. \nSelected preset will be edited with keybind.",
-        options: ["Mage","Archer","Berserk","Healer","Tank","General"],
+        options: ["Mage","Archer","Berserk","Healer","Tank","General","F7"],
         value: 0,
         subcategory: "Settings"
     })
@@ -247,7 +261,7 @@ defConfig
         category: "Auto Leap",
         configName: "autoLeapi4",
         title: "Auto Leap after i4",
-        description: "Leaps to specified class after i4 is completed.",
+        description: "Leaps to specified ign after i4 is completed.\n&c[TODO: Command to change ign.]",
         subcategory: "Settings",
         registerListener(previousvalue, newvalue) {
             mod_chat(`Auto Leap I4 Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
@@ -329,6 +343,13 @@ defConfig
     })
     .addSwitch({
         category: "Alerts",
+        configName: "alertDiamante",
+        title: "Diamante Alert",
+        description: "Displays a title if there is a diamante giant spawns.",
+        subcategory: "Settings"
+    })
+    .addSwitch({
+        category: "Alerts",
         configName: "alertTact",
         title: "Tact Alert",
         description: "Displays a title at 3s timer, to help insta-clears.",
@@ -336,6 +357,45 @@ defConfig
         registerListener(previousvalue, newvalue) {
             mod_chat(`Tact Alert Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         }
+    })
+    .addSwitch({
+        category: "Alerts",
+        configName: "invincibilityMsg",
+        title: "Bonzo and Phoenix Messages",
+        description: "Announces in chat when Bonzo and Phoenix proc.",
+        subcategory: "Messages"
+    })
+    .addTextInput({
+        category: "Alerts",
+        configName: "maskText",
+        title: "Bonzo Mask Text",
+        description: "Text used for Bonzo Mask Message.",
+        value: "Bonzo Gone",
+        placeHolder: "Bonzo Gone",
+        subcategory: "Messages"
+    })
+    .addTextInput({
+        category: "Alerts",
+        configName: "phoenixText",
+        title: "Phoenix Text",
+        description: "Text used for Phoenix Message.",
+        value: "Phoenix Gone",
+        placeHolder: "Phoenix Gone",
+        subcategory: "Messages"
+    })
+    .addSwitch({
+        category: "Alerts",
+        configName: "pre4Disable",
+        title: "Disable During Pre 4",
+        description: "Does not send the bonzo and phoenix messages if you are doing pre 4 as berserker.",
+        subcategory: "Messages"
+    })
+    .addSwitch({
+        category: "Alerts",
+        configName: "watcherMoveDisplay",
+        title: "Watcher Move Alert",
+        description: "Displays what time the watcher moves.",
+        subcategory: "Settings"
     })
     .addSwitch({
         category: "Location Messages",
@@ -523,7 +583,7 @@ defConfig
         configName: "relicLook",
         title: "Toggle Relic Look",
         subcategory: "Relic Look",
-        description: "Automatically rotates the player towards the right relic.\nDoesn't work for healer.\n\nFull auto for archer/bers.\nSemi Auto for Mage/Tank | Hold W After Pickup.",
+        description: "Automatically rotates the player towards the right relic.\nDoesn't work for healer.\n\nFull auto for archer/bers.",
         registerListener(previousvalue, newvalue) {
             mod_chat(`Auto Relic Look ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         } 
@@ -546,6 +606,16 @@ defConfig
         description: "Strafes towards relic, rather than just sprinting.\n&7About 2.04% faster.",
         registerListener(previousvalue, newvalue) {
             mod_chat(`Auto Relic Strafe ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        } 
+    })
+    .addTextInput({
+        category: "Timers",
+        configName: "relicspawnToggle",
+        title: "Relic Spawn Timer",
+        description: "Display a timer on your screen when relics are about to spawn",
+        subcategory: "Relics",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Relic Timer ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         } 
     })
     .addTextInput({
@@ -951,6 +1021,15 @@ defConfig
     })
     .addSlider({
         category: "Drag Prio",
+        configName: "swapSlot",
+        title: "Slot Swap",
+        description: "0 is first slot. Auto Swaps to specified hotbar slot",
+        options: [0, 7],
+        value: 0,
+        subcategory: "Auto Debuff"
+    })
+    .addSlider({
+        category: "Drag Prio",
         configName: "splitPower",
         title: "Set Power",
         description: "Set the power that you split on",
@@ -1013,13 +1092,217 @@ defConfig
         value: 0,
         subcategory: "Purple Teams"
     })
-
+    .addSwitch({
+        category: "Random",
+        configName: "randomToggle",
+        title: "&9Toggle Random Features",
+        description: "Decides wether all features in Random are &aenabled&7/&cdisabled&7.",
+        subcategory: ""
+    })
+    .addSwitch({
+        category: "Random",
+        configName: "chatEmotes",
+        title: "Chat Emotes",
+        description: "Allows you to use MVP++ emotes as any rank. ",
+        subcategory: "Party Chat"
+    })
+    .addSwitch({
+        category: "Random",
+        configName: "cdKick",
+        title: "Cooldown Kick Message",
+        description: "Sends a message to the party when you are cooldown kicked.",
+        subcategory: "Cooldown Kick Message"
+    })
+    .addTextInput({
+        category: "Random",
+        configName: "cdKickText",
+        title: "Cooldown Kick Text",
+        description: "Text used for Cooldown Kick Message.",
+        value: "im kicked",
+        placeHolder: "im kicked",
+        subcategory: "Cooldown Kick Message"
+    })
+    .addSwitch({
+        category: "Random",
+        configName: "wardrobekeybinds",
+        title: "Wardrobe Helper",
+        description: "Works with mouse buttons.",
+        subcategory: "Wardrobe Keybinds"
+    })
+    .addSwitch({
+        category: "PF Overlay",
+        configName: "pfOverlayToggle",
+        title: "&9Toggle PF Overlay",
+        description: "Shows the stats of players in party finder.",
+        subcategory: ""
+    })
+    .addSwitch({
+        category: "PF Overlay",
+        configName: "pfOverlayMissingClasses",
+        title: "Missing Classes",
+        description: "Shows classes needed for a party in m4/m6/m7.",
+        subcategory: "PF Overlay"
+    })
+    .addSwitch({
+        category: "PF Overlay",
+        configName: "pfOverlayClassLevel",
+        title: "Show class level",
+        description: "Shows the players class level in party finder.",
+        subcategory: "PF Overlay"
+    })
+    .addSwitch({
+        category: "PF Overlay",
+        configName: "pfOverlaySecrets",
+        title: "Show total secrets",
+        description: "Shows the players total amount of secrets in party finder.",
+        subcategory: "PF Overlay"
+    })
+    .addSwitch({
+        category: "PF Overlay",
+        configName: "pfOverlaySecretAverage",
+        title: "Show secret average",
+        description: "Shows the players secret average in party finder.",
+        subcategory: "PF Overlay"
+    })
+    .addSwitch({
+        category: "PF Overlay",
+        configName: "pfOverlayPB",
+        title: "Show S+ PB",
+        description: "Shows the players fastest S+ time for the current floor in party finder.",
+        subcategory: "PF Overlay"
+    })
+    .addSwitch({
+        category: "Boss",
+        configName: "bossToggle",
+        title: "&9Toggle Boss Features",
+        description: "Decides wether all features in Boss are &aenabled&7/&cdisabled&7.",
+        subcategory: ""
+    })
+    .addSwitch({
+        category: "Boss",
+        configName: "leapAnnounce",
+        title: "Leap Announce",
+        description: "Says in party chat who you are leaping to.",
+        subcategory: "Leap Message"
+    })
+    .addDropDown({
+        category: "Boss",
+        configName: "hideLeap",
+        title: "Hide Leap Messages",
+        description: "Hides leap messages when:",
+        options: ["Never","Hide Own","Doesn\"t include self","Always"],
+        value: 0,
+        subcategory: "Leap Message"
+    })
+    .addSwitch({
+        category: "Boss",
+        configName: "terminalTimestamps",
+        title: "Terminal Timestamps",
+        description: "Shows what time each terminal, device, or lever was completed.",
+        subcategory: "Terminals"
+    })
+    .addSwitch({
+        category: "Boss",
+        configName: "announceMelody",
+        title: "Announce Melody",
+        description: "Sends a message in Party Chat if you get the Melody Terminal.",
+        subcategory: "Melody"
+    })
+    .addSwitch({
+        category: "Boss",
+        configName: "melodyProgress",
+        title: "Announce Melody Progress",
+        description: "Sends a message in Party Chat with the progress of your terminal.",
+        subcategory: "Melody"
+    })
+    .addTextInput({
+        category: "Boss",
+        configName: "melodyText",
+        title: "Announce Melody Text",
+        description: "Text used for Announce Melody.",
+        value: "null",
+        placeHolder: "null",
+        subcategory: "Melody"
+    })
+    .addSwitch({
+        category: "Boss",
+        configName: "relicTimer",
+        title: "Relic Timer",
+        description: "Shows time it took to place your relic.",
+        subcategory: "Relics"
+    })
+    .addSwitch({
+        category: "Boss",
+        configName: "relicPickupTime",
+        title: "Show Relic Pick Up Time",
+        description: "Calculates how long it took to pick up the relic after it spawned.",
+        subcategory: "Relics"
+    })
+    .addSwitch({
+        category: "Boss",
+        configName: "showEveryRelic",
+        title: "Show Every Relic",
+        description: "Shows relic time for all five relics (might clog chat).",
+        subcategory: "Relics"
+    })
+    .addDropDown({
+        category: "Boss",
+        configName: "melodyColor",
+        title: "Text Color",
+        description: "",
+        options: ["Dark Red","Red","Gold","Yellow","Dark Green","Green","Aqua","Dark Aura","Dark Blue","Blue","Light Purple","Dark Purple","White","Gray","Dark Gray","Black"],
+        value: 0,
+        subcategory: "Melody Warning"
+    })
+    .addSwitch({
+        category: "Boss",
+        configName: "melodyWarningEnabled",
+        title: "Toggle",
+        description: "Warns you when someone has Melody and tells you their progress.",
+        subcategory: "Melody Warning"
+    })
+    .addSlider({
+        category: "Boss",
+        configName: "melodyWarningScale",
+        title: "Scale",
+        description: "",
+        options: [0.25, 4],
+        value: 0.25,
+        subcategory: "Melody Warning"
+    })
+    .addDropDown({
+        category: "Boss",
+        configName: "melodyWarningSound",
+        title: "Sound",
+        description: "",
+        options: ["note.pling","mob.blaze.hit","fire.ignite","random.orb"],
+        value: 0,
+        subcategory: "Melody Warning"
+    })
+    .addSlider({
+        category: "Boss",
+        configName: "melodyWarningPitch",
+        title: "Sound Pitch",
+        description: "",
+        options: [0.5, 2],
+        value: 0.5,
+        subcategory: "Melody Warning"
+    })
+    .addTextInput({
+        category: "Boss",
+        configName: "Messages",
+        title: "Messages",
+        description: "/melodywarning to configure. This lets it display 0/4.",
+        value: "",
+        placeHolder: "",
+        subcategory: "Melody Warning"
+    })
     
 const config = new Settings("GhostAddons", defConfig, "templates/colorScheme.json", "§5Ghost Addons §7by §6Ghostyy§7 and §6KingisBad")
 .setPos(10, 10)
 .setSize(80, 80)
 .apply()
-.setCommand("gh", ["ghost", "ghostaddons"])
+.setCommand("gh", ["ghost", "ghostaddons", "kg"])
 .onCloseGui(() => {
     data.recently_closed = true
     data.save()
