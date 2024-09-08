@@ -6,30 +6,19 @@ let keyW = new KeyBind(mc.field_71474_y.field_74351_w)
 let keyD = new KeyBind(mc.field_71474_y.field_74366_z)
 let keyA = new KeyBind(mc.field_71474_y.field_74370_x)
 
-const ArmorStand = Java.type("net.minecraft.entity.item.EntityArmorStand")
-
-let p5Start
-let spawnTime
-let pickedAt
 let pickedColor
+
+register("command", (name) => {
+    pickedColor = name
+    handleUnsprint.register()
+}).setName("relictest")
 
 register("chat", () => {
     if (!config().relicToggle || !config().toggle || !config().cheatToggle) return
-    p5Start = Date.now()
-
-    relicDetect.register();
     pickupTrigger.register();
-    placeListener.register();
     if (config().relicLook) handleUnsprint.register()
 }).setCriteria("[BOSS] Necron: All this, for nothing...")
 
-const relicDetect = register("RenderWorld", () => {
-    const existingRelics = World.getAllEntitiesOfType(ArmorStand).find(entity => new EntityLivingBase(entity.getEntity()).getItemInSlot(4)?.getName()?.removeFormatting()?.includes("Relic"))
-    if (!existingRelics) return // If there are any armor stands wearing a relic head or whatever
-    spawnTime = Date.now()
-    chat("Relic spawned!")
-    relicDetect.unregister()
-}).unregister()
 
 const pickupTrigger = register("packetSent", (packet) => {
     try {
@@ -37,7 +26,6 @@ const pickupTrigger = register("packetSent", (packet) => {
         if (!helmetName.includes("Relic")) return
 
         pickupTrigger.unregister()
-        pickedAt = Date.now()
 
         if (helmetName === "Corrupted Orange Relic") {
             if (!config().relicLook) return // TODO: Add relicLook to config
@@ -179,42 +167,38 @@ const handleUnsprint = register("tick", () => {
             })
         }
     } else if (pickedColor == "Blue" && Player.getZ() < 45) {
+        const [yaw, pitch] = [95, 0]
+        if (!config().setRelicPitchYaw) { [yaw, pitch] = calcYawPitch({x: 59, y: 8, z: 44}) }
         if (!config().smoothLookRelics) {
             keyW.setState(false)
-            snapTo(65, 0);
+            Player.setHeldItemIndex(8)
+            snapTo(yaw, pitch);
             
             handleUnsprint.unregister();
         } else {
             keyW.setState(false)
-            smoothLook(65, 0, 5, () => {
+            Player.setHeldItemIndex(8)
+            smoothLook(yaw, pitch, 5, () => {
                 handleUnsprint.unregister();
             })
         }
-    } else if (pickedColor == "Green" && Player.getZ < 45.35) {
+    } else if (pickedColor == "Green" && Player.getZ() < 45.35) {
+        const [yaw, pitch] = [-100, -20]
+        if (!config().setRelicPitchYaw) { [yaw, pitch] = calcYawPitch({x: 49, y: 7, z: 44}) }
         if (!config().smoothLookRelics) {
             keyW.setState(false)
-            snapTo(-100, -20);
-
+            Player.setHeldItemIndex(8)
+            snapTo(yaw, pitch);
+            
             handleUnsprint.unregister();
         } else {
             keyW.setState(false)
-            smoothLook(65, 0, 5, () => {
+            Player.setHeldItemIndex(8)
+            smoothLook(yaw, pitch, 5, () => {
                 handleUnsprint.unregister();
             })
         }
     }
-}).unregister()
-
-const placeListener = register('playerInteract', (action, pos) => {
-    if (action.toString() != "RIGHT_CLICK_BLOCK") return
-    const blockClicked = World.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).type.getRegistryName()
-    if (blockClicked != 'minecraft:cauldron' && blockClicked != 'minecraft:anvil' || !Player.getHeldItem()?.getName()?.includes("Relic")) return
-
-    chat("Relic spawned in &6" + ((spawnTime - p5Start) / 1000) + "s.")
-    chat("Relic placed in &6" + ((Date.now() - spawnTime) / 1000) + "s.")
-    chat("Relic placed &6" + ((Date.now() - p5Start) / 1000) + "s &7into P5.")
-    chat("Relic took &6" + ((pickedAt - spawnTime) / 1000) + "s &7to get picked up.")
-    placeListener.unregister()
 }).unregister()
 
 const cauldrons = {

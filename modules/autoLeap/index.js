@@ -6,16 +6,18 @@ let leaptarget = null
 let classes = ['Mage', 'Archer', 'Berserk', 'Healer', 'Tank'];
 
 const openLeap = () => {
-    let leapSlot = parseInt(Player.getInventory().indexOf(Player.getInventory().getItems().find(a => a?.getName()?.removeFormatting() == "Infinileap")?.getID()))
-    if ( leapSlot > 7 || leapSlot < 0) return chat(`&4Leap Not Found in Hotbar`)
-    let heldItem = Player.getHeldItemIndex();
-    waitingLeap = true
-    Client.scheduleTask(0, () => { Player.setHeldItemIndex(leapSlot)})
-    Client.scheduleTask(1, () => {
-        chat(`Opening Leap Menu!`)
-        rightClick()
-    })
-    Client.scheduleTask(3, () => { Player.setHeldItemIndex(heldItem) })
+    leapSlot = Player.getInventory().getItems().findIndex(a => a?.getName()?.removeFormatting() === "Infinileap")
+    if (leapSlot > 7 || leapSlot < 0) { chat("Leap Not Found in Hotbar"); return } else {
+        heldItem = Player.getHeldItemIndex()
+        waitingLeap = true
+        Player.setHeldItemIndex(leapSlot)
+        Client.scheduleTask(0, () => {
+            rightClick()
+        })
+        Client.scheduleTask(3, () => {
+            Player.setHeldItemIndex(heldItem)
+        })
+    }
 }
 
 const S2DPacketOpenWindow = Java.type("net.minecraft.network.play.server.S2DPacketOpenWindow")
@@ -24,14 +26,11 @@ const openMenuTrigger = register("packetReceived", (packet) => {
     waitingLeap = false
     Client.scheduleTask(1, () => {
         if (Player.getContainer().getName() !== "Spirit Leap") return
-        let playerToLeapTo;
-        if (!leaptarget) {
-            playerToLeapTo = getClasses()[classes[config().autoLeapTarget]]
-        } else { playerToLeapTo = leaptarget }
-
-        const item = Player.getContainer()?.getItems().findIndex(x => x?.getName()?.substring(2)?.toLowerCase() === playerToLeapTo.toLowerCase()) // Gets the slot to click
-        Player.getContainer().click(item)
-        chat(`Leaping to &6${playerToLeapTo}`)
+        const item = Player.getContainer()?.getItems().findIndex(x => x?.getName()?.substring(2)?.toLowerCase() === leaptarget.toLowerCase()) // Gets the slot to click
+        setTimeout(() => {
+            Player.getContainer().click(item)
+        }, 100);
+        chat(`Leaping to &6${leaptarget}`)
         leaptarget = null;
     })
 }).setFilteredClass(S2DPacketOpenWindow).unregister()
@@ -39,28 +38,32 @@ const openMenuTrigger = register("packetReceived", (packet) => {
 const i4Trigger = register("chat", (name) => {
     if (name !== Player.getName()) return
     if (getDistanceToCoord(63.5, 127, 35.5) < 1.5) {
-        openLeap()
+        leaptarget = getClasses()[classes[config().autoLeapTarget]]
+        setTimeout(() => {
+            openLeap()
+        }, 150);
     }
-}).setCriteria(/^(\w{3,16}) completed a device! \(\d\/\d\)$/).unregister()
+}).setCriteria('${name} completed a device!').unregister()
 
 const relicTrigger =  register("chat", (username, relic) => {
     if ((relic == 'Red' || relic == 'Orange') || username != Player.getName()) return
-    leaptarget = (getClasses()[classes[config().autoLeapRelicTarget]]);
-    openLeap();
+    leaptarget = getClasses()[classes[config().autoLeapRelicTarget]];
+    setTimeout(() => {
+        openLeap()
+    }, 150);
 }).setCriteria('${username} picked the Corrupted ${relic} Relic!').unregister();
 
 const doorTrigger = register("chat", (user) => {
     if (user == Player.getName()) return
     leaptarget = user
-    openLeap()  
+    openLeap();
 }).setCriteria("${user} opened a WITHER door!").unregister()
 
 register("command", (name) => {
     if (config().autoLeapToggle && config().toggle && config().cheatToggle) {
-        if (name) {leaptarget = name}
-        clickLeap()
+        leaptarget = name
+        openLeap()
     } else { chat(`&cSetting Toggled Off.`)}
-    
 }).setName("autoleap")
 
 export function toggle() {
