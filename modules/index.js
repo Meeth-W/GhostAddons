@@ -13,11 +13,9 @@ import fastLeap from "./fastLeap";
 import invincibilityMessages from "./invincibilityMessages"
 import invincibilityTimers from "./invincibilityTimers";
 import kickMsg from "./kickMsg"
-import leapAnnounce from "./leapAnnounce"
 import locationMessages from "./locationMessages";
 import lowballing from "./lowballing";
 import melodyDisplay from "./melodyDisplay";
-import melodyMsg from "./melodyMsg";
 import partyFinder from "./partyFinder";
 import pfoverlay from "./pfoverlay"
 import ratProtection from "./ratProtection";
@@ -33,7 +31,7 @@ import watcherMoveDisplay from "./watcherMoveDisplay"
 
 
 export const modules = [
-   commands, melodyDisplay, melodyMsg, chatEmotes, diamanteAlert, invincibilityMessages, kickMsg, leapAnnounce, pfoverlay, relicTimes, termTimestamps, wardrobeKeybinds, watcherMoveDisplay, slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4, spawnTimers, lowballing, bloodCamp, secretHighlight, autoEther, invincibilityTimers, fastLeap, dragPrio, secretTriggerbot, relicLook
+   commands, melodyDisplay, chatEmotes, diamanteAlert, invincibilityMessages, kickMsg, pfoverlay, relicTimes, termTimestamps, wardrobeKeybinds, watcherMoveDisplay, slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4, spawnTimers, lowballing, bloodCamp, secretHighlight, autoEther, invincibilityTimers, fastLeap, dragPrio, secretTriggerbot, relicLook
 ]
 
 export function refresh_modules() {
