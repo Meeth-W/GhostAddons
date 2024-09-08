@@ -6,6 +6,7 @@ import { getColor } from "../../utils/utils";
 let showGUI = false
 let player = null
 let windowSize = 60
+let displaytime
 
 function getcol1() {
     return [
@@ -110,7 +111,6 @@ register("command", (username) => {
 }).setName("dv");
 
 const renderTrigger = register('renderOverlay', () => {
-    if (!config().statsOverlay) return
     if (!showGUI) return
 
     const screenWidth = Renderer.screen.getWidth() / 2;
