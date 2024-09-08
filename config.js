@@ -283,7 +283,7 @@ defConfig
         description: "Leaps to specified class after relic is picked.",
         subcategory: "Settings",
         registerListener(previousvalue, newvalue) {
-            mod_chat(`Auto Leap I4 Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+            mod_chat(`Auto Leap Relic Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         }
     })
     .addDropDown({
@@ -608,7 +608,17 @@ defConfig
             mod_chat(`Auto Relic Strafe ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         } 
     })
-    .addTextInput({
+    .addSwitch({
+        category: "Auto Relic",
+        configName: "setRelicPitchYaw",
+        title: "Toggle Preset Pitch/Yaw",
+        subcategory: "Green/Blue",
+        description: "Uses a preset Yaw & Pitch instead of extrapolating from current position.\nIdeal if Bers/Arch is auto-relic.",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto Relic Preset Yaw/Pitch ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        } 
+    })
+    .addSwitch({
         category: "Timers",
         configName: "relicspawnToggle",
         title: "Relic Spawn Timer",
@@ -1178,13 +1188,6 @@ defConfig
         description: "Decides wether all features in Boss are &aenabled&7/&cdisabled&7.",
         subcategory: ""
     })
-    .addSwitch({
-        category: "Boss",
-        configName: "leapAnnounce",
-        title: "Leap Announce",
-        description: "Says in party chat who you are leaping to.",
-        subcategory: "Leap Message"
-    })
     .addDropDown({
         category: "Boss",
         configName: "hideLeap",
@@ -1200,29 +1203,6 @@ defConfig
         title: "Terminal Timestamps",
         description: "Shows what time each terminal, device, or lever was completed.",
         subcategory: "Terminals"
-    })
-    .addSwitch({
-        category: "Boss",
-        configName: "announceMelody",
-        title: "Announce Melody",
-        description: "Sends a message in Party Chat if you get the Melody Terminal.",
-        subcategory: "Melody"
-    })
-    .addSwitch({
-        category: "Boss",
-        configName: "melodyProgress",
-        title: "Announce Melody Progress",
-        description: "Sends a message in Party Chat with the progress of your terminal.",
-        subcategory: "Melody"
-    })
-    .addTextInput({
-        category: "Boss",
-        configName: "melodyText",
-        title: "Announce Melody Text",
-        description: "Text used for Announce Melody.",
-        value: "null",
-        placeHolder: "null",
-        subcategory: "Melody"
     })
     .addSwitch({
         category: "Boss",
