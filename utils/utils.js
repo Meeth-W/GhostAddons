@@ -14,7 +14,7 @@ const makeRequest = (address) => request({
     json: true
 })
 const MCBlock = Java.type("net.minecraft.block.Block");
-export const prefix = "§8[&6Ghost&8]§r "
+export const prefix = "§8[&5Ghost&8]§r "
 const defaultColor = "§7"
 
 export function chat(message, id = null, hoverElement) {
