@@ -35,6 +35,16 @@ const ragAxe = register("chat", () => {
     }, 4000)
 }).setCriteria("[BOSS] Wither King: I no longer wish to fight, but I know that will not stop you.").unregister();
 
+// Milestone shit for owbu
+const Milestone = register("chat", () => {
+    World.playSound(config().alertSound, 100.0, 2.0)
+    text = new Text(`MILESTONE!`).setShadow(true).setScale(4).setColor(Renderer.DARK_BLUE);
+    showText = true;
+    setTimeout(() => {
+        showText = false;
+    }, 4000)
+}).setCriteria("[BOSS] Necron: All this, for nothing...").unregister();
+
 // Tact
 const tactInsert = register("chat", () => {
     World.playSound(config().alertSound, 100.0, 2.0)
@@ -60,6 +70,7 @@ export function toggle() {
         if (config().bloodCamp) bloodCamp.register()
         if (config().alertRag) ragAxe.register()
         if (config().tactInsert) tactInsert.register()
+        if (config().alertMilestone) Milestone.register()
         
         return
     }
@@ -70,6 +81,7 @@ export function toggle() {
     bloodCamp.unregister()
     ragAxe.unregister()
     tactInsert.unregister()
+    Milestone.unregister()
 
     return
 }

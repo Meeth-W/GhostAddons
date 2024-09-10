@@ -333,6 +333,16 @@ defConfig
     })
     .addSwitch({
         category: "Alerts",
+        configName: "alertMilestone",
+        title: "Milestone Alert",
+        description: "Displays a title at start of p5 to get milestone.\nFkin owbu...",
+        subcategory: "Settings",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Milestone Alert Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        }
+    })
+    .addSwitch({
+        category: "Alerts",
         configName: "alertCamp",
         title: "Blood Camp Alert",
         description: "Displays a title when watcher is done spawning the first four mobs. Only works if you're mage.",
