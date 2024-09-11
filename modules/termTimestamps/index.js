@@ -56,7 +56,7 @@ const worldTrigger = register("worldLoad", () => {
 }).unregister();
 
 export function toggle() {
-    if (config().bossToggle && config().toggle) {
+    if (config().bossToggle && config().toggle && config().terminalTimers) {
         if (config().debug) chat("&aStarting the &6Terminal Timestamps &amodule.")
             trigger.register()
             phaseTrigger.register()
