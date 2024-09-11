@@ -160,7 +160,7 @@ const cmdTrigger = register("command", () => {
 }).setName("scan")
 
 export function toggle() {
-    if (config().bossToggle && config().toggle) {
+    if (config().bossToggle && config().toggle && config().relicTimer) {
         if (config().debug) chat("&aStarting the &6Relic Times &amodule.")
         trigger.register()
         cmdTrigger.register()
