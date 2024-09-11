@@ -252,7 +252,7 @@ defConfig
         configName: "autoLeapWitherDoor",
         title: "Auto Leap to Door Opener",
         description: "Leaps to whoever opens the wither door.",
-        subcategory: "Settings",
+        subcategory: "Door Leap",
         registerListener(previousvalue, newvalue) {
             mod_chat(`Auto Leap Wither Door Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         }
@@ -262,7 +262,7 @@ defConfig
         configName: "autoLeapi4",
         title: "Auto Leap after i4",
         description: "Leaps to specified ign after i4 is completed.\n&c[TODO: Command to change ign.]",
-        subcategory: "Settings",
+        subcategory: "I4 Leap",
         registerListener(previousvalue, newvalue) {
             mod_chat(`Auto Leap I4 Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         }
@@ -274,14 +274,14 @@ defConfig
         description: "The Class to Leap to after I4 is Complete",
         options: ["Mage","Archer","Berserk","Healer","Tank"],
         value: 0,
-        subcategory: "Settings"
+        subcategory: "I4 Leap"
     })
     .addSwitch({
         category: "Auto Leap",
         configName: "autoLeaprelic",
         title: "Auto Leap after Relic",
         description: "Leaps to specified class after relic is picked.",
-        subcategory: "Settings",
+        subcategory: "Relic Leap",
         registerListener(previousvalue, newvalue) {
             mod_chat(`Auto Leap Relic Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         }
@@ -290,10 +290,113 @@ defConfig
         category: "Auto Leap",
         configName: "autoLeapRelicTarget",
         title: "Relic AutoLeap Target Class",
-        description: "The Class to Leap to after relic is picked is Complete",
+        description: "The Class to Leap to after relic is picked",
         options: ["Mage","Archer","Berserk","Healer","Tank"],
         value: 0,
-        subcategory: "Settings"
+        subcategory: "Relic Leap"
+    })
+
+    .addSwitch({
+        category: "Auto Leap",
+        configName: "autoLeapTerminals",
+        title: "Auto Leap in Terminals",
+        description: "Leaps to the correct phase of terminals.",
+        subcategory: "Terminal Leaps",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto Leap Terminals Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        }
+    })
+    .addSwitch({
+        category: "Auto Leap",
+        configName: "autoLeapWaitConfirmation",
+        title: "Check Confirmation",
+        description: "Only initiates leap if the corresponding early enter message is detected.",
+        subcategory: "Terminal Leaps",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto Leap Terminals Confirmation Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        }
+    })
+    .addSwitch({
+        category: "Auto Leap",
+        configName: "autoLeapUseMessageTarget",
+        title: "Auto Detect Targets",
+        description: "Automatically detects Early Enter Targets from Chat Messages.",
+        subcategory: "Terminal Leaps",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto Leap Terminals Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        }
+    })
+    .addDropDown({
+        category: "Auto Leap",
+        configName: "autoLeapSS",
+        title: "Simon Says AutoLeap Target Class",
+        description: "The Class to Leap to after Storm Ends",
+        options: ["Mage","Archer","Berserk","Healer","Tank", "Disable"],
+        value: 5,
+        subcategory: "Terminal Leaps"
+    })
+    .addDropDown({
+        category: "Auto Leap",
+        configName: "autoLeapEE2",
+        title: "S1 AutoLeap Target Class",
+        description: "The Class to Leap to after S1 is Complete",
+        options: ["Mage","Archer","Berserk","Healer","Tank", "Disable"],
+        value: 5,
+        subcategory: "Terminal Leaps"
+    })
+    .addDropDown({
+        category: "Auto Leap",
+        configName: "autoLeapEE3",
+        title: "S2 AutoLeap Target Class",
+        description: "The Class to Leap to after S2 is Complete",
+        options: ["Mage","Archer","Berserk","Healer","Tank", "Disable"],
+        value: 5,
+        subcategory: "Terminal Leaps"
+    })
+    .addDropDown({
+        category: "Auto Leap",
+        configName: "autoLeapCore",
+        title: "S3 AutoLeap Target Class",
+        description: "The Class to Leap to after S3 is Complete",
+        options: ["Mage","Archer","Berserk","Healer","Tank", "Disable"],
+        value: 5,
+        subcategory: "Terminal Leaps"
+    })
+    .addDropDown({
+        category: "Auto Leap",
+        configName: "autoLeapTunnel",
+        title: "S4 AutoLeap Target Class",
+        description: "The Class to Leap to after S4 is Complete",
+        options: ["Mage","Archer","Berserk","Healer","Tank", "Disable"],
+        value: 5,
+        subcategory: "Terminal Leaps"
+    })
+    .addSwitch({
+        category: "Auto Leap",
+        configName: "autoLeapMid",
+        title: "Auto Leap Podium",
+        description: "Leaps to specified class after necron drops you.",
+        subcategory: "Necron Leap",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto Leap Necron Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        }
+    })
+    .addDropDown({
+        category: "Auto Leap",
+        configName: "autoLeapMidClass",
+        title: "Podium AutoLeap Target Class",
+        description: "The Class to Leap to after necron drops.",
+        options: ["Mage","Archer","Berserk","Healer","Tank"],
+        value: 0,
+        subcategory: "Necron Leap"
+    })
+    .addTextInput({
+        category: "Auto Leap",
+        configName: "autoLeapNecornDelay",
+        title: "Extra Delay",
+        description: "Ticks to wait after drop timer to begin leap!",
+        subcategory: "Necron Leap",
+        value: "10"
     })
     .addSwitch({
         category: "Alerts",
