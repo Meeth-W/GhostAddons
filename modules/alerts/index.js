@@ -4,6 +4,10 @@ import { chat, getClass } from "../../utils/utils"
 let showText = false
 let text = new Text("")
 
+const ding = register("tick", () => {
+    World.playSound(`note.harp`, 100.0, 2.0)
+}).unregister();
+
 // AutoPet
 const autoPet = register("chat", (lvl, pet) => {
     World.playSound(config().alertSound, 100.0, 1.0)
@@ -40,6 +44,10 @@ const Milestone = register("chat", () => {
     World.playSound(config().alertSound, 100.0, 2.0)
     text = new Text(`MILESTONE!`).setShadow(true).setScale(4).setColor(Renderer.DARK_BLUE);
     showText = true;
+    ding.register();
+    setTimeout(() => {
+        ding.unregister();
+    }, 2000);
     setTimeout(() => {
         showText = false;
     }, 4000)

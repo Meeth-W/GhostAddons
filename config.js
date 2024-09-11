@@ -335,7 +335,7 @@ defConfig
         category: "Alerts",
         configName: "alertMilestone",
         title: "Milestone Alert",
-        description: "Displays a title at start of p5 to get milestone.\nFkin owbu...",
+        description: "Displays a title at start of p5 to get milestone.\n\nComes jam-packed with 2 whole seconds of earrape!",
         subcategory: "Settings",
         registerListener(previousvalue, newvalue) {
             mod_chat(`Milestone Alert Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
@@ -1197,6 +1197,13 @@ defConfig
         title: "&9Toggle Boss Features",
         description: "Decides wether all features in Boss are &aenabled&7/&cdisabled&7.",
         subcategory: ""
+    })
+    .addSwitch({
+        category: "Boss",
+        configName: "terminalTimers",
+        title: "Toggle Terminal Timers",
+        description: "Shows how long terminals took in during each phase.",
+        subcategory: "Terminal Timers"
     })
     .addDropDown({
         category: "Boss",
