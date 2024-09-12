@@ -1,5 +1,6 @@
 import alerts from "./alerts";
 import auto4 from "./auto4";
+import autoCarnival from "./autoCarnival";
 import autoEther from "./autoEther";
 import autoLeap from "./autoLeap";
 import bloodCamp from "./bloodCamp";
@@ -31,7 +32,7 @@ import watcherMoveDisplay from "./watcherMoveDisplay"
 
 
 export const modules = [
-   commands, melodyDisplay, chatEmotes, diamanteAlert, invincibilityMessages, kickMsg, pfoverlay, relicTimes, termTimestamps, wardrobeKeybinds, watcherMoveDisplay, slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4, spawnTimers, lowballing, bloodCamp, secretHighlight, autoEther, invincibilityTimers, fastLeap, dragPrio, secretTriggerbot, relicLook
+   commands, autoCarnival, melodyDisplay, chatEmotes, diamanteAlert, invincibilityMessages, kickMsg, pfoverlay, relicTimes, termTimestamps, wardrobeKeybinds, watcherMoveDisplay, slotBinding, autoLeap, alerts, locationMessages, doorSkip, ratProtection, partyFinder, dungeonStats, auto4, spawnTimers, lowballing, bloodCamp, secretHighlight, autoEther, invincibilityTimers, fastLeap, dragPrio, secretTriggerbot, relicLook
 ]
 
 export function refresh_modules() {
