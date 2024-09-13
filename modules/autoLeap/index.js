@@ -66,7 +66,7 @@ const goldorStart = register("chat", () => {
     leaptarget = getLeapTarget(goldorSection);
     goldorSection = 1;
 
-    if (!leaptarget) return
+    if (!leaptarget) return chat(`&cCouldn't find a leap target!`)
 
     chat('Storm End | Leaping to Goldor Section: 1')
     openLeap();
@@ -86,11 +86,13 @@ const termTrigger = register("chat", () => {
     goldorSection += 1; // Increment Goldor Phase 
 
     if (config().autoLeapWaitConfirmation && !earlyEnterConfirm) return chat('&cCancelled Leap: &7No Early Enter Confirmation Detected.')
-    if (!leaptarget) leaptarget = getLeapTarget(goldorSection); // Manually get target if autoLeapUseMessageTarget was off
-    if (!leaptarget) return; 
+    if (!leaptarget) leaptarget = getLeapTarget(goldorSection - 1); // Manually get target if autoLeapUseMessageTarget was off
+    if (!leaptarget) return chat(`&cCouldn't find a leap target!`); 
 
     chat(`Section End | Leaping to Goldor Section: ${(goldorSection == 5)? "Tunnel": goldorSection}`)
-    openLeap();
+    setTimeout(() => {
+        openLeap();
+    }, 150);
 
     earlyEnterConfirm = false;
 }).setCriteria(/^(\w{3,16}) \w{9,9} a \w{6,11}! \(?(?:7\/7|8\/8)\)$/).unregister();
@@ -102,28 +104,30 @@ const getLeapTarget = (goldorS) => {
     else if (goldorS == 2 && config().autoLeapEE3 != 5) {target = getClasses()[classes[config().autoLeapEE3]]} // S3
     else if (goldorS == 3 && config().autoLeapCore != 5) {target = getClasses()[classes[config().autoLeapCore]]} // S4 
     else if (goldorS == 4 && config().autoLeapTunnel != 5) {target = getClasses()[classes[config().autoLeapTunnel]]} // Tunnel
-
-    if (target.toLowerCase() == Player.getName().toLowerCase()) return null
+    
+    if (target && target.toLowerCase() == Player.getName().toLowerCase()) target = null
+    return target
 }
 
 
 let ticks 
 const tickCounter = register("packetReceived", () => {
-    chat(`${prefix} &7Leaping In: &a${(ticks/20).toFixed(2)}s`, 6969)
+    chat(`${prefix}&7Leaping In: &a${(ticks/20).toFixed(2)}s`, 6969)
     ticks--
     if (ticks <= 0) {
         tickCounter.unregister();
         leaptarget = getClasses()[classes[config().autoLeapMidClass]];
+        if (!leaptarget) return chat(`&cCouldn't find a leap target!`); 
         openLeap();
         ChatLib.clearChat(6969)
     }
 }).setFilteredClass(Java.type("net.minecraft.network.play.server.S32PacketConfirmTransaction")).unregister()
 
 const necronStart = register("chat", () => {
-    chat('Starting Necron Timer.')
+    chat('Starting Necron Timer.', 6969)
     ticks = isNaN(parseInt(config().autoLeapNecornDelay))? 60:60+parseInt(config().autoLeapNecornDelay)
     tickCounter.register();
-}).setCriteria(`[BOSS] Necron: I'm afraid, your journey ends now`).unregister();
+}).setCriteria(`[BOSS] Necron: I'm afraid, your journey ends now.`).unregister();
 
 // Debug Commands: Ill remove this shit later
 register("command", (section) => {
