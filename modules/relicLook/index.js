@@ -1,5 +1,5 @@
 import config from "../../config";
-import { calcYawPitch, chat, getClasses, rightClick, snapTo } from "../../utils/utils";
+import { calcYawPitch, chat, getClasses, rightClick, setBlockAt, snapTo } from "../../utils/utils";
 
 let mc = Client.getMinecraft()
 let keyW = new KeyBind(mc.field_71474_y.field_74351_w)
@@ -194,6 +194,24 @@ const handleUnsprint = register("tick", () => {
         } else {
             keyW.setState(false)
             Player.setHeldItemIndex(8)
+            smoothLook(yaw, pitch, 5, () => {
+                handleUnsprint.unregister();
+            })
+        }
+    } else if (pickedColor == "Purple" && Player.getZ() < 44) { // Fix 44, Soon TM
+        setBlockAt(49, 7, 44, 0);
+        setBlockAt(51, 7, 42, 0);
+        setBlockAt(57, 7, 42, 0);
+        setBlockAt(59, 7, 44, 0);
+
+        const [yaw, pitch] = calcYawPitch({x: 54, y: 7, z: 41})
+        if (!config().smoothLookRelics) {
+            Player.setHeldItemIndex(8)
+            snapTo(yaw, pitch);
+
+            handleUnsprint.unregister();
+        } else {
+            Player.setHeldItemIndex(8);
             smoothLook(yaw, pitch, 5, () => {
                 handleUnsprint.unregister();
             })
