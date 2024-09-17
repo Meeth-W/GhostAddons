@@ -312,11 +312,11 @@ export function getTime() {
 export function getTruePower() { return getPower() + getTime() / 2 }
 
 export const dragInfo = {
-    POWER: { dragString: "§c§lRed", prio: [1, 3], spawned: false, easy: false, time: 2500 },
-    FLAME: { dragString: "§6§lOrange", prio: [2, 1], spawned: false, easy: true, time: 3080 },
-    ICE: { dragString: "§b§lBlue", prio: [3, 4], spawned: false, easy: false, time: 1920 },
-    SOUL: { dragString: "§5§lPurple", prio: [4, 5], spawned: false, easy: true, time: 2000 },
-    APEX: { dragString: "§a§lGreen", prio: [5, 2], spawned: false, easy: true, time: 2600 },
+    POWER: { dragString: "§c§lRed", prio: [1, 3], spawned: false, easy: false, time: 2500, name: 'red' },
+    FLAME: { dragString: "§6§lOrange", prio: [2, 1], spawned: false, easy: true, time: 3080, name: 'orange' },
+    ICE: { dragString: "§b§lBlue", prio: [3, 4], spawned: false, easy: false, time: 1920, name: 'blue' },
+    SOUL: { dragString: "§5§lPurple", prio: [4, 5], spawned: false, easy: true, time: 2000, name: 'purple' },
+    APEX: { dragString: "§a§lGreen", prio: [5, 2], spawned: false, easy: true, time: 2600, name: 'green' },
 }
 
 export function randomize(num, flux) {
@@ -417,4 +417,64 @@ export function unBlacklist(username) {
     }).catch(error => {
         ChatLib.chat(error)
     })
+}
+
+export function calculateAngle(x1, y1, x2, y2) {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+
+    let angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+    if (angle < -180) {
+        angle += 360;
+    } else if (angle > 180) {
+        angle -= 360;
+    }
+
+    return angle - 90;
+}
+
+export const swapItem = (itemName) => {
+    const index = Player.getInventory().getItems().slice(0, 9).findIndex(a => a?.getName()?.toLowerCase()?.includes(itemName.toLowerCase()))
+    if (index == -1) return false
+
+    const initialIndex = Player.getHeldItemIndex()
+    const shouldSwap = initialIndex !== index
+    if (shouldSwap) Player.setHeldItemIndex(index)
+    return (shouldSwap)
+}
+
+export const setYaw = (yaw) => Player.getPlayer().field_70177_z = yaw
+export const setPitch = (pitch) => Player.getPlayer().field_70125_A = pitch
+
+const dragData = new Set([
+    ['purple', 56, 126],
+    ['red', 26, 59],
+    ['orange', 86, 56],
+    ['green', 26, 94],
+    ['blue', 85, 94],    
+])
+
+export const findClosestColor = () => {
+    let closestColor = null;
+    let minDistance = Infinity;
+
+    dragData.forEach(drag => {
+        const [dragon, x1, y1] = drag
+        const distance = getDistance(parseInt(Player.getX()), parseInt(Player.getZ()), x1, y1);
+
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestColor = dragon;
+        }
+        
+    }) 
+    
+    return closestColor;
+};
+
+export const holdingXItem = (itemName) => {
+    let item = Player.getHeldItem()
+    if (item == null) return
+    return (Player.getHeldItem().getName().includes(itemName))
 }
