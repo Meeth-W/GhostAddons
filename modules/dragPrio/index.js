@@ -1,7 +1,36 @@
 import config from "../../config";
-import { chat, dragInfo, getClass, getItemIndex, getTruePower, randomize } from "../../utils/utils";
+import { chat, dragInfo, getClass, getTruePower } from "../../utils/utils";
+import { renderWaypoints } from "./render";
+import { doSpray, pathFind } from "./utils";
 
 // Variables
+export const dragLocations = {
+    purple: {x: 56, y: 7, z: 126},
+    red: {x: 28, y: 6, z: 56},
+    orange: {x: 83, y: 6, z: 58},
+    green: {x: 28, y: 6, z: 91},
+    blue: {x: 83, y: 6, z: 97},
+    wait: {x: 54.5, y: 5, z: 76.5}
+}
+
+export const stackLocations = {
+    purple: {x: 25, y: 6, z: 103},
+    red: {x: 12, y: 7, z: 85},
+    orange: {x: 55, y: 5, z: 87},
+    green: {x: 55, y: 6, z: 108},
+    blue: {x: 47, y: 6, z: 110},
+    wait: {x: 38, y: 6, z: 104}
+}
+
+export const stackRotations = {
+    purple: {yaw: -50, pitch: -24.5},
+    red: {yaw: -148.5, pitch: -25},
+    orange: {yaw: -133, pitch: -27},
+    green: {yaw: 116.5, pitch: -29},
+    blue: {yaw: -110, pitch: -26},
+    wait: {yaw: -90, pitch: 90}
+}
+
 let scanParticles = false;
 let currDragons = [null, null]
 let displayText = null
@@ -18,20 +47,6 @@ let mageTeam = false
 let soulSpawn = false
 let healer = false
 let tank = false
-
-let dragAlive
-
-let keybinds = {
-    jump: Client.getMinecraft().field_71474_y.field_74314_A.func_151463_i(),
-    rightclick: Client.getMinecraft().field_71474_y.field_74313_G.func_151463_i()
-}
-const keyState = {};
-Object.keys(keybinds).forEach(keyName => keyState[keyName] = false);
-
-const KeyBinding = Java.type("net.minecraft.client.settings.KeyBinding");
-export function updateKeys() {
-	Object.keys(keyState).forEach(keyName => KeyBinding.func_74510_a(keybinds[keyName], keyState[keyName]));
-}
 
 // Functions
 function isEasySplit() { return (currDragons[0].easy && currDragons[1].easy) }
@@ -102,10 +117,7 @@ function assignDrag(drag) {
         determinePrio()
     }
     else if (config().showSingleDragons) {
-        displayText = `${drag.dragString} dragon`
-
-        if (config().autoSpray && !config().autoSpraySplit && config().cheatToggle) { jumpSpray(drag) }
-        if (config().autoDBToggle && !config().autoLBsplit && config().cheatToggle) { autoLB(drag) }
+        displayText = `${drag.dragString} Dragon`
     }
 }
 function determinePrio() {
@@ -130,82 +142,12 @@ function displayDragon(bersDrag, archDrag, normalDrag, split) {
     if (split) {
         if ((mageTeam) || (soulSpawn && ((healer && config().healerPurp == 1) || (tank && config().tankPurp == 1)))) {
             displayText = `${bersDrag.dragString}!`
-            if (config().autoSpray && config().cheatToggle) { jumpSpray(bersDrag) }
-            if (config().autoDBToggle && config().cheatToggle) { autoLB(bersDrag) }
         } else {
             displayText = `${archDrag.dragString}!`
-            if (config().autoSpray && config().cheatToggle) { jumpSpray(archDrag) }
-            if (config().autoDBToggle && config().cheatToggle) { autoLB(archDrag) }
         }
     } else {
         displayText = `${normalDrag.dragString}!`
-        if (config().autoSpray && config().cheatToggle) { jumpSpray(normalDrag) }
-        if (config().autoDBToggle && config().cheatToggle) { autoLB(normalDrag) }
     }
-}
-function inDebuffPosition() { return (Player.getPitch() < -70) }
-function jumpSpray(drag) {
-    setTimeout(() => {
-        chat(`&cStarting Jump Spray on ${drag? drag.dragString: ''}&r&c!`)
-        keyState.jump = true
-        updateKeys()
-        setTimeout(() => { 
-            keyState.jump = false
-            updateKeys()
-        }, randomize(100, 25))
-        setTimeout(() => {
-            if (keyState.rightclick) { 
-                keyState.rightclick = false
-                updateKeys() 
-            }
-            setTimeout(() => { 
-                spraySlot = getItemIndex('Ice Spray Wand')
-                Player.setHeldItemIndex(spraySlot) 
-            }, randomize(25, 5))
-        }, randomize(200, 25))
-
-        setTimeout(() => {
-            keyState.rightclick = true
-            updateKeys()
-            setTimeout(() => {
-                keyState.rightclick = false
-                updateKeys()
-                setTimeout(() => { Player.setHeldItemIndex(config().swapSlot) }, randomize(25, 5))
-            }, randomize(100, 25))
-        }, randomize(300, 25))
-    }, randomize(parseInt(config().jumpSprayDelay), parseInt(config().randomFlux)))
-}
-function spamDebuff() {
-    if (!inDebuffPosition()) return
-    if (dragAlive) return
-    setTimeout(() => { 
-        keyState.rightclick = true
-        updateKeys() 
-    }, randomize(60, 10))
-    setTimeout(() => {
-        keyState.rightclick = false
-        updateKeys()
-        spamDebuff()
-    }, randomize(parseInt(config().spamLBdelay), parseInt(config().randomFlux)))
-}
-function spamLB() {
-    if (dragAlive) return
-    if (!inDebuffPosition) {
-        if (config().debug) chat('Not in position. Trying Again.')
-        setTimeout(() => { spamLB() }, 100);
-    } else {
-        if (config().debug) chat(`Starting Spam Debuff. In postion.`)
-        spamDebuff();
-    }
-}
-function autoLB(drag) {
-    setTimeout(() => {
-        chat(`&aStarting Auto Debuff on ${drag? drag.dragString: ''}&r&a!`)
-        Player.setHeldItemIndex(getItemIndex('Last Breath'))
-        setTimeout(() => {
-            spamLB();
-        }, randomize(25, 5));
-    }, randomize(2500, parseInt(config().randomFlux)));
 }
 
 // Registers
@@ -234,6 +176,7 @@ const handleStart = register('chat', () => {
     } else { mageTeam = false }
 
     scanParticles = true;
+    renderWaypoints.register();
 }).setCriteria(/(.+)&r&a picked the &r&cCorrupted Blue Relic&r&a!&r/).unregister();
 
 const handleParticles = register("packetReceived", (packet) => {
@@ -245,7 +188,7 @@ const handleParticles = register("packetReceived", (packet) => {
 const handleRender = register('renderOverlay', () => {
     if (ticks > 0) {
         const displayColor = (ticks > 60)? "&a" : (ticks > 20)? "&e": "&c";
-        if (ticks > 60) Client.Companion.showTitle((displayText)? displayText: " ", `&7Spawn in ${displayColor}${(ticks/20).toFixed(2)}`, 0, 2, 0)
+        if (ticks > 50) Client.Companion.showTitle((displayText)? displayText: " ", `&7Spawn in ${displayColor}${(ticks/20).toFixed(2)}`, 0, 2, 0)
         else Client.Companion.showTitle(" ", `&7Spawn in ${displayColor}${(ticks/20).toFixed(2)}`, 0, 2, 0)
     }
 })
@@ -261,16 +204,22 @@ const dragSpawnChecker = register(Java.type("net.minecraftforge.event.entity.Ent
 
 register('worldLoad', () => {
     scanParticles = false
+    renderWaypoints.unregister();
 })
 
-register("command", () => {
-    jumpSpray(dragInfo.APEX)
-    autoLB(dragInfo.APEX)
+register("command", (drag) => {
+    chat('Spraying!')
     setTimeout(() => {
-        dragAlive = true
-        setTimeout(() => { dragAlive = false }, 1000)
-    }, 5000);
-}).setName("debuff")
+        doSpray()
+    }, 200);
+}).setName("testSpray")
+
+register("command", (x, y, z) => {
+    setTimeout(() => {
+        chat('Running!')
+        pathFind(x, y, z, () => {chat('Done!')})
+    }, 1000);
+}).setName("testDrag")
 
 export function toggle() {
     if (config().dragPrioToggle && config().toggle) {
