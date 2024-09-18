@@ -57,6 +57,31 @@ const spray = register("command", (...args) => {
     }
 }).setName("/spray").unregister()
 
+const buff = register("command", (...args) => {
+    if (!config().cheatToggle) return chat(`&cCheats are currently disabled.`)
+    let checks = [true, true, true]
+    try {
+        if (!swapItem('Weirder Tuba')) {
+            chat('&cTuba not in hotbar!')
+            checks[0] = false
+        }
+        Client.scheduleTask(2, () => { if (checks[0]) rightClick(); })
+        Client.scheduleTask(4, () => { if (!swapItem('Rogue Sword')) {
+            chat('&cRouge Sword not in hotbar')
+            checks[1] = false
+        }}) 
+        Client.scheduleTask(6, () => { if (checks[1]) rightClick(); })
+        Client.scheduleTask(8, () => { if (!swapItem('Sword of Bad Health')) {
+            chat('&cSword of Bad Health not in hotbar') 
+            checks[2] = false
+        }}) 
+        Client.scheduleTask(10, () => { if (checks[2]) rightClick() })
+        Client.scheduleTask(12, () => { if (!swapItem('Terminator')) chat('&cTerminator not in hotbar') }) 
+    } catch (e) {
+        ChatLib.chat(e);
+    }
+}).setName("/buff").unregister()
+
 const restocking = register("command", (...args) => {
     restock();
 }).setName("/restock").unregister()
@@ -94,12 +119,14 @@ export function toggle() {
         main.register()
         spray.register()
         restocking.register();
+        buff.register();
         return
     }
     if (config().debug) chat("&cStopping the &6Commands &cmodule.")
     main.unregister()
     spray.unregister()
     restocking.unregister()
+    buff.unregister()
     return
 }
 export default { toggle };
