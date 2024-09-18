@@ -1,4 +1,4 @@
-import { addBlacklist, addWhitelist, unBlacklist, unWhitelist, prefix } from "../../utils/utils"
+import { addBlacklist, addWhitelist, unBlacklist, unWhitelist, prefix, swapItem, chat, rightClick } from "../../utils/utils"
 import { data } from "../../utils/data"
 import config from "../../config"
 
@@ -45,14 +45,61 @@ const main = register("command", (...args) => {
     }
 }).setName("pfa").unregister()
 
+const spray = register("command", (...args) => {
+    if (!config().cheatToggle) return chat(`&cCheats are currently disabled.`)
+    try {
+        let held = Player.getHeldItemIndex(); 
+        if (!swapItem('Ice Spray Wand')) return chat('&cSpray not in hotbar!')
+        Client.scheduleTask(2, () => { rightClick(); })
+        Client.scheduleTask(4, () => { Player.setHeldItemIndex(held); })
+    } catch (e) {
+        ChatLib.chat(e);
+    }
+}).setName("/spray").unregister()
+
+const restocking = register("command", (...args) => {
+    restock();
+}).setName("/restock").unregister()
+
+export function getPearls() {
+    const pearlStack = Player.getInventory().getItems().find(a => a?.getName() == "§fEnder Pearl")
+    if (!pearlStack) { 
+        return ChatLib.command(`gfs ender_pearl 16`, false)
+    }
+    const toGivePearl = 16 - pearlStack.getStackSize()
+    if (toGivePearl != 0) { ChatLib.command(`gfs ender_pearl ${toGivePearl}`, false) }
+}
+
+export function getJerrys() {
+    const jerryStack = Player.getInventory().getItems().find(a => a?.getName() == "§fInflatable Jerry")
+    if (!jerryStack) {
+        return ChatLib.command(`gfs inflatable_jerry 64`, false)
+    }
+    const toGiveJerry = 64 - jerryStack.getStackSize()
+    if (toGiveJerry != 0) { ChatLib.command(`gfs inflatable_jerry ${toGiveJerry}`, false) }
+}
+
+export function restock() {
+    chat('Replenishing Ender Pearls.')
+    getPearls()
+    setTimeout(() => {
+        chat('Replenishing Inflatable Jerrys.');
+        getJerrys();
+    }, 3000)
+}
+
 export function toggle() {
     if (config().toggle) {
         if (config().debug) chat("&aStarting the &6Commands &amodule.")
         main.register()
+        spray.register()
+        restocking.register();
         return
     }
     if (config().debug) chat("&cStopping the &6Commands &cmodule.")
-        main.unregister()
-        return
+    main.unregister()
+    spray.unregister()
+    restocking.unregister()
+    return
 }
 export default { toggle };
