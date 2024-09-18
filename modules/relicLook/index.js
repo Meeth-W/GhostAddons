@@ -198,7 +198,7 @@ const handleUnsprint = register("tick", () => {
                 handleUnsprint.unregister();
             })
         }
-    } else if (pickedColor == "Purple" && Player.getZ() < 44) { // Fix 44, Soon TM
+    } else if (pickedColor == "Purple" && Player.getZ() < 45) { // Fix 44, Soon TM
         setBlockAt(49, 7, 44, 0);
         setBlockAt(51, 7, 42, 0);
         setBlockAt(57, 7, 42, 0);
