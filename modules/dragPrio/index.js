@@ -1,44 +1,130 @@
 import config from "../../config";
-import { chat, dragInfo, getClass, getTruePower } from "../../utils/utils";
-import { renderWaypoints } from "./render";
-import { doSpray, pathFind } from "./utils";
-
-// Variables
-export const dragLocations = {
-    purple: {x: 56, y: 7, z: 126},
-    red: {x: 28, y: 6, z: 56},
-    orange: {x: 83, y: 6, z: 58},
-    green: {x: 28, y: 6, z: 91},
-    blue: {x: 83, y: 6, z: 97},
-    wait: {x: 54.5, y: 5, z: 76.5}
-}
-
-export const stackLocations = {
-    purple: {x: 25, y: 6, z: 103},
-    red: {x: 12, y: 7, z: 85},
-    orange: {x: 55, y: 5, z: 87},
-    green: {x: 55, y: 6, z: 108},
-    blue: {x: 47, y: 6, z: 110},
-    wait: {x: 38, y: 6, z: 104}
-}
-
-export const stackRotations = {
-    purple: {yaw: -50, pitch: -24.5},
-    red: {yaw: -148.5, pitch: -25},
-    orange: {yaw: -133, pitch: -27},
-    green: {yaw: 116.5, pitch: -29},
-    blue: {yaw: -110, pitch: -26},
-    wait: {yaw: -90, pitch: 90}
-}
+import { chat, dragInfo, getClass, getTruePower, findClosestColor, holdingXItem, calculateAngle, getDistance, setPitch, setYaw, swapItem } from "../../utils/utils";
+import { handleSnaps, renderWaypoints } from "./auto";
 
 let scanParticles = false;
 let currDragons = [null, null]
 let displayText = null
+export let prioDrag = null;
+
+let doSplit = true;
 
 let ticks 
 
+let dragDelays = {
+    purple: 350,
+    red: 440,
+    orange: 440,
+    green: 420,
+    blue: 420,
+    icespray: 100
+}
+let lastCharge = null
+let charged = false
+let waitAmount = 0
+
+export const KeyBinding = Java.type("net.minecraft.client.settings.KeyBinding")
+const dragLocations = {
+    purple: [56, 126],
+    red: [28, 56],
+    orange: [83, 58],
+    green: [28, 91],
+    blue: [83, 97],    
+    middle: [54.5, 76.5]
+}
+
+export function pathfindDragon(drag) {
+    if (Client.isInGui() || Client.isInChat()) return
+
+    let jumping = false
+    KeyBinding.func_74510_a(17, true)
+    const pathfind = register('step', () => {
+        if (Client.isInGui() || Client.isInChat()) {
+            KeyBinding.func_74510_a(42, false)
+            KeyBinding.func_74510_a(17, false)
+            KeyBinding.func_74510_a(57, false)
+            pathfind.unregister()
+            return
+        }
+        x = dragLocations[drag][0]
+        z = dragLocations[drag][1]
+
+        if (getDistance(parseInt(Player.getX()), parseInt(Player.getZ()), x, z) < 1.5) {
+            if (!(drag == 'middle')) setPitch(-90) 
+            KeyBinding.func_74510_a(17, false);
+            KeyBinding.func_74510_a(42, false)
+            swapItem('Last Breath') 
+            moving = false;
+            pathfind.unregister()
+            return
+        }
+
+        if (getDistance(parseInt(Player.getX()), parseInt(Player.getZ()), x, z) < 4) KeyBinding.func_74510_a(42, true)
+
+        const block = Player.lookingAt();
+        if (block instanceof Block) {
+            if (!jumping) {
+                jumping = true;
+                KeyBinding.func_74510_a(57, jumping);
+            }
+        } else {
+            if (jumping) {
+                jumping = false;
+                KeyBinding.func_74510_a(57, jumping);
+            } 
+        }
+        
+        setYaw(calculateAngle(Player.getX(), Player.getZ(), x, z))
+        setPitch(18)
+    }).setFps(200)
+}
+
+const handleDebuff = register("tick", () => {
+    if (!(holdingXItem('Last Breath')) || !(Player.getPitch() < -70)) {
+        if (charged) {
+            charged = false
+            KeyBinding.func_74510_a(-99, charged)
+        }
+        return
+    }
+    if (
+        new Date().getTime() - lastCharge < waitAmount || 
+        !holdingXItem('Last Breath') || 
+        !(Player.getPitch() < -70) || 
+        !config().toggleAutoLB || 
+        (Player.getY() > 31)
+    ) return
+    charged = !charged
+    if (charged) {
+        waitAmount = dragDelays[findClosestColor()]
+    }
+    else {waitAmount = 350}
+    KeyBinding.func_74510_a(-99, charged)
+    lastCharge = new Date().getTime()
+}).unregister();
+
+
+export function doSpray() {
+    if (getClass() == "Archer" || getClass() == "Berserk") return;
+    KeyBinding.func_74510_a(57, true)
+    KeyBinding.func_74510_a(-99, false)
+    setTimeout(() => { swapItem("Ice Spray Wand") }, randomize(25, 5));
+    setTimeout(() => {
+        KeyBinding.func_74510_a(-99, true)
+        KeyBinding.func_74510_a(57, false)
+        setTimeout(() => {
+            KeyBinding.func_74510_a(-99, false)
+            if (getClass() == 'Mage') swapItem(`Midas' Sword`)
+            else swapItem('Soul Whip')
+        }, randomize(100, 25));
+    }, randomize(100, 25));
+}
+
 const tickCounter = register("packetReceived", () => {
     ticks--
+    if (ticks == config().sprayTick && config().toggleAutoP5 && config().cheatToggle && !(getClass() == "Archer" || getClass() == "Berserk") && config().toggleSpray) {
+        doSpray();
+    }
     if (ticks <= 0) tickCounter.unregister()
 }).setFilteredClass(Java.type("net.minecraft.network.play.server.S32PacketConfirmTransaction")).unregister()
 
@@ -118,6 +204,17 @@ function assignDrag(drag) {
     }
     else if (config().showSingleDragons) {
         displayText = `${drag.dragString} Dragon`
+        if (config().toggleAutoP5 && config().cheatToggle && !(getClass() == "Archer" || getClass() == "Berserk")) {
+            if (!config().togglePathFind) return
+            chat(`Pathfinding to ${drag.dragString}&7!`);
+            pathfindDragon(drag.name);
+            if (doSplit) {
+                doSplit = false;
+                setTimeout(() => {
+                    pathfindDragon('middle')
+                }, 10000);
+            }
+        }
     }
 }
 function determinePrio() {
@@ -142,11 +239,44 @@ function displayDragon(bersDrag, archDrag, normalDrag, split) {
     if (split) {
         if ((mageTeam) || (soulSpawn && ((healer && config().healerPurp == 1) || (tank && config().tankPurp == 1)))) {
             displayText = `${bersDrag.dragString}!`
+            if (config().toggleAutoP5 && config().cheatToggle && !(getClass() == "Archer" || getClass() == "Berserk")) {
+                if (!config().togglePathFind) return
+                chat(`Pathfinding to ${bersDrag.dragString}&7!`);
+                pathfindDragon(bersDrag.name);
+                if (doSplit) {
+                    doSplit = false;
+                    setTimeout(() => {
+                        pathfindDragon('middle')
+                    }, 10000);
+                }
+            }
         } else {
             displayText = `${archDrag.dragString}!`
+            if (config().toggleAutoP5 && config().cheatToggle && !(getClass() == "Archer" || getClass() == "Berserk")) {
+                if (!config().togglePathFind) return
+                chat(`Pathfinding to ${archDrag.dragString}&7!`);
+                pathfindDragon(archDrag.name);
+                if (doSplit) {
+                    doSplit = false;
+                    setTimeout(() => {
+                        pathfindDragon('middle')
+                    }, 10000);
+                }
+            }
         }
     } else {
         displayText = `${normalDrag.dragString}!`
+        if (config().toggleAutoP5 && config().cheatToggle && !(getClass() == "Archer" || getClass() == "Berserk")) {
+            if (!config().togglePathFind) return
+            chat(`Pathfinding to ${normalDrag.dragString}&7!`);
+            pathfindDragon(normalDrag.name);
+            if (doSplit) {
+                doSplit = false;
+                setTimeout(() => {
+                    pathfindDragon('middle')
+                }, 10000);
+            }
+        }
     }
 }
 
@@ -176,7 +306,12 @@ const handleStart = register('chat', () => {
     } else { mageTeam = false }
 
     scanParticles = true;
-    renderWaypoints.register();
+
+    handleDebuff.register();
+    doSplit = true;
+
+    if (config().toggleWaypoints) renderWaypoints.register();
+    if (config().snapWaypoints) handleSnaps.register();
 }).setCriteria(/(.+)&r&a picked the &r&cCorrupted Blue Relic&r&a!&r/).unregister();
 
 const handleParticles = register("packetReceived", (packet) => {
@@ -196,30 +331,15 @@ const handleRender = register('renderOverlay', () => {
 const dragSpawnChecker = register(Java.type("net.minecraftforge.event.entity.EntityJoinWorldEvent"), (event) => {
     const entity = new Entity(event.entity)
     if (entity.getClassName() === "EntityDragon") {
-        dragAlive = true
         displayText = null
-        setTimeout(() => { dragAlive = false }, 150)
     }
 }).unregister();
 
 register('worldLoad', () => {
     scanParticles = false
     renderWaypoints.unregister();
+    handleSnaps.unregister();
 })
-
-register("command", (drag) => {
-    chat('Spraying!')
-    setTimeout(() => {
-        doSpray()
-    }, 200);
-}).setName("testSpray")
-
-register("command", (x, y, z) => {
-    setTimeout(() => {
-        chat('Running!')
-        pathFind(x, y, z, () => {chat('Done!')})
-    }, 1000);
-}).setName("testDrag")
 
 export function toggle() {
     if (config().dragPrioToggle && config().toggle) {

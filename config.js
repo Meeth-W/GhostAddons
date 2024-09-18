@@ -436,16 +436,6 @@ defConfig
     })
     .addSwitch({
         category: "Alerts",
-        configName: "alertMilestone",
-        title: "Milestone Alert",
-        description: "Displays a title at start of p5 to get milestone.\n\nComes jam-packed with 2 whole seconds of earrape!",
-        subcategory: "Settings",
-        registerListener(previousvalue, newvalue) {
-            mod_chat(`Milestone Alert Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
-        }
-    })
-    .addSwitch({
-        category: "Alerts",
         configName: "alertCamp",
         title: "Blood Camp Alert",
         description: "Displays a title when watcher is done spawning the first four mobs. Only works if you're mage.",
@@ -1078,7 +1068,134 @@ defConfig
             mod_chat(`Drag Prio Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
         }
     })
-    
+    // .addSwitch({
+    //     category: "Drag Prio",
+    //     configName: "autoDBToggle",
+    //     title: "&dAuto Last Breath",
+    //     description: "Main Toggle for Auto Last Breath",
+    //     subcategory: "Auto Debuff",
+    //     registerListener(previousvalue, newvalue) {
+    //         mod_chat(`Auto Debuff Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+    //     }
+    // })
+    // .addSwitch({
+    //     category: "Drag Prio",
+    //     configName: "autoSpray",
+    //     title: "&dAuto Jump Spray",
+    //     description: "Main Toggle for Auto Jump Spray",
+    //     subcategory: "Auto Debuff",
+    //     registerListener(previousvalue, newvalue) {
+    //         mod_chat(`Auto Spray Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+    //     }
+    // })
+    // .addSlider({
+    //     category: "Drag Prio",
+    //     configName: "swapSlot",
+    //     title: "Slot Swap",
+    //     description: "0 is first slot. Auto Swaps to specified hotbar slot",
+    //     options: [0, 7],
+    //     value: 0,
+    //     subcategory: "Auto Debuff"
+    // })
+    // .addSwitch({
+    //     category: "Drag Prio",
+    //     configName: "autoPathfind",
+    //     subcategory: "Auto P5",
+    //     description: "Automatically goes to the drag thats spawning",
+    //     title: "Auto Pathfind",
+    //     registerListener(previousvalue, newvalue) {
+    //         mod_chat(`Auto Pathfinding Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+    //     }
+    // })
+    // .addSwitch({
+    //     category: "Drag Prio",
+    //     configName: "onlyPathSplit",
+    //     subcategory: "Auto P5",
+    //     description: "Only path to the split drag",
+    //     title: "Only Pathfind Split",
+    //     registerListener(previousvalue, newvalue) {
+    //         mod_chat(`Only Pathfind Split Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+    //     }
+    // })
+    // .addSwitch({
+    //     category: "Drag Prio",
+    //     configName: "onlyLBSplit",
+    //     subcategory: "Auto P5",
+    //     title: "Only LB Split",
+    //     description: "Only automatically lb's split drag",
+    //     registerListener(previousvalue, newvalue) {
+    //         mod_chat(`Only LB Split Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+    //     }
+    // })
+    // .addSwitch({
+    //     category: "Drag Prio",
+    //     configName: "onlySpraySplit",
+    //     subcategory: "Auto P5",
+    //     description: "Only automatically sprays split drag",
+    //     title: "Only Spray Split",
+    //     registerListener(previousvalue, newvalue) {
+    //         mod_chat(`Only Spray Split Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+    //     }
+    // })
+    // .addSwitch({
+    //     category: "Drag Prio",
+    //     configName: "displayRings",
+    //     subcategory: "Auto P5",
+    //     description: "Display rings on the floor at debuff/split locations based on ur class",
+    //     title: "Display Rings",
+    //     registerListener(previousvalue, newvalue) {
+    //         mod_chat(`Display Rings Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+    //     }
+    // })
+    // .addSwitch({
+    //     category: "Drag Prio",
+    //     configName: "snapRings",
+    //     subcategory: "Auto P5",
+    //     description: "When you are inside ring, it automatically rotates you to correct yaw/pitch",
+    //     title: "Snap Rings",
+    //     registerListener(previousvalue, newvalue) {
+    //         mod_chat(`Snap Rings Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+    //     }
+    // })
+    // .addSwitch({
+    //     category: "Drag Prio",
+    //     configName: "autoRag",
+    //     subcategory: "Auto P5",
+    //     description: "Automatically rag axes for you in P5",
+    //     title: "Auto Rag",
+    //     registerListener(previousvalue, newvalue) {
+    //         mod_chat(`Auto Rag Axe Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+    //     }
+    // })
+    // .addSlider({
+    //     category: "Drag Prio",
+    //     configName: "sprayTick",
+    //     title: "Ice Spray Tick",
+    //     description: "What time to spray the dragon at",
+    //     options: [0, 50],
+    //     value: 0,
+    //     subcategory: "Auto P5"
+    // })
+    // .addSwitch({
+    //     category: "Drag Prio",
+    //     subcategory: "",
+    //     configName: "autoP5",
+    //     title: "Auto P5",
+    //     description: "Automatically does all of P5 for you",
+    //     registerListener(previousvalue, newvalue) {
+    //         mod_chat(`Auto P5 Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+    //     }
+    // })
+    // .addSwitch({
+    //     category: "Drag Prio",
+    //     configName: "debuffClass",
+    //     subcategory: "Auto P5",
+    //     description: "Automatically debuffs drags based on your class after icespray",
+    //     title: "Auto Swap",
+    //     registerListener(previousvalue, newvalue) {
+    //         mod_chat(`Auto Swap Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+    //     }
+    // })
     .addSlider({
         category: "Drag Prio",
         configName: "splitPower",
@@ -1142,6 +1259,75 @@ defConfig
         options: ["Arch Team","Bers Team"],
         value: 0,
         subcategory: "Purple Teams"
+    })
+    .addSwitch({
+        category: "Auto P5",
+        configName: "toggleAutoP5",
+        title: "&9Toggle Auto P5",
+        description: "Decides wether all features in Auto P5 are &aenabled&7/&cdisabled&7.",
+        subcategory: "",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto P5 Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        }
+    })
+    .addSwitch({
+        category: "Auto P5",
+        configName: "toggleAutoLB",
+        title: "Auto LB",
+        description: "Automatically stacks lb's on dragons.\n\nUses Preset Delays.",
+        subcategory: "Debuff",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto LB Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        }
+    })
+    .addSwitch({
+        category: "Auto P5",
+        configName: "toggleSpray",
+        title: "Auto Spray",
+        description: "Automatically sprays dragons.",
+        subcategory: "Debuff",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto Spray Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        }
+    })
+    .addSlider({
+        category: "Auto P5",
+        configName: "sprayTick",
+        title: "Ice Spray Tick",
+        description: "What time to spray the dragon at",
+        options: [0, 50],
+        value: 0,
+        subcategory: "Debuff"
+    })
+    .addSwitch({
+        category: "Auto P5",
+        configName: "togglePathFind",
+        title: "Pathfind",
+        description: "Automatically goes to debuff locations.",
+        subcategory: "Movement",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto Pathfind Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        }
+    })
+    .addSwitch({
+        category: "Auto P5",
+        configName: "toggleWaypoints",
+        title: "Render Waypoints",
+        description: "Renders Debuff/Stack locations",
+        subcategory: "Waypoints",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Waypoints Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        }
+    })
+    .addSwitch({
+        category: "Auto P5",
+        configName: "snapWaypoints",
+        title: "Snap Waypoints",
+        description: "Automatically snaps to face the right direction once inside a waypoint.\n\nOnly for arch/bers stacks.",
+        subcategory: "Waypoints",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Snap Waypoints Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        }
     })
     .addSwitch({
         category: "Random",
@@ -1228,13 +1414,6 @@ defConfig
         title: "&9Toggle Boss Features",
         description: "Decides wether all features in Boss are &aenabled&7/&cdisabled&7.",
         subcategory: ""
-    })
-    .addSwitch({
-        category: "Boss",
-        configName: "terminalTimers",
-        title: "Toggle Terminal Timers",
-        description: "Shows how long terminals took in during each phase.",
-        subcategory: "Terminal Timers"
     })
     .addDropDown({
         category: "Boss",
