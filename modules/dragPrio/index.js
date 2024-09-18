@@ -1,6 +1,6 @@
 import config from "../../config";
 import { chat, dragInfo, getClass, getTruePower, findClosestColor, holdingXItem, calculateAngle, getDistance, setPitch, setYaw, swapItem } from "../../utils/utils";
-import { handleSnaps, renderWaypoints } from "./auto";
+import { handleRagAxe, handleSnaps, renderWaypoints } from "./auto";
 
 let scanParticles = false;
 let currDragons = [null, null]
@@ -312,6 +312,7 @@ const handleStart = register('chat', () => {
 
     if (config().toggleWaypoints) renderWaypoints.register();
     if (config().snapWaypoints) handleSnaps.register();
+    if (config().autoRagAxe) handleRagAxe.register();
 }).setCriteria(/(.+)&r&a picked the &r&cCorrupted Blue Relic&r&a!&r/).unregister();
 
 const handleParticles = register("packetReceived", (packet) => {
@@ -339,6 +340,7 @@ register('worldLoad', () => {
     scanParticles = false
     renderWaypoints.unregister();
     handleSnaps.unregister();
+    handleRagAxe.unregister();
 })
 
 export function toggle() {

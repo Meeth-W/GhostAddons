@@ -63,3 +63,14 @@ export const handleSnaps = register('tick', () => {
         }
     });
 }).unregister();
+
+export const handleRagAxe = register('chat', () => {
+    if (!config().cheatToggle || !config().autoRagAxe) return
+    if (!getClass() == "Archer" || !getClass() == "Berserk") return
+    chat('Proccing Ragnarock Axe')
+    swapItem('Ragnarock Axe');
+    setTimeout(() => {
+        rightClick();
+        handleRagAxe.unregister();
+    }, 150);
+}).setCriteria(`[BOSS] Wither King: You... again?`).unregister();

@@ -1330,6 +1330,16 @@ defConfig
         }
     })
     .addSwitch({
+        category: "Auto P5",
+        configName: "autoRagAxe",
+        title: "Auto Ragnarock Axe",
+        description: "Automatically proc's rag axe at the start of p5 at the right time.",
+        subcategory: "Archer/Berserk",
+        registerListener(previousvalue, newvalue) {
+            mod_chat(`Auto Rag Toggle ${newvalue ? "&aEnabled" : "&cDisabled"}`)
+        }
+    })
+    .addSwitch({
         category: "Random",
         configName: "randomToggle",
         title: "&9Toggle Random Features",
