@@ -1,5 +1,5 @@
 import config from "../../config";
-import { chat, dragInfo, getClass, getTruePower, findClosestColor, holdingXItem, calculateAngle, getDistance, setPitch, setYaw, swapItem } from "../../utils/utils";
+import { chat, dragInfo, getClass, getTruePower, findClosestColor, holdingXItem, calculateAngle, getDistance, setPitch, setYaw, swapItem, randomize } from "../../utils/utils";
 import { handleRagAxe, handleSnaps, renderWaypoints } from "./auto";
 
 let scanParticles = false;
@@ -282,6 +282,7 @@ function displayDragon(bersDrag, archDrag, normalDrag, split) {
 
 // Registers
 const handleStart = register('chat', () => {
+    chat('P5 Start Detected!')
     currDragons = [null, null]
     soulSpawn = false
     mageTeam = false
@@ -310,9 +311,9 @@ const handleStart = register('chat', () => {
     handleDebuff.register();
     doSplit = true;
 
-    if (config().toggleWaypoints) renderWaypoints.register();
-    if (config().snapWaypoints) handleSnaps.register();
-    if (config().autoRagAxe) handleRagAxe.register();
+    if (config().toggleWaypoints && config().toggleAutoP5) renderWaypoints.register();
+    if (config().snapWaypoints && config().toggleAutoP5 && config().cheatToggle) handleSnaps.register();
+    if (config().autoRagAxe && config().toggleAutoP5 && config().cheatToggle) handleRagAxe.register();
 }).setCriteria(/(.+)&r&a picked the &r&cCorrupted Blue Relic&r&a!&r/).unregister();
 
 const handleParticles = register("packetReceived", (packet) => {

@@ -1,6 +1,6 @@
 import RenderLib from "../../../RenderLib";
 import config from "../../config";
-import { chat, getClass, getDistance, snapTo } from "../../utils/utils";
+import { chat, getClass, getDistance, randomize, snapTo } from "../../utils/utils";
 
 let lastrotated = null;
 // Soon TM
