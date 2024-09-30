@@ -3,6 +3,8 @@ By: Ghostyy `.ghxstyy` & KingisBad `.kingisbad`
 
 QOL Mod for Hypixel Skyblock Dungeons.
 
+### Unfinished Features: 
+- 🚧 | Implementing new Doorless
 
 ### Installation
 
