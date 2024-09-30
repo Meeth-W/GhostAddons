@@ -1,93 +1,73 @@
 import Dungeon from "../../../BloomCore/dungeons/Dungeon";
 import config from "../../config";
-import { chat, getBlockFloor, getBlockPosFloor, isWithinTolerence, setBlockAt, snapTo } from "../../utils/utils";
+import { chat, getBlockFloor, snapTo } from "../../utils/utils";
 
+const Blocks = Java.type("net.minecraft.init.Blocks");
 const C03PacketPlayer = Java.type("net.minecraft.network.play.client.C03PacketPlayer");
 const C08PacketPlayerBlockPlacement = Java.type("net.minecraft.network.play.client.C08PacketPlayerBlockPlacement");
 const S08PacketPlayerPosLook = Java.type("net.minecraft.network.play.server.S08PacketPlayerPosLook");
 
-let inDoor = false;
-const validBlocks = [173, 159];
+let  inDoor = false
 
-const trigger = register("packetSent", (packet, event) => {
+const trigger = register('tick', () => {
 	if (!Dungeon.inDungeon) return;
-	if (inDoor) return;
-	const item = Player.getHeldItem();
-	if (item?.getID() !== 368) return;
-	const moving = packet.func_149466_j();
-	const rotating = packet.func_149463_k();
-	const onGround = packet.func_149465_i();
-	if (!moving) return;
-	const [x, y, z] = [packet.func_149464_c(), packet.func_149467_d(), packet.func_149472_e()];
+	if (Player.getHeldItem()?.getID() !== 368 && !inDoor) return;
+	const [x, y, z] = [Player.getX() + Player.getMotionX(), Player.getY(), Player.getZ() + Player.getMotionZ()];
 	if (x > 0 || z > 0 || x < -200 || z < -200) return;
-	const [xDec, zDec] = [(x + 200) % 1, (z + 200) % 1];
-	let yaw = -1;
-	let pitch = -1;
-	let xOffset = 0;
-	let zOffset = 0;
-	if (isWithinTolerence(zDec, 0.7) && xDec > 0.3 && xDec < 0.7 && (validBlocks.includes(getBlockFloor(x + 1, y, z + 2).type.getID()) || validBlocks.includes(getBlockFloor(x - 1, y, z + 2).type.getID()))) {
-		yaw = 0;
-		pitch = 77;
-		++zOffset;
-	} else if (isWithinTolerence(xDec, 0.3) && zDec > 0.3 && zDec < 0.7 && (validBlocks.includes(getBlockFloor(x - 2, y, z + 1).type.getID()) || validBlocks.includes(getBlockFloor(x - 2, y, z - 1).type.getID()))) {
-		yaw = 90;
-		pitch = 77;
-		--xOffset;
-	} else if (isWithinTolerence(zDec, 0.3) && xDec > 0.3 && xDec < 0.7 && (validBlocks.includes(getBlockFloor(x - 1, y, z - 2).type.getID()) || validBlocks.includes(getBlockFloor(x + 1, y, z - 2).type.getID()))) {
-		yaw = 180;
-		pitch = 77;
-		--zOffset;
-	} else if (isWithinTolerence(xDec, 0.7) && zDec > 0.3 && zDec < 0.7 && (validBlocks.includes(getBlockFloor(x + 2, y, z - 1).type.getID()) || validBlocks.includes(getBlockFloor(x + 2, y, z + 1).type.getID()))) {
-		yaw = 270;
-		pitch = 77;
-		++xOffset;
-	} else if (isWithinTolerence(zDec, 0.95) && xDec > 0.3 && xDec < 0.7 && (validBlocks.includes(getBlockFloor(x + 1, y, z + 2).type.getID()) || validBlocks.includes(getBlockFloor(x - 1, y, z + 2).type.getID()))) {
-		yaw = 0;
-		pitch = 84;
-		++zOffset;
-	} else if (isWithinTolerence(xDec, 0.05) && zDec > 0.3 && zDec < 0.7 && (validBlocks.includes(getBlockFloor(x - 2, y, z + 1).type.getID()) || validBlocks.includes(getBlockFloor(x - 2, y, z - 1).type.getID()))) {
-		yaw = 90;
-		pitch = 84;
-		--xOffset;
-	} else if (isWithinTolerence(zDec, 0.05) && xDec > 0.3 && xDec < 0.7 && (validBlocks.includes(getBlockFloor(x - 1, y, z - 2).type.getID()) || validBlocks.includes(getBlockFloor(x + 1, y, z - 2).type.getID()))) {
-		yaw = 180;
-		pitch = 84;
-		--zOffset;
-	} else if (isWithinTolerence(xDec, 0.95) && zDec > 0.3 && zDec < 0.7 && (validBlocks.includes(getBlockFloor(x + 2, y, z - 1).type.getID()) || validBlocks.includes(getBlockFloor(x + 2, y, z + 1).type.getID()))) {
-		yaw = 270;
-		pitch = 84;
-		++xOffset;
-	}
-	if (yaw < 0 || pitch < 0) return;
-	const tileEntity = World.getWorld().func_175625_s(getBlockPosFloor(x + xOffset, y + 1, z + zOffset).toMCBlock());
-    if (!tileEntity || !tileEntity.func_152108_a()) return;
-    const skullId = tileEntity.func_152108_a().getProperties().get("textures")[0].getValue();
-	if (!["eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2JjYmJmOTRkNjAzNzQzYTFlNzE0NzAyNmUxYzEyNDBiZDk4ZmU4N2NjNGVmMDRkY2FiNTFhMzFjMzA5MTRmZCJ9fX0=", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWQ5ZDgwYjc5NDQyY2YxYTNhZmVhYTIzN2JkNmFkYWFhY2FiMGMyODgzMGZiMzZiNTcwNGNmNGQ5ZjU5MzdjNCJ9fX0="].includes(skullId)) return;
-	inDoor = true;
-	const [initialYaw, initialPitch] = [Player.getYaw(), Player.getPitch()];
-	chat(`Door Skipping`);
-	Client.sendPacket(new C03PacketPlayer.C06PacketPlayerPosLook(x, y, z, yaw, pitch, onGround));
-	Client.sendPacket(new C08PacketPlayerBlockPlacement(item.itemStack));
-	const trigger2 = register("packetReceived", packet => {
-		Client.scheduleTask(0, () => snapTo(initialYaw, initialPitch));
-		const [x, y, z] = [packet.func_148932_c(), packet.func_148928_d(), packet.func_148933_e()];
-		setBlockAt(x + xOffset, y, z + zOffset, 0);
-		setBlockAt(x + xOffset, y + 1, z + zOffset, 0);
-		setBlockAt(x + xOffset * 2, y, z + zOffset * 2, 0);
-		setBlockAt(x + xOffset * 2, y + 1, z + zOffset * 2, 0);
-		setBlockAt(x + xOffset * 3, y, z + zOffset * 3, 0);
-		setBlockAt(x + xOffset * 3, y + 1, z + zOffset * 3, 0);
-		setBlockAt(x + xOffset * 4, y, z + zOffset * 4, 0);
-		setBlockAt(x + xOffset * 4, y + 1, z + zOffset * 4, 0);
-		setBlockAt(x + xOffset * 2 + (zOffset ? 1 : 0), y, z + zOffset * 2 + (xOffset ? 1 : 0), 20);
-		setBlockAt(x + xOffset * 2 + (zOffset ? 1 : 0), y + 1, z + zOffset * 2 + (xOffset ? 1 : 0), 20);
-		setBlockAt(x + xOffset * 2 - (zOffset ? 1 : 0), y, z + zOffset * 2 - (xOffset ? 1 : 0), 20);
-		setBlockAt(x + xOffset * 2 - (zOffset ? 1 : 0), y + 1, z + zOffset * 2 - (xOffset ? 1 : 0), 20);
+	const southBlock = getBlockFloor(x, y, z + 0.301); // yaw0
+	const westBlock = getBlockFloor(x - 0.301, y, z); // yaw90
+	const northBlock = getBlockFloor(x, y, z - 0.301); // yaw180
+	const eastBlock = getBlockFloor(x + 0.301, y, z); // yaw270
+	const southId = southBlock.type.getID();
+	const westId = westBlock.type.getID();
+	const northId = northBlock.type.getID();
+	const eastId = eastBlock.type.getID();
+	const southMeta = southBlock.getMetadata();
+	const westMeta = westBlock.getMetadata();
+	const northMeta = northBlock.getMetadata();
+	const eastMeta = eastBlock.getMetadata();
+	const southWither = southId === 173;
+	const westWither = westId === 173;
+	const northWither = northId === 173;
+	const eastWither = eastId === 173;
+	const southBlood = southId === 159 && southMeta === 14
+	const westBlood = westId === 159 && westMeta === 14
+	const northBlood = northId === 159 && northMeta === 14
+	const eastBlood = eastId === 159 && eastMeta === 14
+	if (!southWither && !westWither && !northWither && !eastWither && !southBlood && !westBlood && !northBlood && !eastBlood) {
+		Blocks.field_150402_ci.func_149676_a(0, 0, 0, 1, 1, 1);
+		Blocks.field_150406_ce.func_149676_a(0, 0, 0, 1, 1, 1);
 		inDoor = false;
-		trigger2.unregister();
-	}).setFilteredClass(S08PacketPlayerPosLook);
-	cancel(event);
-}).setFilteredClass(C03PacketPlayer).unregister();
+		return;
+	} 
+	if (inDoor) return;
+	inDoor = true;
+	const trigger1 = register("packetSent", (packet, event) => {
+		trigger1.unregister();
+		const moving = packet.func_149466_j();
+		const rotating = packet.func_149463_k();
+		const onGround = packet.func_149465_i();
+		const [x, y, z] = [packet.func_149464_c(), packet.func_149467_d(), packet.func_149472_e()];
+		const yaw = (southWither || southBlood) ? 0 : (westWither || westBlood) ? 90 : (northWither || northBlood) ? 180 : 270;
+		const pitch = -85;
+		const [initialYaw, initialPitch] = [Player.getYaw(), Player.getPitch()];
+		const item = Player.getHeldItem();
+		if (!item) return;
+		chat('Door Skipping')
+		
+		if (moving) Client.sendPacket(new C03PacketPlayer.C06PacketPlayerPosLook(x, y, z, yaw, pitch, onGround));
+		else Client.sendPacket(new C03PacketPlayer.C05PacketPlayerLook(yaw, pitch, onGround));
+		Client.sendPacket(new C08PacketPlayerBlockPlacement(item.itemStack));
+		const trigger2 = register("packetReceived", () => {
+			if (southWither || westWither || northWither || eastWither) Blocks.field_150402_ci.func_149676_a(-1, -1, -1, -1, -1, -1);
+			else if (southBlood || westBlood || northBlood || eastBlood) Blocks.field_150406_ce.func_149676_a(-1, -1, -1, -1, -1, -1);
+			chat('rotatingback')
+			Client.scheduleTask(0, () => snapTo(initialYaw, initialPitch));
+			trigger2.unregister();
+		}).setFilteredClass(S08PacketPlayerPosLook);
+		cancel(event);
+	}).setFilteredClass(C03PacketPlayer);
+})
 
 export function toggle() {
     if (config().doorSkipToggle && config().toggle && config().cheatToggle) {
